@@ -35,6 +35,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         return motor1.getCurrentPosition();
     }
 
+    public void setToCurrentPosition() {
+        elevatorPID.setSetPoint(getEncoderPosition());
+    }
+
     public void setPower(double power) {
         motor1.setPower(power);
         motor2.setPower(power);
