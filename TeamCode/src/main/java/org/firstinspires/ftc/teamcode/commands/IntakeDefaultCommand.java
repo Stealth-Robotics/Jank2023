@@ -10,14 +10,14 @@ public class IntakeDefaultCommand extends CommandBase {
     DoubleSupplier triggerInput;
     IntakeSubsystem intake;
 
-    public IntakeDefaultCommand(IntakeSubsystem intake, DoubleSupplier triggerInput){
+    public IntakeDefaultCommand(IntakeSubsystem intake, DoubleSupplier triggerInput) {
         this.triggerInput = triggerInput;
         this.intake = intake;
         addRequirements(intake);
     }
 
     @Override
-    public void execute(){
-        if(triggerInput.getAsDouble() > 0.05) intake.setSpeed(triggerInput.getAsDouble());
+    public void execute() {
+        if (triggerInput.getAsDouble() > 0.05) intake.setSpeed(triggerInput.getAsDouble());
     }
 }

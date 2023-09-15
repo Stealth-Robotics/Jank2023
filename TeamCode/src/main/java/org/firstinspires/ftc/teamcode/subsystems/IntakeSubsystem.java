@@ -14,7 +14,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void setSpeed(double speed){
+    public void setSpeed(double speed) {
         intakeMotor.setPower(speed);
     }
 

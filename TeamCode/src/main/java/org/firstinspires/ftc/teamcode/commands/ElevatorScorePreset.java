@@ -29,11 +29,6 @@ public class ElevatorScorePreset extends CommandBase {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public boolean isFinished() {
         return (elevator.atSetpoint() || (input != null && input.getAsDouble() > 0.05));
 

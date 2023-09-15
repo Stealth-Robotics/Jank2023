@@ -17,7 +17,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     BNO055IMU imu;
 
-    public DriveSubsystem(HardwareMap hardwareMap){
+    public DriveSubsystem(HardwareMap hardwareMap) {
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
@@ -40,15 +40,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    public double getAngle(){
+    public double getAngle() {
         return -imu.getAngularOrientation().firstAngle + headingOffset;
     }
 
-    public void resetAngle(){
+    public void resetAngle() {
         headingOffset = imu.getAngularOrientation().firstAngle;
     }
 
-    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed){
+    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed) {
         // This code is pulled from Game Manual 0
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
         double speedMultiplier = halfSpeed ? 0.5 : 1.0;

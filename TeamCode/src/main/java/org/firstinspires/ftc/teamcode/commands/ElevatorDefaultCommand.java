@@ -18,20 +18,19 @@ public class ElevatorDefaultCommand extends CommandBase {
     }
 
     //Autonomous Default Command
-    public ElevatorDefaultCommand(ElevatorSubsystem elevator){
+    public ElevatorDefaultCommand(ElevatorSubsystem elevator) {
         this.elevator = elevator;
         addRequirements(elevator);
     }
 
     @Override
     public void execute() {
-        if(input != null && input.getAsDouble() > 0.05) {
+        if (input != null && input.getAsDouble() > 0.05) {
             elevator.setPower(input.getAsDouble());
             elevator.setUsePID(false);
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
             elevator.setToCurrentPosition();
-        }
-        else{
+        } else {
             elevator.setUsePID(true);
         }
     }
