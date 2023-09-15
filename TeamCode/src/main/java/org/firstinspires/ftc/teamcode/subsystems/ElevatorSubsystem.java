@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import androidx.core.math.MathUtils;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +10,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private DcMotor motor2;
     //TODO: Tune PID
     private final PIDFController elevatorPID = new PIDFController(0, 0, 0, 0);
+    private boolean usePID = true;
 
     public ElevatorSubsystem(HardwareMap hardwareMap) {
         motor1 = hardwareMap.get(DcMotor.class, "elevatorMotor1");
@@ -32,11 +31,26 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorPID.atSetPoint();
     }
 
-    @Override
-    public void periodic() {
-        //todo: set clamp, this will not work currently
-        double power = elevatorPID.calculate(MathUtils.clamp(motor1.getCurrentPosition(), 0, 0));
+    public double getEncoderPosition() {
+        return motor1.getCurrentPosition();
+    }
+
+    public void setPower(double power) {
         motor1.setPower(power);
         motor2.setPower(power);
+    }
+
+    public void setUsePID(boolean usePID) {
+        this.usePID = usePID;
+    }
+
+    //TODO: Tune PID
+    //call setUsePID(true) to use PID
+    @Override
+    public void periodic() {
+        if (usePID) {
+            double power = elevatorPID.calculate(getEncoderPosition());
+            setPower(power);
+        }
     }
 }
