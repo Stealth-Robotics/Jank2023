@@ -12,6 +12,8 @@ public class IntakeDefaultCommand extends CommandBase {
 
     public IntakeDefaultCommand(IntakeSubsystem intake, DoubleSupplier triggerInput){
         this.triggerInput = triggerInput;
+        this.intake = intake;
+        addRequirements(intake);
     }
 
     @Override
