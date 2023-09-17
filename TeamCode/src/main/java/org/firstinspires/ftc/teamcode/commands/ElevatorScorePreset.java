@@ -30,7 +30,7 @@ public class ElevatorScorePreset extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (elevator.atSetpoint() || (input != null && input.getAsDouble() > 0.05));
+        return (elevator.atSetpoint() || (input != null && Math.abs(input.getAsDouble()) > 0.05));
 
     }
 }
