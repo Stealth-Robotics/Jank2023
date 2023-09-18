@@ -6,13 +6,17 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorScorePreset;
+import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 public abstract class Teleop extends StealthOpMode {
     DriveSubsystem driveSubsystem;
     ElevatorSubsystem elevatorSubsystem;
+
+    IntakeSubsystem intakeSubsystem;
 
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
@@ -23,6 +27,7 @@ public abstract class Teleop extends StealthOpMode {
     public void initialize() {
         driveSubsystem = new DriveSubsystem(hardwareMap);
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap);
 
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
@@ -39,6 +44,10 @@ public abstract class Teleop extends StealthOpMode {
 
         elevatorSubsystem.setDefaultCommand(
                 new ElevatorDefaultCommand(elevatorSubsystem, () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger))
+        );
+
+        intakeSubsystem.setDefaultCommand(
+                new IntakeDefaultCommand(intakeSubsystem, () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger))
         );
 
         operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
