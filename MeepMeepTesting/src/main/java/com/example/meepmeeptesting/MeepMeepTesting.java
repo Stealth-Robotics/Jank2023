@@ -6,6 +6,12 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep mm = new MeepMeep(600);
@@ -22,8 +28,11 @@ public class MeepMeepTesting {
 
                 );
 
+        Image img = null;
+        try{img = ImageIO.read(new File("C:/users/oliver/Downloads/image.png"));}
+        catch (IOException e){}
 
-        mm.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
+        mm.setBackground(img)
             .setBackgroundAlpha(1f)
             .addEntity(myBot)
             .start();
