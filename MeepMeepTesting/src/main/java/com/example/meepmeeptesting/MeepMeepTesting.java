@@ -2,38 +2,62 @@ package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 public class MeepMeepTesting {
+    private static TrajectoryVelocityConstraint veloConstraint(double angVel, double velo){
+        return new MinVelocityConstraint(Arrays.asList(
+                new AngularVelocityConstraint(angVel),
+                new MecanumVelocityConstraint(velo, 15.5)
+        ));
+    }
+    private static TrajectoryAccelerationConstraint accelConstraint(double constraint){
+        return new ProfileAccelerationConstraint(constraint);
+    }
     public static void main(String[] args) {
         MeepMeep mm = new MeepMeep(600);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(mm)
                 .setConstraints(60, 30, Math.toRadians(180), Math.toRadians(180), 15.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(62.17, -34.18, Math.toRadians(90.00)))
-                                .splineTo(new Vector2d(32.05, -37.18), Math.toRadians(185.67))
-                                .splineTo(new Vector2d(39.31, -64.95), Math.toRadians(-75.34))
+                                .splineTo(new Vector2d(32.05, -24), Math.toRadians(185.67))
+                                .back(15, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
+                                .splineToLinearHeading(new Pose2d(35.3, -59.5, Math.toRadians(-90)), Math.toRadians(-90))
                                 .waitSeconds(0.5)
-                                .lineTo(new Vector2d(37.82, 52.99))
+                                .lineTo(
+                                        new Vector2d(37.82, 52.99),
+                                        veloConstraint(2, 15),
+                                        accelConstraint(5)
+                                )
                                 .build()
 
 
                 );
 
         Image img = null;
-        try{img = ImageIO.read(new File("C:/users/oliver/Downloads/image.png"));}
+        try{img = ImageIO.read(new File("C:/users/oliver/Downloads/field.png"));}
         catch (IOException e){}
 
         mm.setBackground(img)
-            .setBackgroundAlpha(1f)
+            .setBackgroundAlpha(0.5f)
             .addEntity(myBot)
             .start();
 
