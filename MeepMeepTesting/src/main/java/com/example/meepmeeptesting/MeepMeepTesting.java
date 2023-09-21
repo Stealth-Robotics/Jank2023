@@ -35,17 +35,21 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep mm = new MeepMeep(600);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(mm)
-                .setConstraints(60, 30, Math.toRadians(180), Math.toRadians(180), 15.5)
+                .setConstraints(80, 50, Math.toRadians(180), Math.toRadians(180), 15.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(62.17, -34.18, Math.toRadians(90.00)))
                                 .splineTo(new Vector2d(32.05, -24), Math.toRadians(185.67))
-                                .back(15, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
-                                .splineToLinearHeading(new Pose2d(35.3, -59.5, Math.toRadians(-90)), Math.toRadians(-90))
-                                .waitSeconds(0.5)
+                                .back(7, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
+                                .splineToLinearHeading(new Pose2d(34.3, -24, Math.toRadians(270)),
+                                        Math.toRadians(270),
+                                        veloConstraint(Math.toRadians(60), 50),
+                                        accelConstraint(40)
+                                )
+
                                 .lineTo(
                                         new Vector2d(37.82, 52.99),
-                                        veloConstraint(2, 15),
-                                        accelConstraint(5)
+                                        veloConstraint(2, 75),
+                                        accelConstraint(50)
                                 )
                                 .build()
 
