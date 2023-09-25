@@ -31,17 +31,41 @@ public class MeepMeepSim{
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(80, 50, Math.toRadians(180), Math.toRadians(180), 15.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(62.17, -34.18, Math.toRadians(90.00)))
-                                .splineTo(new Vector2d(32.05, -24), Math.toRadians(185.67))
+                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -58, Math.toRadians(90.00)))
+                                .splineTo(new Vector2d(-47, -33), Math.toRadians(90))
                                 .back(7, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
-                                .splineToLinearHeading(new Pose2d(34.3, -24, Math.toRadians(270)),
-                                        Math.toRadians(270),
+                                .splineToLinearHeading(new Pose2d(-60, -35, Math.toRadians(180)),
+                                        Math.toRadians(180),
                                         veloConstraint(Math.toRadians(60), 50),
                                         accelConstraint(40)
                                 )
-
+                                .waitSeconds(1)
                                 .lineTo(
-                                        new Vector2d(37.82, 52.99),
+                                        new Vector2d(45, -35),
+                                        veloConstraint(2, 75),
+                                        accelConstraint(50)
+                                )
+                                .waitSeconds(1)
+                                .lineTo(
+                                        new Vector2d(-60, -35),
+                                        veloConstraint(2, 75),
+                                        accelConstraint(50)
+                                )
+                                .waitSeconds(1)
+                                .lineTo(
+                                        new Vector2d(45, -35),
+                                        veloConstraint(2, 75),
+                                        accelConstraint(50)
+                                )
+                                .waitSeconds(1)
+                                .lineTo(
+                                        new Vector2d(-60, -35),
+                                        veloConstraint(2, 75),
+                                        accelConstraint(50)
+                                )
+                                .waitSeconds(1)
+                                .lineTo(
+                                        new Vector2d(45, -35),
                                         veloConstraint(2, 75),
                                         accelConstraint(50)
                                 )
