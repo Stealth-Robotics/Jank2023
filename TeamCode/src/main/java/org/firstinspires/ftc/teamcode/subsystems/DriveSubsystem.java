@@ -54,13 +54,18 @@ public class DriveSubsystem extends SubsystemBase {
         double speedMultiplier = halfSpeed ? 0.5 : 1.0;
 
         double y = -leftStickY; // Remember, this is reversed!
-        double x = leftStickX * 1.1; // Counteract imperfect strafing
+        double x = leftStickX;
         double rotation = rightStickX;
-        double rotx = x;
-        double roty = y;
+
         double botHeading = getAngle();
         //gets heading from imu every loop, reversed as imu heading is cw positive
 
+
+
+        double rotx = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+        double roty = y * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+
+        rotx *= 1.1;
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
