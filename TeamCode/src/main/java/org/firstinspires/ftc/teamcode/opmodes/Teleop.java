@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorScorePreset;
 import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -14,7 +15,10 @@ import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 public abstract class Teleop extends StealthOpMode {
     DriveSubsystem driveSubsystem;
+
+    SampleMecanumDrive roadrunnerDrive;
     ElevatorSubsystem elevatorSubsystem;
+
 
     IntakeSubsystem intakeSubsystem;
 
@@ -22,10 +26,10 @@ public abstract class Teleop extends StealthOpMode {
     GamepadEx operatorGamepad;
 
 
-
     @Override
     public void initialize() {
-        driveSubsystem = new DriveSubsystem(hardwareMap);
+        roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
+        driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
 

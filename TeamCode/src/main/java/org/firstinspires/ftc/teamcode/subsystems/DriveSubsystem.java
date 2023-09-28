@@ -2,10 +2,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class DriveSubsystem extends SubsystemBase {
     private DcMotor frontLeftMotor;
@@ -17,7 +21,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     BNO055IMU imu;
 
-    public DriveSubsystem(HardwareMap hardwareMap) {
+    private SampleMecanumDrive roadrunnerDrive;
+
+    public DriveSubsystem(HardwareMap hardwareMap, SampleMecanumDrive roadrunnerDrive) {
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
@@ -38,6 +44,8 @@ public class DriveSubsystem extends SubsystemBase {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
+        this.roadrunnerDrive = roadrunnerDrive;
+
     }
 
     public double getAngle() {
@@ -46,6 +54,26 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void resetAngle() {
         headingOffset = imu.getAngularOrientation().firstAngle;
+    }
+
+    public void followTrajectoryAsync(Trajectory trajectory){
+        roadrunnerDrive.followTrajectoryAsync(trajectory);
+    }
+
+    public void update(){
+        roadrunnerDrive.update();
+    }
+
+    public boolean isBusy(){
+        return roadrunnerDrive.isBusy();
+    }
+
+    public void followTrajectorySequenceAsync(TrajectorySequence trajectory){
+        roadrunnerDrive.followTrajectorySequenceAsync(trajectory);
+    }
+
+    public void stop(){
+        driveTeleop(0,0,0, false);
     }
 
     public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed) {
