@@ -58,11 +58,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getAngle() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - headingOffset;
     }
 
     public void resetAngle() {
-        imu.resetYaw();
+        headingOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     public void followTrajectoryAsync(Trajectory trajectory){
@@ -94,6 +94,7 @@ public class DriveSubsystem extends SubsystemBase {
         double x = leftStickX;
         double rotation = rightStickX;
 
+        resetAngle();
         double botHeading = getAngle();
         //gets heading from imu every loop, reversed as imu heading is cw positive
 
