@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
@@ -19,15 +23,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     double headingOffset = 0;
 
-    BNO055IMU imu;
+    IMU imu;
 
     private SampleMecanumDrive roadrunnerDrive;
 
     public DriveSubsystem(HardwareMap hardwareMap, SampleMecanumDrive roadrunnerDrive) {
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
-        backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
+        backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
 
         //TODO: CHECK DIRECTIONS
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -38,10 +42,15 @@ public class DriveSubsystem extends SubsystemBase {
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                )
+        );
 
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+
         imu.initialize(parameters);
 
         this.roadrunnerDrive = roadrunnerDrive;
@@ -49,11 +58,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getAngle() {
-        return -imu.getAngularOrientation().firstAngle + headingOffset;
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     public void resetAngle() {
-        headingOffset = imu.getAngularOrientation().firstAngle;
+        imu.resetYaw();
     }
 
     public void followTrajectoryAsync(Trajectory trajectory){
@@ -93,7 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
         double rotx = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double roty = y * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-        rotx *= 1.1;
+        rotx = rotx * 1.1;
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]

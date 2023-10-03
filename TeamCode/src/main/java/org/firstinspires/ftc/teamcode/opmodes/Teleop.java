@@ -1,27 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
-import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
-import org.firstinspires.ftc.teamcode.commands.ElevatorScorePreset;
-import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 public abstract class Teleop extends StealthOpMode {
     DriveSubsystem driveSubsystem;
 
     SampleMecanumDrive roadrunnerDrive;
-    ElevatorSubsystem elevatorSubsystem;
-
-
-    IntakeSubsystem intakeSubsystem;
-
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
 
@@ -30,8 +22,7 @@ public abstract class Teleop extends StealthOpMode {
     public void initialize() {
         roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
-        elevatorSubsystem = new ElevatorSubsystem(hardwareMap);
-        intakeSubsystem = new IntakeSubsystem(hardwareMap);
+
 
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
@@ -46,16 +37,16 @@ public abstract class Teleop extends StealthOpMode {
                 )
         );
 
-        elevatorSubsystem.setDefaultCommand(
-                new ElevatorDefaultCommand(elevatorSubsystem, () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger))
-        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                new InstantCommand(() -> driveSubsystem.resetAngle()));
+    }
+    @SuppressWarnings("unused")
+    @TeleOp(name = "RED | Tele-Op", group = "Red")
+    public static class RedTeleop extends Teleop {
+    }
 
-        intakeSubsystem.setDefaultCommand(
-                new IntakeDefaultCommand(intakeSubsystem, () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger))
-        );
-
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new ElevatorScorePreset(elevatorSubsystem,
-                        () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)));
+    @SuppressWarnings("unused")
+    @TeleOp(name = "BLUE | Tele-Op", group = "Blue")
+    public static class BlueTeleop extends Teleop {
     }
 }
