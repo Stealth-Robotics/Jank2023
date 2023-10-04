@@ -2,9 +2,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -82,6 +83,14 @@ public class DriveSubsystem extends SubsystemBase {
         roadrunnerDrive.followTrajectorySequenceAsync(trajectory);
     }
 
+    public void setPoseEstimate(Pose2d poseEstimate){
+        roadrunnerDrive.setPoseEstimate(poseEstimate);
+    }
+
+    public Pose2d getPoseEstimate(){
+        return roadrunnerDrive.getPoseEstimate();
+    }
+
     public void stop(){
         driveTeleop(0,0,0, false);
     }
@@ -91,36 +100,21 @@ public class DriveSubsystem extends SubsystemBase {
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
         double speedMultiplier = halfSpeed ? 0.5 : 1.0;
 
-        double y = -leftStickY; // Remember, this is reversed!
-        double x = leftStickX;
-        double rotation = rightStickX;
-        
+        Pose2d poseEstimate = getPoseEstimate();
 
-        resetAngle();
+        Vector2d inputVector = new Vector2d(
+                -leftStickY,
+                -leftStickX
+        ).rotated(-poseEstimate.getHeading());
 
-        //rotates input by heading
-        //TODO: check if needs to be reversed
-        Vector2d inputVector = new Vector2d(x, y).rotateBy(getAngle());
+        roadrunnerDrive.setWeightedDrivePower(
+                new Pose2d(
+                        inputVector.getX(),
+                        inputVector.getY(),
+                        -rightStickX
+                )
+        );
 
-
-        double rotx = inputVector.getX();
-        double roty = inputVector.getY();
-
-        rotx = rotx * 1.1;
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio, but only when
-        // at least one is out of the range [-1, 1]
-        //sets power of motors based on field-centric rotated values
-        double denominator = Math.max(Math.abs(roty) + Math.abs(rotx) + Math.abs(rotation), 1);
-        double leftFrontDrivePower = (roty + rotx + rotation) / denominator;
-        double leftRearDrivePower = (roty - rotx + rotation) / denominator;
-        double rightFrontDrivePower = (roty - rotx - rotation) / denominator;
-        double rightRearDrivePower = (roty + rotx - rotation) / denominator;
-
-        frontLeftMotor.setPower(leftFrontDrivePower * speedMultiplier);
-        backLeftMotor.setPower(leftRearDrivePower * speedMultiplier);
-        frontRightMotor.setPower(rightFrontDrivePower * speedMultiplier);
-        backRightMotor.setPower(rightRearDrivePower * speedMultiplier);
     }
 
     @Override
