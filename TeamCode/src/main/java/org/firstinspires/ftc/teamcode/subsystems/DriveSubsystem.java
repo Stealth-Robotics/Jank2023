@@ -4,6 +4,7 @@ import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -93,15 +94,17 @@ public class DriveSubsystem extends SubsystemBase {
         double y = -leftStickY; // Remember, this is reversed!
         double x = leftStickX;
         double rotation = rightStickX;
+        
 
         resetAngle();
-        double botHeading = getAngle();
-        //gets heading from imu every loop, reversed as imu heading is cw positive
+
+        //rotates input by heading
+        //TODO: check if needs to be reversed
+        Vector2d inputVector = new Vector2d(x, y).rotateBy(getAngle());
 
 
-
-        double rotx = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double roty = y * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        double rotx = inputVector.getX();
+        double roty = inputVector.getY();
 
         rotx = rotx * 1.1;
         // Denominator is the largest motor power (absolute value) or 1
