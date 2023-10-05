@@ -1,33 +1,43 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class DriveSubsystem extends SubsystemBase {
+    FtcDashboard dashboard  = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
-
+    private DcMotor backRightMotor; 
     double headingOffset = 0;
 
-    BNO055IMU imu;
+    IMU imu;
 
     private SampleMecanumDrive roadrunnerDrive;
 
     public DriveSubsystem(HardwareMap hardwareMap, SampleMecanumDrive roadrunnerDrive) {
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
-        backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "leftFront");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
+        backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
 
         //TODO: CHECK DIRECTIONS
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -38,10 +48,15 @@ public class DriveSubsystem extends SubsystemBase {
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                )
+        );
 
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+
         imu.initialize(parameters);
 
         this.roadrunnerDrive = roadrunnerDrive;
@@ -49,11 +64,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getAngle() {
-        return -imu.getAngularOrientation().firstAngle + headingOffset;
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - headingOffset;
     }
 
     public void resetAngle() {
-        headingOffset = imu.getAngularOrientation().firstAngle;
+        headingOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     public void followTrajectoryAsync(Trajectory trajectory){
@@ -72,6 +87,14 @@ public class DriveSubsystem extends SubsystemBase {
         roadrunnerDrive.followTrajectorySequenceAsync(trajectory);
     }
 
+    public void setPoseEstimate(Pose2d poseEstimate){
+        roadrunnerDrive.setPoseEstimate(poseEstimate);
+    }
+
+    public Pose2d getPoseEstimate(){
+        return roadrunnerDrive.getPoseEstimate();
+    }
+
     public void stop(){
         driveTeleop(0,0,0, false);
     }
@@ -81,38 +104,22 @@ public class DriveSubsystem extends SubsystemBase {
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
         double speedMultiplier = halfSpeed ? 0.5 : 1.0;
 
-        double y = -leftStickY; // Remember, this is reversed!
-        double x = leftStickX;
-        double rotation = rightStickX;
+        Vector2d inputVector = new Vector2d(
+                -leftStickY,
+                -leftStickX
+        ).rotated(getAngle());
 
-        double botHeading = getAngle();
-        //gets heading from imu every loop, reversed as imu heading is cw positive
-
-
-
-        double rotx = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double roty = y * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-        rotx *= 1.1;
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio, but only when
-        // at least one is out of the range [-1, 1]
-        //sets power of motors based on field-centric rotated values
-        double denominator = Math.max(Math.abs(roty) + Math.abs(rotx) + Math.abs(rotation), 1);
-        double leftFrontDrivePower = (roty + rotx + rotation) / denominator;
-        double leftRearDrivePower = (roty - rotx + rotation) / denominator;
-        double rightFrontDrivePower = (roty - rotx - rotation) / denominator;
-        double rightRearDrivePower = (roty + rotx - rotation) / denominator;
-
-        frontLeftMotor.setPower(leftFrontDrivePower * speedMultiplier);
-        backLeftMotor.setPower(leftRearDrivePower * speedMultiplier);
-        frontRightMotor.setPower(rightFrontDrivePower * speedMultiplier);
-        backRightMotor.setPower(rightRearDrivePower * speedMultiplier);
+        roadrunnerDrive.setWeightedDrivePower(
+                new Pose2d(
+                        inputVector.getX() * speedMultiplier,
+                        inputVector.getY() * speedMultiplier,
+                        -rightStickX * speedMultiplier
+                )
+        );
+        roadrunnerDrive.update();
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
-        telemetry.addData("Heading", getAngle());
     }
 }
