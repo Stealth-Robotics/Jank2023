@@ -96,10 +96,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void stop(){
-        driveTeleop(0,0,0, false);
+        driveTeleop(0,0,0, false, false);
     }
 
-    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed) {
+    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed, boolean strafe) {
         // This code is pulled from Game Manual 0
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
         double speedMultiplier = halfSpeed ? 0.5 : 1.0;
@@ -108,7 +108,14 @@ public class DriveSubsystem extends SubsystemBase {
                 -leftStickY,
                 -leftStickX
         ).rotated(getAngle());
+        if(strafe){
+            inputVector = new Vector2d(
 
+                    0,
+                    -leftStickX
+
+            ).rotated(getAngle());
+        }
         roadrunnerDrive.setWeightedDrivePower(
                 new Pose2d(
                         inputVector.getX() * speedMultiplier,

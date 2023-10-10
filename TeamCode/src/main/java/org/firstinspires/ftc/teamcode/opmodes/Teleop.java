@@ -33,7 +33,8 @@ public abstract class Teleop extends StealthOpMode {
                         () -> driverGamepad.getLeftY(),
                         () -> driverGamepad.getLeftX(),
                         () -> driverGamepad.getRightX(),
-                        () -> driverGamepad.gamepad.right_bumper
+                        () -> driverGamepad.gamepad.right_bumper,
+                        () -> driverGamepad.gamepad.left_bumper
                 )
         );
 

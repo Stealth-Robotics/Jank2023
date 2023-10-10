@@ -9,20 +9,21 @@ import java.util.function.DoubleSupplier;
 
 public class DriveDefaultCommand extends CommandBase {
     private DoubleSupplier leftY, leftX, rightX;
-    private BooleanSupplier halfSpeed;
+    private BooleanSupplier halfSpeed, strafeOnly;
     private DriveSubsystem driveSubsystem;
 
-    public DriveDefaultCommand(DriveSubsystem driveSubsystem, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX, BooleanSupplier halfSpeed) {
+    public DriveDefaultCommand(DriveSubsystem driveSubsystem, DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX, BooleanSupplier halfSpeed, BooleanSupplier strafeOnly) {
         this.driveSubsystem = driveSubsystem;
         this.leftY = leftY;
         this.leftX = leftX;
         this.rightX = rightX;
         this.halfSpeed = halfSpeed;
+        this.strafeOnly = strafeOnly;
         addRequirements(driveSubsystem);
     }
 
     @Override
     public void execute() {
-        driveSubsystem.driveTeleop(leftY.getAsDouble(), leftX.getAsDouble(), rightX.getAsDouble(), halfSpeed.getAsBoolean());
+        driveSubsystem.driveTeleop(leftY.getAsDouble(), leftX.getAsDouble(), rightX.getAsDouble(), halfSpeed.getAsBoolean(), strafeOnly.getAsBoolean());
     }
 }
