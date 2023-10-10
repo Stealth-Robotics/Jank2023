@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorScorePreset extends CommandBase {
-    private ElevatorSubsystem elevator;
-    private DoubleSupplier input;
+    private final ElevatorSubsystem elevator;
+    private final DoubleSupplier input;
 
     //use this for teleop
     public ElevatorScorePreset(ElevatorSubsystem elevator, DoubleSupplier input) {
@@ -19,6 +19,8 @@ public class ElevatorScorePreset extends CommandBase {
     //use this for autonomous
     public ElevatorScorePreset(ElevatorSubsystem elevator) {
         this.elevator = elevator;
+        input = null;
+        addRequirements(elevator);
     }
 
     @Override

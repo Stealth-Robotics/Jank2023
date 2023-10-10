@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorDefaultCommand extends CommandBase {
-    private DoubleSupplier input;
-    private ElevatorSubsystem elevator;
+    private final DoubleSupplier input;
+    private final ElevatorSubsystem elevator;
 
     //Teleop Default Command
     public ElevatorDefaultCommand(ElevatorSubsystem elevator, DoubleSupplier input) {
@@ -19,6 +19,7 @@ public class ElevatorDefaultCommand extends CommandBase {
 
     //Autonomous Default Command
     public ElevatorDefaultCommand(ElevatorSubsystem elevator) {
+        input = null;
         this.elevator = elevator;
         addRequirements(elevator);
     }
@@ -29,9 +30,11 @@ public class ElevatorDefaultCommand extends CommandBase {
             elevator.setPower(input.getAsDouble());
             elevator.setUsePID(false);
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
-            elevator.setToCurrentPosition();
+
         } else {
+            //sets elevator to hold in place after manual control, pid won't run until trigger is released
             elevator.setUsePID(true);
+            elevator.setToCurrentPosition();
         }
     }
 }
