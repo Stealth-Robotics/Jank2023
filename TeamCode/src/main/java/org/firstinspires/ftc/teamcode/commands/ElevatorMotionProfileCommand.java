@@ -32,8 +32,8 @@ public class ElevatorMotionProfileCommand extends CommandBase {
         controller = new PIDFController(new PIDCoefficients(0, 0, 0));
         //TODO: FIND MAX VEL, ACCEL, AND JERK VALUES
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(elevator.getEncoderPosition(), 0, 0),
-                new MotionState(position, 0, 0),
+                new MotionState(elevator.getEncoderPosition(), elevator.getVelo()),
+                new MotionState(position, 0),
                 0,
                 0,
                 0
