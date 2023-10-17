@@ -32,6 +32,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final double MAX_VELOCITY = 0.0;
     private final double MAX_ACCEL = 0.0;
     private final double MAX_JERK = 0.0;
+    //TODO: TUNE TOLERANCE
+    private final double MOTION_PROFILE_TOLERANCE = 10.0;
 
     private long motionProfileStartTime = 0;
     private long elapsedTime = 0;
@@ -94,6 +96,16 @@ public class ElevatorSubsystem extends SubsystemBase {
         return  accel;
     }
 
+    public boolean motionProfilingAtSetpoint(){
+        return (Math.abs(motionProfilePID.getLastError()) < MOTION_PROFILE_TOLERANCE);
+    }
+
+    public void setUseMotionProfiling(boolean useMotionProfiling){
+        this.useMotionProfiling = useMotionProfiling;
+    }
+    //runs to position using motion profiling
+    //generates motion profile based on current state and user specified goalState
+    //also must take in start time for motion profile to profile
     public void runToPositionMotionProfiling(MotionState goalState, long timeStarted){
         motionProfileStartTime = timeStarted / (long)1000;
 
@@ -103,9 +115,6 @@ public class ElevatorSubsystem extends SubsystemBase {
                 MAX_VELOCITY,
                 MAX_ACCEL
         );
-
-        setUsePID(true);
-
     }
 
     //TODO: Tune PID
