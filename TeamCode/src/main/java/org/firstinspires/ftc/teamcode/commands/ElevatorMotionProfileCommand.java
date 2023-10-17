@@ -25,7 +25,7 @@ public class ElevatorMotionProfileCommand extends CommandBase {
     //TODO: TUNE POSITION TOLERANCE
     private final double TOLERANCE = 10;
 
-    public ElevatorMotionProfileCommand(ElevatorSubsystem elevator, double position) {
+    public ElevatorMotionProfileCommand(ElevatorSubsystem elevator, double position){
         this.elevator = elevator;
         this.position = position;
         //TODO: TUNE
