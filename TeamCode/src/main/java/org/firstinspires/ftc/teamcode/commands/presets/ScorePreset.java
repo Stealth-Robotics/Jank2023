@@ -21,7 +21,7 @@ public class ScorePreset extends ParallelCommandGroup {
                     new ElevatorToPositionMotionProfiling(elevator, ElevatorPosition.SCORE_POSITION)
                 ),
                 new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
-            )
+            ).interruptOn(cancel)
         );
     }
 
