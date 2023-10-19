@@ -52,6 +52,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private long currentTime = 0;
     private long lastTime = 0;
+
+    public enum ElevatorPosition{
+        SCORE_POSITION(0.0);
+
+
+        private final double value;
+        private ElevatorPosition(double value){
+            this.value = value;
+        }
+        public double getValue(){
+            return value;
+        }
+    }
     public ElevatorSubsystem(HardwareMap hardwareMap) {
         motor1 = hardwareMap.get(DcMotorEx.class, "elevatorMotor1");
         motor2 = hardwareMap.get(DcMotorEx.class, "elevatorMotor2");
