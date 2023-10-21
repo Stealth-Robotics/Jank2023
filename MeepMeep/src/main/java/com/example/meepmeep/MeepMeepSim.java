@@ -29,9 +29,10 @@ public class MeepMeepSim{
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(80, 50, Math.toRadians(180), Math.toRadians(180), 15.5)
+                .setConstraints(80, 50, Math.toRadians(180), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 16.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-37.5, -58, Math.toRadians(90.00)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(90.00)))
                                 .splineTo(new Vector2d(-47, -33), Math.toRadians(90))
                                 .back(7, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
                                 .splineToLinearHeading(new Pose2d(-60, -35, Math.toRadians(180)),
