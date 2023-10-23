@@ -2,15 +2,22 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import androidx.core.math.MathUtils;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.stealthrobotics.library.math.filter.Debouncer;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private DcMotorEx motor1;
@@ -53,6 +60,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private long currentTime = 0;
     private long lastTime = 0;
 
+    private final Debouncer stallDebouncer;
+
     public enum ElevatorPosition{
         SCORE_POSITION(0.0);
 
@@ -66,11 +75,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
     public ElevatorSubsystem(HardwareMap hardwareMap) {
+        stallDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
         motor1 = hardwareMap.get(DcMotorEx.class, "elevatorMotor1");
         motor2 = hardwareMap.get(DcMotorEx.class, "elevatorMotor2");
 
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         elevatorPID.setTolerance(10);
 
@@ -84,8 +99,16 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorPID.atSetPoint();
     }
 
+    public void resetStall(){
+
+    }
+
     public double getEncoderPosition() {
         return motor1.getCurrentPosition();
+    }
+    public void resetEncoderZero(){
+        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setToCurrentPosition() {
@@ -95,6 +118,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setPower(double power) {
         motor1.setPower(power);
         motor2.setPower(power);
+    }
+    public void setSlowly(){
+        setPower(-0.1);
+        stallDebouncer.calculate(false);
     }
 
     public void setUsePID(boolean usePID) {
@@ -111,6 +138,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public boolean motionProfilingAtSetpoint(){
         return (Math.abs(motionProfilePID.getLastError()) < MOTION_PROFILE_TOLERANCE);
+    }
+    public boolean checkZeroVelocity(){
+        return stallDebouncer.calculate(Math.abs(motor1.getVelocity()) < 10);
+    }
+    public void resetElevatorStall(){
+        setPower(0);
+        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setUseMotionProfiling(boolean useMotionProfiling){
@@ -132,16 +167,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Tune PID
     //call setUsePID(true) to use PID
+
+    ElapsedTime loopTimer = new ElapsedTime();
     @Override
     public void periodic() {
+        loopTimer.reset();
+
         currentVelo = getVelo();
-        currentTime = System.currentTimeMillis() / (long)1000;
-        if(firstLoop){
-            lastTime = currentTime;
-            lastVelo = currentVelo;
-            firstLoop = false;
-        }
-        deltaT = currentTime - lastTime;
+        currentTime = System.currentTimeMillis();
+        deltaT = loopTimer.milliseconds();
         lastTime = currentTime;
         deltaV = currentVelo - lastVelo;
         lastVelo = currentVelo;
@@ -163,6 +197,16 @@ public class ElevatorSubsystem extends SubsystemBase {
                 setPower(power);
             }
         }
+
+        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
+        FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
+        FtcDashboard board = FtcDashboard.getInstance();
+        board.getTelemetry().addData("loop time: ", deltaT);
+        board.getTelemetry().addData("velo: ", getVelo());
+        board.getTelemetry().addData("accel: ", accel);
+        board.getTelemetry().addData("deltaV: ", deltaV);
+
+        FtcDashboard.getInstance().getTelemetry().update();
 
     }
 }
