@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
@@ -19,6 +21,7 @@ public abstract class Teleop extends StealthOpMode {
     //SampleMecanumDrive roadrunnerDrive;
 
     ElevatorSubsystem elevator;
+    ClawperSubsystem clawper;
 
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
@@ -31,6 +34,7 @@ public abstract class Teleop extends StealthOpMode {
 //
 //
         elevator = new ElevatorSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap);
 
 
         driverGamepad = new GamepadEx(gamepad1);
@@ -44,7 +48,14 @@ public abstract class Teleop extends StealthOpMode {
         );
 
         operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new ElevatorReset(elevator, () -> operatorGamepad.isDown(GamepadKeys.Button.X))
+                new InstantCommand(() -> clawper.clawperToPosition(ClawperSubsystem.ClawperPosition.RELEASE_BOTH))
+        );
+
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                new InstantCommand(() -> clawper.clawperRelease())
+        );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new InstantCommand(() -> clawper.clawperClosedPosition())
         );
 
 //        driveSubsystem.setDefaultCommand(

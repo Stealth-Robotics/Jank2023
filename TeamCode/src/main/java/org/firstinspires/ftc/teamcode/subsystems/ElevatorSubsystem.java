@@ -175,7 +175,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         currentVelo = getVelo();
         currentTime = System.currentTimeMillis();
-        deltaT = loopTimer.milliseconds();
+        deltaT = loopTimer.milliseconds() / 1000.0;
         lastTime = currentTime;
         deltaV = currentVelo - lastVelo;
         lastVelo = currentVelo;
