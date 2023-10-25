@@ -12,21 +12,25 @@ import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class DriveSubsystem extends SubsystemBase {
     FtcDashboard dashboard  = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
-    private DcMotor frontLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor; 
+    private final DcMotor frontLeftMotor;
+    private final DcMotor frontRightMotor;
+    private final DcMotor backLeftMotor;
+    private final DcMotor backRightMotor;
+
+    private final DistanceSensor distanceSensor;
     double headingOffset = 0;
 
     IMU imu;
@@ -38,6 +42,8 @@ public class DriveSubsystem extends SubsystemBase {
         frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
         backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
         backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
+
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         //TODO: CHECK DIRECTIONS
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -89,6 +95,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setPoseEstimate(Pose2d poseEstimate){
         roadrunnerDrive.setPoseEstimate(poseEstimate);
+    }
+
+    public void driveTowardBoardSlow(){
+        driveTeleop(0.2, 0, 0, false, false);
+    }
+
+    public double getDistance(){
+        return distanceSensor.getDistance(DistanceUnit.MM);
     }
 
     public Pose2d getPoseEstimate(){

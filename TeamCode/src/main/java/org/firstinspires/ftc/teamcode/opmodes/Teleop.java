@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
+import org.firstinspires.ftc.teamcode.commands.DriveToBoard;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
@@ -40,6 +41,10 @@ public abstract class Teleop extends StealthOpMode {
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
                 new InstantCommand(() -> driveSubsystem.resetAngle()));
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whileHeld(
+                new DriveToBoard(driveSubsystem)
+        );
     }
     @SuppressWarnings("unused")
     @TeleOp(name = "RED | Tele-Op", group = "Red")
