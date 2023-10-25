@@ -86,6 +86,6 @@ public class ProcessorBase implements VisionProcessor {
     }
 
     public String getOutStr(){
-        return outStr;
+        return "this is processor base. you've done something wrong";
     }
 }
