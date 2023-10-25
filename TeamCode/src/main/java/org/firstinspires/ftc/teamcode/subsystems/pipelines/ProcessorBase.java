@@ -85,6 +85,7 @@ public class ProcessorBase implements VisionProcessor {
 
     }
 
+    //returns string to detect if using wrong class
     public String getOutStr(){
         return "this is processor base. you've done something wrong";
     }
