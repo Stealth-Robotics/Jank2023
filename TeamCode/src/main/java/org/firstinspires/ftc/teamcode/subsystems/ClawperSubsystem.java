@@ -1,25 +1,31 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class ClawperSubsystem extends SubsystemBase {
+@Config
+public final class ClawperSubsystem extends SubsystemBase {
     private final Servo clawServo;
     private final Servo rotationServo;
+
+    public static double TEST_POSITION = 0;
 
 
 
     private int positionCycle = 0;
 
-    public enum ClawperPosition{
+
+    public static enum ClawperPosition{
         ROTATION_STOW(0.0),
         ROTATION_SCORE(0.0),
-        RELEASE_ONE(0.0),
-        RELEASE_SECOND(0.0),
-        RELEASE_BOTH(0.0),
-        CLAW_HOLD(0.0);
+        RELEASE_ONE(0.4),
+        RELEASE_SECOND(0.57),
+        RELEASE_BOTH(0.4),
+        CLAW_HOLD(0.7);
 
         private final double position;
         ClawperPosition(double position){
@@ -40,10 +46,17 @@ public class ClawperSubsystem extends SubsystemBase {
         rotationServo.setPosition(position.getValue());
     }
 
+    public void clawperToPosition(ClawperPosition position){
+        positionCycle = 1;
+        clawServo.setPosition(position.getValue());
+        positionCycle = 0;
+    }
     public void clawperRelease(){
+
         if(positionCycle == 0){
             clawServo.setPosition(ClawperPosition.RELEASE_ONE.getValue());
             positionCycle++;
+            return;
         }
         if(positionCycle == 1){
             clawServo.setPosition(ClawperPosition.RELEASE_SECOND.getValue());
@@ -53,6 +66,12 @@ public class ClawperSubsystem extends SubsystemBase {
 
     public void clawperClosedPosition(){
         clawServo.setPosition(ClawperPosition.CLAW_HOLD.getValue());
+        positionCycle = 0;
     }
 
+    @Override
+    public void periodic() {
+        FtcDashboard.getInstance().getTelemetry().addData("cycle: ", positionCycle);
+        FtcDashboard.getInstance().getTelemetry().update();
+    }
 }
