@@ -61,6 +61,7 @@ public abstract class Teleop extends StealthOpMode {
 
     }
     @SuppressWarnings("unused")
+    //sets the camera to the red prop processor if alliance is red
     @TeleOp(name = "RED | Tele-Op", group = "Red")
     public static class RedTeleop extends Teleop {
         @Override

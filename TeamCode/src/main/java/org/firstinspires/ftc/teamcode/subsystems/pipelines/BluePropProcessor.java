@@ -43,18 +43,17 @@ public class BluePropProcessor extends ProcessorBase {
 
         //TODO: tune these values
 
-        Scalar lowHSVBlueLower = new Scalar(0, 100, 20); //beginning of Blue
-        Scalar lowHSVBlueUpper = new Scalar(10, 255, 255);
 
-        Scalar highHSVBlueLower = new Scalar(160, 100, 20); //end of Blue
-        Scalar highHSVBlueUpper = new Scalar(180, 255, 255);
+        //hue range for blue
+        Scalar lowHSVBlueLower = new Scalar(100, 100, 20);
+        Scalar lowHSVBlueUpper = new Scalar(130, 255, 255);
 
+        //maps white to everything in blue range and sets everything else to black
         Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper, lowMat);
-        Core.inRange(testMat, highHSVBlueLower, highHSVBlueUpper, highMat);
 
         testMat.release();
 
-        Core.bitwise_or(lowMat, highMat, finalMat);
+        finalMat = lowMat;
 
         lowMat.release();
         highMat.release();

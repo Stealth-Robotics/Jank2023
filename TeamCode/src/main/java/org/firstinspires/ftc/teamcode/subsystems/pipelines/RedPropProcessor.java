@@ -49,11 +49,14 @@ public class RedPropProcessor extends ProcessorBase {
         Scalar highHSVRedLower = new Scalar(160, 100, 20); //end of red
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
+
+        //maps white to everything in red range and sets everything else to black
         Core.inRange(testMat, lowHSVRedLower, lowHSVRedUpper, lowMat);
         Core.inRange(testMat, highHSVRedLower, highHSVRedUpper, highMat);
 
         testMat.release();
 
+        //combines ranges since red is split between 0 and 180
         Core.bitwise_or(lowMat, highMat, finalMat);
 
         lowMat.release();
