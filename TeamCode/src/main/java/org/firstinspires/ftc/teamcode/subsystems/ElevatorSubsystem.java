@@ -132,10 +132,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         return motor1.getVelocity();
     }
 
-    public double getAccel(){
-        return  accel;
-    }
-
     public boolean motionProfilingAtSetpoint(){
         return (Math.abs(motionProfilePID.getLastError()) < MOTION_PROFILE_TOLERANCE);
     }
@@ -158,7 +154,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         motionProfileStartTime = timeStarted / (long)1000;
 
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(getEncoderPosition(), getVelo(), getAccel()),
+                new MotionState(getEncoderPosition(), getVelo(), 0),
                 goalState,
                 MAX_VELOCITY,
                 MAX_ACCEL
@@ -167,24 +163,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Tune PID
     //call setUsePID(true) to use PID
-
-    ElapsedTime loopTimer = new ElapsedTime();
     @Override
     public void periodic() {
-        loopTimer.reset();
-
-        currentVelo = getVelo();
-        currentTime = System.currentTimeMillis();
-        deltaT = loopTimer.milliseconds() / 1000.0;
-        lastTime = currentTime;
-        deltaV = currentVelo - lastVelo;
-        lastVelo = currentVelo;
-
-        accel = deltaV / deltaT;
-
         if (usePID) {
             if(useMotionProfiling){
-                elapsedTime = System.currentTimeMillis() - motionProfileStartTime;
+                elapsedTime = System.currentTimeMillis() / (long)1000 - motionProfileStartTime;
                 MotionState state = profile.get(elapsedTime);
                 motionProfilePID.setTargetVelocity(state.getV());
                 motionProfilePID.setTargetAcceleration(state.getA());
