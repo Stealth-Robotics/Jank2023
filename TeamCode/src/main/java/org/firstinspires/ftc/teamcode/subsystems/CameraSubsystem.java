@@ -20,7 +20,9 @@ public class CameraSubsystem extends SubsystemBase {
     PropProcessor processor;
     public CameraSubsystem(HardwareMap hardwareMap, Alliance alliance){
         this.alliance = alliance;
+        //inits processor based on specified alliance
         processor = new PropProcessor(alliance);
+        //sets camera info using processor
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCameraResolution(new Size(640, 480))

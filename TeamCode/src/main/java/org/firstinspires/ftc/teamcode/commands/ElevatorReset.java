@@ -30,11 +30,13 @@ public class ElevatorReset extends CommandBase {
 
 
     @Override
+    //ends command if elevator is at zero velocity or if the cancel button is pressed
     public boolean isFinished() {
         return elevator.checkZeroVelocity() || endItAll.getAsBoolean();
     }
 
     @Override
+    //runs code to reset encoder position
     public void end(boolean interrupted) {
         elevator.resetElevatorStall();
     }

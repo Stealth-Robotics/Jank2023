@@ -20,8 +20,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.stealthrobotics.library.math.filter.Debouncer;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    private DcMotorEx motor1;
-    private DcMotorEx motor2;
+    private final DcMotorEx motor1;
+    private final DcMotorEx motor2;
     //PID Constants
     //TODO: Tune PID
     private final double kP = 0;
@@ -32,13 +32,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final PIDFController elevatorPID = new PIDFController(kP, kI, kD, kF);
     private final com.acmerobotics.roadrunner.control.PIDFController motionProfilePID =
             new com.acmerobotics.roadrunner.control.PIDFController(new PIDCoefficients(0, 0, 0));
-    private final double SPEED_LIMIT  = 0.25;
+    private final double SPEED_LIMIT = 0.25;
 
     //MOTION PROFILING CONSTANTS
-    //VALUES ARE IN TICKS/SECOND (EQUIVALENT FOR ACCEL AND JERK)
+    //VALUES ARE IN TICKS/SECOND (TICKS/SECOND^2 FOR ACCEL)
     private final double MAX_VELOCITY = 0.0;
     private final double MAX_ACCEL = 0.0;
-    private final double MAX_JERK = 0.0;
     //TODO: TUNE TOLERANCE
     private final double MOTION_PROFILE_TOLERANCE = 10.0;
 
@@ -47,33 +46,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private MotionProfile profile;
     private boolean usePID = true;
-
-    private double currentVelo = 0;
-    private double lastVelo = 0;
-    private boolean firstLoop = true;
-    private double deltaV = 0;
-
-    private double accel = 0;
-
     private double deltaT = 0;
 
-    private long currentTime = 0;
-    private long lastTime = 0;
 
     private final Debouncer stallDebouncer;
 
-    public enum ElevatorPosition{
+    public enum ElevatorPosition {
         SCORE_POSITION(0.0);
 
 
         private final double value;
-        private ElevatorPosition(double value){
+
+        ElevatorPosition(double value) {
             this.value = value;
         }
-        public double getValue(){
+
+        public double getValue() {
             return value;
         }
     }
+
     public ElevatorSubsystem(HardwareMap hardwareMap) {
         stallDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
         motor1 = hardwareMap.get(DcMotorEx.class, "elevatorMotor1");
@@ -99,14 +91,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorPID.atSetPoint();
     }
 
-    public void resetStall(){
-
-    }
 
     public double getEncoderPosition() {
         return motor1.getCurrentPosition();
     }
-    public void resetEncoderZero(){
+
+    public void resetEncoderZero() {
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -119,7 +109,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor1.setPower(power);
         motor2.setPower(power);
     }
-    public void setSlowly(){
+
+    public void setSlowly() {
         setPower(-0.1);
         stallDebouncer.calculate(false);
     }
@@ -128,30 +119,32 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.usePID = usePID;
     }
 
-    public double getVelo(){
+    public double getVelo() {
         return motor1.getVelocity();
     }
 
-    public boolean motionProfilingAtSetpoint(){
+    public boolean motionProfilingAtSetpoint() {
         return (Math.abs(motionProfilePID.getLastError()) < MOTION_PROFILE_TOLERANCE);
     }
-    public boolean checkZeroVelocity(){
+
+    public boolean checkZeroVelocity() {
         return stallDebouncer.calculate(Math.abs(motor1.getVelocity()) < 10);
     }
-    public void resetElevatorStall(){
+
+    public void resetElevatorStall() {
         setPower(0);
-        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoderZero();
     }
 
-    public void setUseMotionProfiling(boolean useMotionProfiling){
+    public void setUseMotionProfiling(boolean useMotionProfiling) {
         this.useMotionProfiling = useMotionProfiling;
     }
+
     //runs to position using motion profiling
     //generates motion profile based on current state and user specified goalState
     //also must take in start time for motion profile to profile
-    public void runToPositionMotionProfiling(MotionState goalState, long timeStarted){
-        motionProfileStartTime = timeStarted / (long)1000;
+    public void runToPositionMotionProfiling(MotionState goalState, long timeStarted) {
+        motionProfileStartTime = timeStarted / (long) 1000;
 
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
                 new MotionState(getEncoderPosition(), getVelo(), 0),
@@ -166,16 +159,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (usePID) {
-            if(useMotionProfiling){
-                elapsedTime = System.currentTimeMillis() / (long)1000 - motionProfileStartTime;
+            if (useMotionProfiling) {
+                elapsedTime = System.currentTimeMillis() / (long) 1000 - motionProfileStartTime;
                 MotionState state = profile.get(elapsedTime);
                 motionProfilePID.setTargetVelocity(state.getV());
                 motionProfilePID.setTargetAcceleration(state.getA());
                 motionProfilePID.setTargetPosition(state.getX());
                 double power = motionProfilePID.update(getEncoderPosition());
                 setPower(MathUtils.clamp(power, -SPEED_LIMIT, SPEED_LIMIT));
-            }
-            else {
+            } else {
                 double power = elevatorPID.calculate(getEncoderPosition());
                 setPower(power);
             }
@@ -185,9 +177,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
         FtcDashboard board = FtcDashboard.getInstance();
         board.getTelemetry().addData("loop time: ", deltaT);
-        board.getTelemetry().addData("velo: ", getVelo());
-        board.getTelemetry().addData("accel: ", accel);
-        board.getTelemetry().addData("deltaV: ", deltaV);
 
         FtcDashboard.getInstance().getTelemetry().update();
 

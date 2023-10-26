@@ -15,7 +15,7 @@ public class FollowTrajectory extends CommandBase {
         this.trajectory = trajectory;
         addRequirements(driveSubsystem);
     }
-
+    //async trajectory following to use other things while following
     @Override
     public void initialize(){
         driveSubsystem.followTrajectoryAsync(trajectory);

@@ -37,25 +37,27 @@ public class PropProcessor implements VisionProcessor {
             new Point(500, 480)
     );
 
-    Scalar lowHSVRedUpper;
-    Scalar highHSVRedLower;
-    Scalar lowHSVRedLower;
-    Scalar highHSVRedUpper;
+    Scalar lowHSVColorUpper;
+    Scalar highHSVColorLower;
+    Scalar lowHSVColorLower;
+    Scalar highHSVColorUpper;
 
     public PropProcessor(Alliance alliance){
+        //sets the color thresholds based on alliance
         if(alliance == Alliance.RED){
-            lowHSVRedLower = new Scalar(0, 170, 164); //beginning of red
-            lowHSVRedUpper = new Scalar(12.8, 255, 255);
+            lowHSVColorLower = new Scalar(0, 170, 164); //beginning of red
+            lowHSVColorUpper = new Scalar(12.8, 255, 255);
 
-            highHSVRedLower = new Scalar(138, 90, 160); //end of red
-            highHSVRedUpper = new Scalar(255, 255, 255);
+            highHSVColorLower = new Scalar(138, 90, 160); //end of red
+            highHSVColorUpper = new Scalar(255, 255, 255);
         }
-        else if(alliance == Alliance.BLUE){
-            lowHSVRedLower = new Scalar(100, 100, 100);
-            lowHSVRedUpper = new Scalar(160, 255, 255);
 
-            highHSVRedLower = new Scalar(160, 255, 255); //end of red
-            highHSVRedUpper = new Scalar(160, 255, 255);
+        else if(alliance == Alliance.BLUE){
+            lowHSVColorLower = new Scalar(100, 100, 100); //blue thresholding
+            lowHSVColorUpper = new Scalar(160, 255, 255);
+
+            highHSVColorLower = new Scalar(160, 255, 255);
+            highHSVColorUpper = new Scalar(160, 255, 255);
         }
     }
     @Override
@@ -65,16 +67,13 @@ public class PropProcessor implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        //convert to hsv for thresholding
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
-        //TODO: tune these values
 
-
-
-
-        //maps white to everything in red range and sets everything else to black
-        Core.inRange(testMat, lowHSVRedLower, lowHSVRedUpper, lowMat);
-        Core.inRange(testMat, highHSVRedLower, highHSVRedUpper, highMat);
+        //maps white to everything in color range and black to everything out of color range
+        Core.inRange(testMat, lowHSVColorLower, lowHSVColorUpper, lowMat);
+        Core.inRange(testMat, highHSVColorLower, highHSVColorUpper, highMat);
 
         testMat.release();
 
@@ -84,17 +83,17 @@ public class PropProcessor implements VisionProcessor {
         lowMat.release();
         highMat.release();
 
+        //gets the sum of the pixels in each rectangle
         double leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
         double rightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
         double centerBox = Core.sumElems(finalMat.submat(CENTER_RECT)).val[0];
 
+        //finds max of 3 areas and sets the output string to the corresponding area
         double max = Math.max(Math.max(leftBox, rightBox), centerBox);
         if(leftBox == max) outStr = "left";
         else if(rightBox == max) outStr = "right";
         else outStr = "center";
 
-        double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
-        double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
         finalMat.copyTo(frame);
 
