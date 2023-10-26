@@ -10,6 +10,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.stealthrobotics.library.Alliance;
 
 public class RedPropProcessor extends ProcessorBase {
     Mat testMat = new Mat();
@@ -19,19 +20,44 @@ public class RedPropProcessor extends ProcessorBase {
 
     double redThreshold = 0.5;
 
-    String outStr = "Left";
+    String outStr = "left";
     //TODO: tune these values
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
-            new Point(0, 0)
+            new Point(100, 480)
     );
 
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(0, 0)
+            new Point(500, 0),
+            new Point(640, 480)
+    );
+    static final Rect CENTER_RECT = new Rect(
+            new Point(100, 0),
+            new Point(500, 480)
     );
 
+    Scalar lowHSVRedUpper;
+    Scalar highHSVRedLower;
+    Scalar lowHSVRedLower;
+    Scalar highHSVRedUpper;
+
+    public RedPropProcessor(Alliance alliance){
+        if(alliance == Alliance.RED){
+            lowHSVRedLower = new Scalar(0, 170, 164); //beginning of red
+            lowHSVRedUpper = new Scalar(12.8, 255, 255);
+
+            highHSVRedLower = new Scalar(138, 90, 160); //end of red
+            highHSVRedUpper = new Scalar(255, 255, 255);
+        }
+        else if(alliance == Alliance.BLUE){
+            lowHSVRedLower = new Scalar(100, 100, 100);
+            lowHSVRedUpper = new Scalar(160, 255, 255);
+
+            highHSVRedLower = new Scalar(160, 255, 255); //end of red
+            highHSVRedUpper = new Scalar(160, 255, 255);
+        }
+    }
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
 
@@ -43,11 +69,7 @@ public class RedPropProcessor extends ProcessorBase {
 
         //TODO: tune these values
 
-        Scalar lowHSVRedLower = new Scalar(0, 100, 20); //beginning of red
-        Scalar lowHSVRedUpper = new Scalar(10, 255, 255);
 
-        Scalar highHSVRedLower = new Scalar(160, 100, 20); //end of red
-        Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
 
         //maps white to everything in red range and sets everything else to black
@@ -64,20 +86,16 @@ public class RedPropProcessor extends ProcessorBase {
 
         double leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
         double rightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
+        double centerBox = Core.sumElems(finalMat.submat(CENTER_RECT)).val[0];
+
+        double max = Math.max(Math.max(leftBox, rightBox), centerBox);
+        if(leftBox == max) outStr = "left";
+        else if(rightBox == max) outStr = "right";
+        else outStr = "center";
 
         double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
         double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
-
-
-
-        if(averagedLeftBox > redThreshold){        //Must Tune Red Threshold
-            outStr = "left";
-        }else if(averagedRightBox> redThreshold){
-            outStr = "center";
-        }else{
-            outStr = "right";
-        }
         finalMat.copyTo(frame);
 
         return null;
@@ -87,6 +105,7 @@ public class RedPropProcessor extends ProcessorBase {
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
     }
+    @Override
 
     public String getOutStr(){
         return outStr;

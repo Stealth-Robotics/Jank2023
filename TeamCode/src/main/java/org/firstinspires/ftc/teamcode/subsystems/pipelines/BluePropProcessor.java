@@ -24,12 +24,16 @@ public class BluePropProcessor extends ProcessorBase {
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
-            new Point(0, 0)
+            new Point(100, 480)
     );
 
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(0, 0)
+            new Point(500, 0),
+            new Point(640, 480)
+    );
+    static final Rect CENTER_RECT = new Rect(
+            new Point(100, 0),
+            new Point(500, 480)
     );
 
     @Override
@@ -45,8 +49,8 @@ public class BluePropProcessor extends ProcessorBase {
 
 
         //hue range for blue
-        Scalar lowHSVBlueLower = new Scalar(100, 100, 20);
-        Scalar lowHSVBlueUpper = new Scalar(130, 255, 255);
+        Scalar lowHSVBlueLower = new Scalar(100, 100, 100);
+        Scalar lowHSVBlueUpper = new Scalar(160, 255, 255);
 
         //maps white to everything in blue range and sets everything else to black
         Core.inRange(testMat, lowHSVBlueLower, lowHSVBlueUpper, lowMat);
@@ -60,6 +64,12 @@ public class BluePropProcessor extends ProcessorBase {
 
         double leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
         double rightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
+        double centerBox = Core.sumElems(finalMat.submat(CENTER_RECT)).val[0];
+
+        double max = Math.max(Math.max(leftBox, rightBox), centerBox);
+        if(leftBox == max) outStr = "left";
+        else if(rightBox == max) outStr = "right";
+        else outStr = "center";
 
         double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
         double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
@@ -67,13 +77,13 @@ public class BluePropProcessor extends ProcessorBase {
 
 
 
-        if(averagedLeftBox > blueThreshold){        //Must Tune Blue Threshold
-            outStr = "left";
-        }else if(averagedRightBox> blueThreshold){
-            outStr = "center";
-        }else{
-            outStr = "right";
-        }
+//        if(averagedLeftBox > blueThreshold){        //Must Tune Blue Threshold
+//            outStr = "left";
+//        }else if(averagedRightBox> blueThreshold){
+//            outStr = "center";
+//        }else{
+//            outStr = "right";
+//        }
         finalMat.copyTo(frame);
 
         return null;
