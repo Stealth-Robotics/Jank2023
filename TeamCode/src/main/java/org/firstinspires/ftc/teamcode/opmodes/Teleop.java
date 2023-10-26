@@ -1,25 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import android.graphics.Camera;
-
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
-import org.firstinspires.ftc.teamcode.commands.DriveToBoard;
-import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.pipelines.BluePropProcessor;
-import org.firstinspires.ftc.teamcode.subsystems.pipelines.RedPropProcessor;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
@@ -40,9 +28,6 @@ public abstract class Teleop extends StealthOpMode {
     GamepadEx operatorGamepad;
 
     private CameraSubsystem cameraSubsystem;
-    public CameraSubsystem intializeCameraSubsystem(){
-        return null;
-    }
 
 
     public void initialize() {

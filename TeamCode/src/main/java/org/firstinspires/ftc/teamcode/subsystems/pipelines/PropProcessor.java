@@ -12,7 +12,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.stealthrobotics.library.Alliance;
 
-public class RedPropProcessor extends ProcessorBase {
+public class PropProcessor implements VisionProcessor {
     Mat testMat = new Mat();
     Mat highMat = new Mat();
     Mat lowMat = new Mat();
@@ -42,7 +42,7 @@ public class RedPropProcessor extends ProcessorBase {
     Scalar lowHSVRedLower;
     Scalar highHSVRedUpper;
 
-    public RedPropProcessor(Alliance alliance){
+    public PropProcessor(Alliance alliance){
         if(alliance == Alliance.RED){
             lowHSVRedLower = new Scalar(0, 170, 164); //beginning of red
             lowHSVRedUpper = new Scalar(12.8, 255, 255);
@@ -105,8 +105,6 @@ public class RedPropProcessor extends ProcessorBase {
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
     }
-    @Override
-
     public String getOutStr(){
         return outStr;
     }
