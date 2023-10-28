@@ -4,6 +4,7 @@ import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -22,6 +23,7 @@ public class CameraSubsystem extends SubsystemBase {
         this.alliance = alliance;
         //inits processor based on specified alliance
         processor = new PropProcessor(alliance);
+
         //sets camera info using processor
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
@@ -29,6 +31,7 @@ public class CameraSubsystem extends SubsystemBase {
                 .setCamera(BuiltinCameraDirection.BACK)
                 .addProcessor(processor)
                 .build();
+        FtcDashboard.getInstance().startCameraStream(processor, 25);
     }
 
     @Override

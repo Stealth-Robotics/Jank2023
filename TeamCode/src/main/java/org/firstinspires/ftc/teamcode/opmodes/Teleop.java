@@ -35,8 +35,7 @@ public abstract class Teleop extends StealthOpMode {
 
 
     public void initialize() {
-
-        //CameraSubsystem camera = new CameraSubsystem(hardwareMap, Alliance.RED);
+        //cameraSubsystem = new CameraSubsystem(hardwareMap, Alliance.RED);
 
 
 

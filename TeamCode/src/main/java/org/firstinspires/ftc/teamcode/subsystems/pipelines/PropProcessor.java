@@ -1,9 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems.pipelines;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -12,7 +17,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.stealthrobotics.library.Alliance;
 
-public class PropProcessor implements VisionProcessor {
+import java.util.concurrent.atomic.AtomicReference;
+
+public class PropProcessor implements VisionProcessor, CameraStreamSource {
     Mat testMat = new Mat();
     Mat highMat = new Mat();
     Mat lowMat = new Mat();
@@ -42,6 +49,8 @@ public class PropProcessor implements VisionProcessor {
     Scalar lowHSVColorLower;
     Scalar highHSVColorUpper;
 
+    private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
     public PropProcessor(Alliance alliance){
         //sets the color thresholds based on alliance
         if(alliance == Alliance.RED){
@@ -62,11 +71,13 @@ public class PropProcessor implements VisionProcessor {
     }
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
-
+        lastFrame.set(Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565));
     }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+
+
         //convert to hsv for thresholding
         Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
 
@@ -96,6 +107,11 @@ public class PropProcessor implements VisionProcessor {
 
 
         finalMat.copyTo(frame);
+        //frame.copyTo(frame);
+
+        Bitmap b = Bitmap.createBitmap(finalMat.width(), finalMat.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(finalMat, b);
+        lastFrame.set(b);
 
         return null;
     }
@@ -106,5 +122,10 @@ public class PropProcessor implements VisionProcessor {
     }
     public String getOutStr(){
         return outStr;
+    }
+
+    @Override
+    public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
+        continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
     }
 }
