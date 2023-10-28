@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
@@ -38,16 +41,18 @@ public abstract class Teleop extends StealthOpMode {
 
 //        roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
 //        driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
+        elevator = new ElevatorSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap);
 
 
 
 
-//        driverGamepad = new GamepadEx(gamepad1);
-//        operatorGamepad = new GamepadEx(gamepad2);
-//
-//        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
-//                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
-//        ));
+        driverGamepad = new GamepadEx(gamepad1);
+        operatorGamepad = new GamepadEx(gamepad2);
+
+        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
+                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
+        ));
 //        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
 //                new InstantCommand(() -> elevator.resetEncoderZero())
 //        );
@@ -58,13 +63,28 @@ public abstract class Teleop extends StealthOpMode {
 //        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whileHeld(
 //                new DriveToBoard(driveSubsystem)
 //        );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                new InstantCommand(() -> clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW))
+        );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                new InstantCommand(() -> clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
+        );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                new InstantCommand(() -> clawper.clawperToPosition(ClawperSubsystem.ClawperPosition.RELEASE_BOTH))
+        );
+
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                    new InstantCommand(() -> clawper.clawperClosedPosition())
+            );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new InstantCommand(() -> clawper.clawperRelease())
+        );
 
     }
     @SuppressWarnings("unused")
     //sets the camera to the red prop processor if alliance is red
     @TeleOp(name = "RED | Tele-Op", group = "Red")
     public static class RedTeleop extends Teleop {
-
 
 
     }
