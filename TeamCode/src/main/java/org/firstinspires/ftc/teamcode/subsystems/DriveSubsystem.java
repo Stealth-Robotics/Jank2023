@@ -12,6 +12,7 @@ import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -30,7 +31,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final DcMotor backLeftMotor;
     private final DcMotor backRightMotor;
 
-    private final DistanceSensor distanceSensor;
+    //private final DistanceSensor distanceSensor;
     double headingOffset = 0;
 
     IMU imu;
@@ -43,7 +44,7 @@ public class DriveSubsystem extends SubsystemBase {
         backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
         backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
 
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         //TODO: CHECK DIRECTIONS
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -57,7 +58,7 @@ public class DriveSubsystem extends SubsystemBase {
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                         RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
@@ -70,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getAngle() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - headingOffset;
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - headingOffset + Math.PI;
     }
 
     public void resetAngle() {
@@ -101,9 +102,9 @@ public class DriveSubsystem extends SubsystemBase {
         driveTeleop(0.2, 0, 0, false, false);
     }
 
-    public double getDistance(){
-        return distanceSensor.getDistance(DistanceUnit.MM);
-    }
+//    public double getDistance(){
+//        return distanceSensor.getDistance(DistanceUnit.MM);
+//    }
 
     public Pose2d getPoseEstimate(){
         return roadrunnerDrive.getPoseEstimate();
@@ -122,18 +123,10 @@ public class DriveSubsystem extends SubsystemBase {
                 -leftStickY,
                 -leftStickX
         ).rotated(getAngle());
-        if(strafe){
-            inputVector = new Vector2d(
-
-                    0,
-                    -leftStickX
-
-            ).rotated(getAngle());
-        }
         roadrunnerDrive.setWeightedDrivePower(
                 new Pose2d(
                         inputVector.getX() * speedMultiplier,
-                        inputVector.getY() * speedMultiplier,
+                        -inputVector.getY() * speedMultiplier,
                         -rightStickX * speedMultiplier
                 )
         );
@@ -142,5 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        FtcDashboard.getInstance().getTelemetry().addData("roboheading: ", getAngle());
+        FtcDashboard.getInstance().getTelemetry().update();
     }
 }

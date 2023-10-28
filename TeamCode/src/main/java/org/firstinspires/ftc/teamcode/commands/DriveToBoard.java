@@ -21,7 +21,8 @@ public class DriveToBoard extends CommandBase {
     @Override
     public boolean isFinished() {
         //will stop when distance is between 3 and 5 millimeters
-        return (driveSubsystem.getDistance() > 3 && driveSubsystem.getDistance() < 5);
+//        return (driveSubsystem.getDistance() > 3 && driveSubsystem.getDistance() < 5);
+        return true;
     }
 
     @Override

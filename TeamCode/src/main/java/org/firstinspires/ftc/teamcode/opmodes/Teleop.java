@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
@@ -30,18 +31,18 @@ public abstract class Teleop extends StealthOpMode {
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
 
-    private CameraSubsystem cameraSubsystem;
+    //private CameraSubsystem cameraSubsystem;
 
 
     public void initialize() {
 
-        CameraSubsystem camera = new CameraSubsystem(hardwareMap, Alliance.RED);
+        //CameraSubsystem camera = new CameraSubsystem(hardwareMap, Alliance.RED);
 
 
 
-//        roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
-//        driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
-        elevator = new ElevatorSubsystem(hardwareMap);
+        roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
+        driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
+        //elevator = new ElevatorSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap);
 
 
@@ -50,9 +51,21 @@ public abstract class Teleop extends StealthOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
 
-        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
-                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
-        ));
+        driveSubsystem.setDefaultCommand(
+                new DriveDefaultCommand(
+                        driveSubsystem,
+                        () -> driverGamepad.getLeftY(),
+                        () -> driverGamepad.getLeftX(),
+                        () -> driverGamepad.getRightX(),
+                        () -> driverGamepad.gamepad.right_bumper,
+                        () -> driverGamepad.gamepad.left_bumper
+                )
+        );
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> driveSubsystem.resetAngle()));
+//        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
+//                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
+//        ));
 //        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
 //                new InstantCommand(() -> elevator.resetEncoderZero())
 //        );
