@@ -33,11 +33,16 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 16.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(90.00)))
-                                .splineTo(new Vector2d(-47, -33), Math.toRadians(90))
-                                .back(7, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
+                                .splineTo(new Vector2d(-39.5, -42), Math.toRadians(90))
+                                .splineTo(new Vector2d(-24.9, -32.9), Math.toRadians(90))
+                                .back(3, veloConstraint(Math.toRadians(180), 5), accelConstraint(5))
+                                .forward(1.5)
+                                .turn(Math.toRadians(90))
 
-                                .splineTo(new Vector2d(-24.2, -36.7), Math.toRadians(0))
-                                .splineTo(new Vector2d(50, -28), Math.toRadians(0))
+                                .back(3)
+                                .splineTo(new Vector2d(2, -35.3), Math.toRadians(0))
+                                .back(1)
+                                .splineTo(new Vector2d(50, -41), Math.toRadians(0))
                                 .build()
                 );
 
