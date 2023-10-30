@@ -43,6 +43,7 @@ public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
             telemetry.addData("Tag ID: ", detection.id);
             telemetry.addData("Tag Pose: ", detection.metadata.fieldPosition);
             telemetry.addData("distance to tag: ", detection.ftcPose);
+            telemetry.update();
         }
     }
 }
