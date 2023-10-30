@@ -68,8 +68,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem(HardwareMap hardwareMap) {
         stallDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
-        motor1 = hardwareMap.get(DcMotorEx.class, "elevatorMotor1");
-        motor2 = hardwareMap.get(DcMotorEx.class, "elevatorMotor2");
+        motor1 = hardwareMap.get(DcMotorEx.class, "motor1");
+        motor2 = hardwareMap.get(DcMotorEx.class, "motor2");
 
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -93,7 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public double getEncoderPosition() {
-        return motor1.getCurrentPosition();
+        return motor2.getCurrentPosition();
     }
 
     public void resetEncoderZero() {

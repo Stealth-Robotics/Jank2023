@@ -41,7 +41,7 @@ public abstract class Teleop extends StealthOpMode {
 
         roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
-        //elevator = new ElevatorSubsystem(hardwareMap);
+        elevator = new ElevatorSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap);
 
 
@@ -62,9 +62,9 @@ public abstract class Teleop extends StealthOpMode {
         );
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> driveSubsystem.resetAngle()));
-//        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
-//                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
-//        ));
+        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
+                () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
+        ));
 //        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
 //                new InstantCommand(() -> elevator.resetEncoderZero())
 //        );

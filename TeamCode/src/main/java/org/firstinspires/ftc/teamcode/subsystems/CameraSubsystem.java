@@ -18,6 +18,8 @@ public class CameraSubsystem extends SubsystemBase {
 
     private final VisionPortal portal;
     private final Alliance alliance;
+
+    private String position;
     PropProcessor processor;
     public CameraSubsystem(HardwareMap hardwareMap, Alliance alliance){
         this.alliance = alliance;
@@ -34,9 +36,13 @@ public class CameraSubsystem extends SubsystemBase {
         FtcDashboard.getInstance().startCameraStream(processor, 25);
     }
 
+    public final String getPosition(){
+        return position;
+    }
     @Override
     public void periodic() {
         telemetry.addData("position: ", processor.getOutStr());
+        position = processor.getOutStr();
     }
 
 
