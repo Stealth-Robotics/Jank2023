@@ -135,7 +135,5 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        FtcDashboard.getInstance().getTelemetry().addData("roboheading: ", getAngle());
-        FtcDashboard.getInstance().getTelemetry().update();
     }
 }
