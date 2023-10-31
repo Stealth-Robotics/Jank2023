@@ -40,6 +40,9 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(47.7, -29, Math.toRadians(180)), Math.toRadians(0))
+                                .strafeTo(new Vector2d(47.2, -59.2))
+                                .back(12)
+
                                 .build()
                 );
 
@@ -56,6 +59,8 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(-35.6, -53, Math.toRadians(100)), Math.toRadians(315))
                                 .splineToSplineHeading(new Pose2d(-2.3, -56, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(47.7, -36.5, Math.toRadians(180)), Math.toRadians(0))
+                                .strafeTo(new Vector2d(47.2, -59.2))
+                                .back(12)
                                 .build()
                 );
         RoadRunnerBotEntity rightBot = new DefaultBotBuilder(meepMeep)
@@ -71,6 +76,8 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(47.7, -43.5, Math.toRadians(180)), Math.toRadians(0))
+                                .strafeTo(new Vector2d(47.2, -59.2))
+                                .back(12)
                                 .build()
                 );
 
