@@ -55,9 +55,9 @@ public class RedLeftAuto extends StealthOpMode {
 
         return new SequentialCommandGroup(
             new FollowTrajectory(drive, RedLeftTrajectories.rightPixelDrop),
-            new WaitCommand(1000),
+            //new WaitCommand(1000),
             new FollowTrajectory(drive, RedLeftTrajectories.outtakeDriveBackRight),
-            new WaitCommand(1000),
+            //new WaitCommand(1000),
             new FollowTrajectorySequence(drive, RedLeftTrajectories.driveToBoardRight)
 
 //                new ParallelCommandGroup(
