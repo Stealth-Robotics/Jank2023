@@ -31,8 +31,8 @@ public class RedLeftTrajectories {
             .build();
     public static Trajectory rightPixelDrop = TrajectoryBuilder.buildTrajectory(
                     new Pose2d(-39.5, -62, Math.toRadians(90.00)))
-            .splineTo(new Vector2d(-39.5, -42), Math.toRadians(90))
-            .splineTo(new Vector2d(-24.9, -32.9), Math.toRadians(90))
+            .splineTo(new Vector2d(-39.5, -50), Math.toRadians(90))
+            .splineTo(new Vector2d(-30.6, -34.9), Math.toRadians(45))
             .build();
 
 
@@ -72,12 +72,9 @@ public class RedLeftTrajectories {
             .splineTo(new Vector2d(50, -35), Math.toRadians(0))
             .build();
     public static TrajectorySequence driveToBoardRight = TrajectorySequenceBuilder.buildTrajectorySequence(outtakeDriveBackRight.end())
-            .forward(1.5)
-            .turn(Math.toRadians(90))
-            .back(3)
-            .splineTo(new Vector2d(2, -35.3), Math.toRadians(0))
-            .back(1)
-            .splineTo(new Vector2d(50, -41), Math.toRadians(0))
+            .splineTo(new Vector2d(-34.1, -49.3), Math.toRadians(315))
+            .splineTo(new Vector2d(-2.3, -57), Math.toRadians(0))
+            .splineTo(new Vector2d(47.7, -43.5), Math.toRadians(0))
             .build();
 
 
