@@ -27,7 +27,7 @@ public class MeepMeepSim{
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity redLeftBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
@@ -46,7 +46,7 @@ public class MeepMeepSim{
                                 .build()
                 );
 
-        RoadRunnerBotEntity centerBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity redCenterBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
@@ -63,7 +63,7 @@ public class MeepMeepSim{
                                 .back(12)
                                 .build()
                 );
-        RoadRunnerBotEntity rightBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity redRightBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
@@ -81,12 +81,68 @@ public class MeepMeepSim{
                                 .build()
                 );
 
+        RoadRunnerBotEntity rightRedRightBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
+                                .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
+                                .splineToSplineHeading(new Pose2d(22.6, -37, Math.toRadians(90)), Math.toRadians(90))
+                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+
+                                .splineToSplineHeading(new Pose2d(47.7, -42, Math.toRadians(180)), Math.toRadians(30))
+//
+                                .strafeTo(new Vector2d(47.2, -59.2))
+                                .back(12)
+
+                                .build()
+                );
+
+        RoadRunnerBotEntity rightRedCenterBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
+                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
+                                        .splineToSplineHeading(new Pose2d(14.6, -33, Math.toRadians(90)), Math.toRadians(90))
+                                        .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+
+                                        .splineToSplineHeading(new Pose2d(47.7, -35, Math.toRadians(180)), Math.toRadians(30))
+//
+                                        .strafeTo(new Vector2d(47.2, -59.2))
+                                        .back(12)
+
+                                        .build()
+                );
+
+        RoadRunnerBotEntity rightRedLeftBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
+                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
+                                        .splineToSplineHeading(new Pose2d(7.8, -36, Math.toRadians(135)), Math.toRadians(180))
+                                        .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+
+                                        .splineToSplineHeading(new Pose2d(47.7, -29, Math.toRadians(180)), Math.toRadians(30))
+//
+                                        .strafeTo(new Vector2d(47.2, -59.2))
+                                        .back(12)
+
+                                        .build()
+                );
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
-                .addEntity(centerBot)
-                .addEntity(rightBot)
+                .addEntity(redCenterBot)
+                .addEntity(redLeftBot)
+                .addEntity(redRightBot)
+                .addEntity(rightRedRightBot)
+                .addEntity(rightRedCenterBot)
+                .addEntity(rightRedLeftBot)
                 .start();
     }
 }
