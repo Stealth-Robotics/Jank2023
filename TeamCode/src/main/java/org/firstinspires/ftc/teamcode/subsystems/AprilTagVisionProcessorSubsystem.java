@@ -4,12 +4,16 @@ import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
 import android.util.Size;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
@@ -34,6 +38,20 @@ public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
 
 
 
+    }
+
+    public Pose2d robotPoseFromAprilTagDetection(){
+        AprilTagDetection detection = processor.getFreshDetections().get(0);
+        if(detection != null){
+            VectorF aprilTagFieldPosition = detection.metadata.fieldPosition;
+            AprilTagPoseFtc distanceFromTag = detection.ftcPose;
+            Vector2d tagDistance = new Vector2d(distanceFromTag.x, distanceFromTag.y);
+            Vector2d aprilTagPose = new Vector2d(aprilTagFieldPosition.get(0), aprilTagFieldPosition.get(1));
+            Vector2d robotPose = aprilTagPose.minus(tagDistance);
+            return new Pose2d(robotPose.getX(), robotPose.getY(), distanceFromTag.yaw);
+
+        }
+        else return null;
     }
 
     @Override
