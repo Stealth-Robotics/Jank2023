@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.trajectories.RedRightTrajectories;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 @SuppressWarnings("unused")
-@Autonomous(name="Red left auto", group="red auto")
+@Autonomous(name="Red right auto", group="red auto")
 public class RedRightAuto extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
@@ -42,7 +42,7 @@ public class RedRightAuto extends StealthOpMode {
 
     @Override
     public Command getAutoCommand() {
-        drive.setPoseEstimate(RedRightTrajectories.leftPixelDrop.start());
+        drive.setPoseEstimate(RedRightTrajectories.rightPixelDrop.start());
         //Set trajectory sequence based on camera, implement later
 
         Trajectory pixelDrop = RedRightTrajectories.leftPixelDrop;

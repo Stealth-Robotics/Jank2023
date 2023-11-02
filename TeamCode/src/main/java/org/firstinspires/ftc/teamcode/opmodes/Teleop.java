@@ -31,11 +31,13 @@ public abstract class Teleop extends StealthOpMode {
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
 
-    //private CameraSubsystem cameraSubsystem;
+    private CameraSubsystem cameraSubsystem;
 
 
     public void initialize() {
-        //cameraSubsystem = new CameraSubsystem(hardwareMap, Alliance.RED);
+        cameraSubsystem = new CameraSubsystem(hardwareMap, Alliance.RED);
+
+        telemetry.addData("pos:", cameraSubsystem.getPosition());
 
 
 

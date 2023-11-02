@@ -178,6 +178,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         FtcDashboard board = FtcDashboard.getInstance();
         board.getTelemetry().addData("loop time: ", deltaT);
 
+
+        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
         FtcDashboard.getInstance().getTelemetry().update();
 
     }
