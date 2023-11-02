@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 
@@ -22,11 +23,19 @@ public class FollowTrajectory extends CommandBase {
     }
     @Override
     public void execute(){
+
         driveSubsystem.update();
+        FtcDashboard.getInstance().getTelemetry().addData("pos x ", driveSubsystem.getPoseEstimate().getX());
+        FtcDashboard.getInstance().getTelemetry().addData("pos y ", driveSubsystem.getPoseEstimate().getY());
+        FtcDashboard.getInstance().getTelemetry().addData("Trajectory x ", trajectory.end().getX());
+        FtcDashboard.getInstance().getTelemetry().addData("Trajectory y ", trajectory.end().getY());
+        FtcDashboard.getInstance().getTelemetry().update();
+
+
     }
     @Override
     public boolean isFinished(){
-        return driveSubsystem.isBusy();
+        return !driveSubsystem.isBusy();
     }
 
     @Override
