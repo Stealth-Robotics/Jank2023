@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -48,7 +49,7 @@ public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
             Vector2d tagDistance = new Vector2d(distanceFromTag.x, distanceFromTag.y);
             Vector2d aprilTagPose = new Vector2d(aprilTagFieldPosition.get(0), aprilTagFieldPosition.get(1));
             Vector2d robotPose = aprilTagPose.minus(tagDistance);
-            return new Pose2d(robotPose.getX(), robotPose.getY(), distanceFromTag.yaw);
+            return new Pose2d(robotPose.getX(), robotPose.getY(), distanceFromTag.bearing);
 
         }
         else return null;
