@@ -26,7 +26,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     //TODO: Tune PID
     private final double kP = 0.015;
     private final double kI = 0;
-    private final double kD = 0;
+    private final double kD = 0.0000;
     private final double kF = 0;
     private boolean useMotionProfiling = false;
     private final PIDFController elevatorPID = new PIDFController(kP, kI, kD, kF);
@@ -87,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        elevatorPID.setTolerance(10);
+        elevatorPID.setTolerance(20);
 
     }
 
@@ -196,7 +196,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
         FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
-        FtcDashboard.getInstance().getTelemetry().addData("level", level);
+        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
 
         FtcDashboard.getInstance().getTelemetry().update();
 

@@ -59,6 +59,8 @@ public abstract class Teleop extends StealthOpMode {
         clawper = new ClawperSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
 
+        clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW);
+
 
 
 
