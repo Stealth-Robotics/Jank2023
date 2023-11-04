@@ -26,7 +26,7 @@ public class ElevatorDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (input != null && Math.abs(input.getAsDouble()) > 0.05) {
+        if (input != null && Math.abs(input.getAsDouble()) > 0.1) {
             elevator.setPower(input.getAsDouble());
             elevator.setUsePID(false);
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
@@ -36,6 +36,7 @@ public class ElevatorDefaultCommand extends CommandBase {
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
 //            elevator.setUsePID(true);
 //
+            elevator.setPower(0);
         }
     }
 }

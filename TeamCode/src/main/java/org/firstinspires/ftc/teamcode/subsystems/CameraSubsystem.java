@@ -33,7 +33,7 @@ public class CameraSubsystem extends SubsystemBase {
                 .setCamera(BuiltinCameraDirection.BACK)
                 .addProcessor(processor)
                 .build();
-        FtcDashboard.getInstance().startCameraStream(processor, 25);
+        //FtcDashboard.getInstance().startCameraStream(processor, 25);
     }
 
     public final String getPosition(){

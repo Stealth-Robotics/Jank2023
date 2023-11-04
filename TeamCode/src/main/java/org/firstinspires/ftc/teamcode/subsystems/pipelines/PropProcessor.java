@@ -19,7 +19,7 @@ import org.stealthrobotics.library.Alliance;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PropProcessor implements VisionProcessor, CameraStreamSource {
+public class PropProcessor implements VisionProcessor {
     Mat testMat = new Mat();
     Mat highMat = new Mat();
     Mat lowMat = new Mat();
@@ -49,7 +49,6 @@ public class PropProcessor implements VisionProcessor, CameraStreamSource {
     Scalar lowHSVColorLower;
     Scalar highHSVColorUpper;
 
-    private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
 
     public PropProcessor(Alliance alliance){
         //sets the color thresholds based on alliance
@@ -71,7 +70,6 @@ public class PropProcessor implements VisionProcessor, CameraStreamSource {
     }
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
-        lastFrame.set(Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565));
     }
 
     @Override
@@ -109,9 +107,8 @@ public class PropProcessor implements VisionProcessor, CameraStreamSource {
         finalMat.copyTo(frame);
         //frame.copyTo(frame);
 
-        Bitmap b = Bitmap.createBitmap(finalMat.width(), finalMat.height(), Bitmap.Config.RGB_565);
-        Utils.matToBitmap(finalMat, b);
-        lastFrame.set(b);
+
+        finalMat.release();
 
         return null;
     }
@@ -124,8 +121,4 @@ public class PropProcessor implements VisionProcessor, CameraStreamSource {
         return outStr;
     }
 
-    @Override
-    public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
-        continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
-    }
 }

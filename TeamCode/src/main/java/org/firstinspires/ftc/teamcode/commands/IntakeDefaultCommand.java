@@ -18,6 +18,9 @@ public class IntakeDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (Math.abs(triggerInput.getAsDouble()) > 0.05) intake.setSpeed(triggerInput.getAsDouble());
+        if (Math.abs(triggerInput.getAsDouble()) > 0.1) intake.setSpeed(triggerInput.getAsDouble());
+        else{
+            intake.setSpeed(0);
+        }
     }
 }

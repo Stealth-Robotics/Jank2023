@@ -59,7 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 )
         );
 

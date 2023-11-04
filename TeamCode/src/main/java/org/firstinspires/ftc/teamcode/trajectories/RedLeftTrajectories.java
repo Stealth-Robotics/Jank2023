@@ -22,19 +22,25 @@ public class RedLeftTrajectories {
 
     //first trajectory, drives to tape line
     public static Trajectory leftPixelDrop = TrajectoryBuilder.buildTrajectory(
-            new Pose2d(-39.5, -62, Math.toRadians(90.00)))
-            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-46.8, -37, Math.toRadians(90)), Math.toRadians(90))
+            new Pose2d(-39.5, -62, Math.toRadians(270)))
+            .back(1e-2)
+
+            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+            .splineToSplineHeading(new Pose2d(-46.8, -37, Math.toRadians(270)), Math.toRadians(90))
             .build();
     public static Trajectory centerPixelDrop = TrajectoryBuilder.buildTrajectory(
-                    new Pose2d(-39.5, -62, Math.toRadians(90.00)))
-            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-36.2, -30, Math.toRadians(90)), Math.toRadians(90))
+                    new Pose2d(-39.5, -62, Math.toRadians(270)))
+            .back(1e-2)
+
+            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+            .splineToSplineHeading(new Pose2d(-36.2, -30, Math.toRadians(270)), Math.toRadians(90))
             .build();
     public static Trajectory rightPixelDrop = TrajectoryBuilder.buildTrajectory(
-                    new Pose2d(-39.5, -62, Math.toRadians(90.00)))
-            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-31.3, -34.3, Math.toRadians(45)), Math.toRadians(0))
+                    new Pose2d(-39.5, -62, Math.toRadians(270)))
+            .back(1e-2)
+
+            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+            .splineToSplineHeading(new Pose2d(-31.3, -34.3, Math.toRadians(135)), Math.toRadians(0))
             .build();
 
 
@@ -64,18 +70,18 @@ public class RedLeftTrajectories {
             )
             .build();
     //after outtaking hex, drive to board position to place hex
-    public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(outtakeDriveBackLeft.end(), true)
+    public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(outtakeDriveBackLeft.end(), Math.toRadians(180))
             .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(47.7, -29, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
-    public static Trajectory driveToBoardCenter = TrajectoryBuilder.buildTrajectory(outtakeDriveBackCenter.end(), true)
+    public static Trajectory driveToBoardCenter = TrajectoryBuilder.buildTrajectory(outtakeDriveBackCenter.end(), Math.toRadians(180))
             .splineToSplineHeading(new Pose2d(-35.6, -53, Math.toRadians(100)), Math.toRadians(315))
             .splineToSplineHeading(new Pose2d(-2.3, -56, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(47.7, -36.5, Math.toRadians(180)), Math.toRadians(0))
             .build();
-    public static Trajectory driveToBoardRight = TrajectoryBuilder.buildTrajectory(outtakeDriveBackRight.end(), true)
+    public static Trajectory driveToBoardRight = TrajectoryBuilder.buildTrajectory(outtakeDriveBackRight.end(), Math.toRadians(180))
             .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(47.7, -43.5, Math.toRadians(180)), Math.toRadians(0))

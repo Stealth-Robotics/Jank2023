@@ -7,11 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
@@ -24,6 +26,8 @@ public abstract class Teleop extends StealthOpMode {
 
     ElevatorSubsystem elevator;
     ClawperSubsystem clawper;
+
+    IntakeSubsystem intake;
 
     DriveSubsystem driveSubsystem;
     SampleMecanumDrive roadrunnerDrive;
@@ -45,6 +49,7 @@ public abstract class Teleop extends StealthOpMode {
         driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
         elevator = new ElevatorSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap);
 
 
 
@@ -61,6 +66,10 @@ public abstract class Teleop extends StealthOpMode {
                         () -> driverGamepad.gamepad.right_bumper,
                         () -> driverGamepad.gamepad.left_bumper
                 )
+        );
+
+        intake.setDefaultCommand(
+               new IntakeDefaultCommand(intake, () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger))
         );
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> driveSubsystem.resetAngle()));
