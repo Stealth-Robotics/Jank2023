@@ -10,17 +10,18 @@ import java.util.function.BooleanSupplier;
 public class ElevatorReset extends CommandBase {
 
     private final ElevatorSubsystem elevator;
-    private final BooleanSupplier endItAll;
 
-    public ElevatorReset(ElevatorSubsystem elevator, BooleanSupplier cancel){
+
+    public ElevatorReset(ElevatorSubsystem elevator){
         this.elevator = elevator;
-        endItAll = cancel;
+
         addRequirements(elevator);
     }
 
 
     @Override
     public void initialize() {
+        elevator.setUsePID(false);
         elevator.setSlowly();
         FtcDashboard.getInstance().getTelemetry().addData("running ", true);
         FtcDashboard.getInstance().getTelemetry().update();
@@ -32,12 +33,15 @@ public class ElevatorReset extends CommandBase {
     @Override
     //ends command if elevator is at zero velocity or if the cancel button is pressed
     public boolean isFinished() {
-        return elevator.checkZeroVelocity() || endItAll.getAsBoolean();
+        return elevator.checkZeroVelocity();
     }
 
     @Override
     //runs code to reset encoder position
     public void end(boolean interrupted) {
+
         elevator.resetElevatorStall();
+        elevator.setUsePID(true);
+        elevator.setSetpoint(elevator.getEncoderPosition());
     }
 }

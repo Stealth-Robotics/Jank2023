@@ -34,9 +34,9 @@ public class ElevatorDefaultCommand extends CommandBase {
 
         } else {
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
-//            elevator.setUsePID(true);
-//
-            elevator.setPower(0);
+            elevator.setUsePID(true);
+////
+//            elevator.setPower(0);
         }
     }
 }

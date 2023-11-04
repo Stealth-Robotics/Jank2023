@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DcMotorEx motor2;
     //PID Constants
     //TODO: Tune PID
-    private final double kP = 0;
+    private final double kP = 0.015;
     private final double kI = 0;
     private final double kD = 0;
     private final double kF = 0;
@@ -51,8 +51,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final Debouncer stallDebouncer;
 
+
+    private int level = 1;
+
     public enum ElevatorPosition {
-        SCORE_POSITION(0.0);
+        SCORE_POSITION(0.0),
+        STOW_POSITION(0.0),
+
+        LEVEL_ONE(500),
+        LEVEL_TWO(600),
+        LEVEL_THREE(700);
 
 
         private final double value;
@@ -97,8 +105,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void resetEncoderZero() {
-        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setToCurrentPosition() {
@@ -111,8 +119,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setSlowly() {
-        setPower(-0.1);
         stallDebouncer.calculate(false);
+        setPower(-0.7);
+
     }
 
     public void setUsePID(boolean usePID) {
@@ -128,7 +137,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean checkZeroVelocity() {
-        return stallDebouncer.calculate(Math.abs(motor1.getVelocity()) < 10);
+        return stallDebouncer.calculate(Math.abs(motor2.getVelocity()) < 10);
     }
 
     public void resetElevatorStall() {
@@ -136,6 +145,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         resetEncoderZero();
     }
 
+    public void incrementLevel(int increment){
+        level += increment;
+    }
+    public int getLevel(){
+        return level;
+    }
     public void setUseMotionProfiling(boolean useMotionProfiling) {
         this.useMotionProfiling = useMotionProfiling;
     }
@@ -168,7 +183,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 double power = motionProfilePID.update(getEncoderPosition());
                 setPower(MathUtils.clamp(power, -SPEED_LIMIT, SPEED_LIMIT));
             } else {
-                double power = elevatorPID.calculate(getEncoderPosition());
+                double power = MathUtils.clamp(elevatorPID.calculate(getEncoderPosition()), -1, 1);
                 setPower(power);
             }
         }
@@ -180,7 +195,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
+        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
+        FtcDashboard.getInstance().getTelemetry().addData("level", level);
+
         FtcDashboard.getInstance().getTelemetry().update();
+
 
     }
 }
