@@ -93,6 +93,7 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new InstantCommand(() -> clawper.clawperRelease())
         );
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_CLIMB)));
 
     }
     @SuppressWarnings("unused")
