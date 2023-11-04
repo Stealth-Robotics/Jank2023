@@ -24,7 +24,6 @@ public class RedLeftTrajectories {
     public static Trajectory leftPixelDrop = TrajectoryBuilder.buildTrajectory(
             new Pose2d(-39.5, -62, Math.toRadians(270)))
             .back(1e-2)
-
             .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
             .splineToSplineHeading(new Pose2d(-46.8, -37, Math.toRadians(270)), Math.toRadians(90))
             .build();
@@ -40,13 +39,13 @@ public class RedLeftTrajectories {
             .back(1e-2)
 
             .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-31.3, -34.3, Math.toRadians(135)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-30.3, -30.3, Math.toRadians(135)), Math.toRadians(0))
             .build();
 
 
     //next trajectory, drives back slowly to outtake hex
     public static Trajectory outtakeDriveBackLeft = TrajectoryBuilder.buildTrajectory(leftPixelDrop.end())
-            .back(
+            .forward(
                     5,
                     SampleMecanumDrive.getVelocityConstraint(5, Math.toRadians(180),
                             DriveConstants.TRACK_WIDTH),
@@ -54,7 +53,7 @@ public class RedLeftTrajectories {
             )
             .build();
     public static Trajectory outtakeDriveBackCenter = TrajectoryBuilder.buildTrajectory(centerPixelDrop.end())
-            .back(
+            .forward(
                     5,
                     SampleMecanumDrive.getVelocityConstraint(5, Math.toRadians(180),
                             DriveConstants.TRACK_WIDTH),
@@ -62,7 +61,7 @@ public class RedLeftTrajectories {
             )
             .build();
     public static Trajectory outtakeDriveBackRight = TrajectoryBuilder.buildTrajectory(rightPixelDrop.end())
-            .back(
+            .forward(
                     5,
                     SampleMecanumDrive.getVelocityConstraint(5, Math.toRadians(180),
                             DriveConstants.TRACK_WIDTH),
@@ -82,7 +81,7 @@ public class RedLeftTrajectories {
             .splineToSplineHeading(new Pose2d(47.7, -36.5, Math.toRadians(180)), Math.toRadians(0))
             .build();
     public static Trajectory driveToBoardRight = TrajectoryBuilder.buildTrajectory(outtakeDriveBackRight.end(), Math.toRadians(180))
-            .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-35.6, -54, Math.toRadians(135)), Math.toRadians(315))
             .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(47.7, -43.5, Math.toRadians(180)), Math.toRadians(0))
             .build();

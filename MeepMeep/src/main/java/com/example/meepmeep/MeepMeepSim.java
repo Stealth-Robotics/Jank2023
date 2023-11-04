@@ -33,6 +33,7 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
+                                .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
                                 .splineToSplineHeading(new Pose2d(-46.8, -37, Math.toRadians(270)), Math.toRadians(90))
                                 .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
@@ -52,6 +53,8 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
+                                .back(1e-2)
+
                                 .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
                                 .splineToSplineHeading(new Pose2d(-36.2, -30, Math.toRadians(270)), Math.toRadians(90))
                                 .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
@@ -69,9 +72,11 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
+                                .back(1e-2)
+
                                 .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-                                .splineToSplineHeading(new Pose2d(-31.3, -34.3, Math.toRadians(315)), Math.toRadians(0))
-                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                                .splineToSplineHeading(new Pose2d(-30.3, -30.3, Math.toRadians(135)), Math.toRadians(0))
+                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
                                 //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-35.6, -54, Math.toRadians(135)), Math.toRadians(315))
                                 .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
@@ -86,10 +91,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
-                                .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-                                .splineToSplineHeading(new Pose2d(22.6, -37, Math.toRadians(90)), Math.toRadians(90))
-                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                        drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
+                                .back(1e-2)
+
+                                .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+                                .splineToSplineHeading(new Pose2d(22.6, -37, Math.toRadians(270)), Math.toRadians(90))
+                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
 
                                 .splineToSplineHeading(new Pose2d(47.7, -42, Math.toRadians(180)), Math.toRadians(30))
 //
@@ -104,10 +111,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
-                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-                                        .splineToSplineHeading(new Pose2d(14.6, -33, Math.toRadians(90)), Math.toRadians(90))
-                                        .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
+                                        .back(1e-2)
+
+                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+                                        .splineToSplineHeading(new Pose2d(14.6, -33, Math.toRadians(270)), Math.toRadians(90))
+                                        .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
 
                                         .splineToSplineHeading(new Pose2d(47.7, -35, Math.toRadians(180)), Math.toRadians(30))
 //
@@ -122,10 +131,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(90.00)))
-                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(90)), Math.toRadians(90.0))
-                                        .splineToSplineHeading(new Pose2d(7.8, -36, Math.toRadians(135)), Math.toRadians(180))
-                                        .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
+                                        .back(1e-2)
+
+                                        .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+                                        .splineToSplineHeading(new Pose2d(7.8, -36, Math.toRadians(315)), Math.toRadians(180))
+                                        .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
 
                                         .splineToSplineHeading(new Pose2d(47.7, -29, Math.toRadians(180)), Math.toRadians(30))
 //
@@ -140,10 +151,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(270)))
-                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(270)), Math.toRadians(270))
-                                .splineToSplineHeading(new Pose2d(-46.8, 37, Math.toRadians(270)), Math.toRadians(270))
-                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .back(1e-2)
+
+                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(90)), Math.toRadians(270))
+                                .splineToSplineHeading(new Pose2d(-46.8, 37, Math.toRadians(90)), Math.toRadians(270))
+                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
                                 //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-35.6, 57.0, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-2.3, 57, Math.toRadians(180)), Math.toRadians(0))
@@ -158,10 +171,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(270)))
-                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(270)), Math.toRadians(270.0))
-                                .splineToSplineHeading(new Pose2d(-36.2, 30, Math.toRadians(270)), Math.toRadians(270))
-                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .back(1e-2)
+
+                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(90)), Math.toRadians(270.0))
+                                .splineToSplineHeading(new Pose2d(-36.2, 30, Math.toRadians(90)), Math.toRadians(270))
+                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
                                 //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-35.6, 56, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-2.3, 56, Math.toRadians(180)), Math.toRadians(0))
@@ -176,10 +191,12 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(270.00)))
-                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(270)), Math.toRadians(270.0))
-                                .splineToSplineHeading(new Pose2d(-31.3, 34.3, Math.toRadians(315)), Math.toRadians(0))
-                                .back(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .back(1e-2)
+
+                                .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(90)), Math.toRadians(270.0))
+                                .splineToSplineHeading(new Pose2d(-31.3, 34.3, Math.toRadians(135)), Math.toRadians(0))
+                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
                                 //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-35.6, 57.0, Math.toRadians(180)), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-2.3, 57, Math.toRadians(180)), Math.toRadians(0))
