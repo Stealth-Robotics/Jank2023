@@ -66,8 +66,8 @@ public class RedLeftAuto extends StealthOpMode {
     public Command getAutoCommand() {
         drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
         //Set trajectory sequence based on camera, implement later
-        TrajectorySequence pixelDrop = RedLeftTrajectories.leftPixelDrop;
-        Trajectory driveBack = RedLeftTrajectories.outtakeDriveBackLeft;
+        Trajectory pixelDrop = RedLeftTrajectories.leftPixelDrop;
+
         Trajectory board = RedLeftTrajectories.driveToBoardLeft;
 
 
@@ -80,17 +80,15 @@ public class RedLeftAuto extends StealthOpMode {
         switch(camera.getPosition()){
             case "center":
                 pixelDrop = RedLeftTrajectories.centerPixelDrop;
-                driveBack = RedLeftTrajectories.outtakeDriveBackCenter;
                 board = RedLeftTrajectories.driveToBoardCenter;
                 break;
             case "right":
-                pixelDrop = RedLeftTrajectories.rightPixelDrop;
-                driveBack = RedLeftTrajectories.outtakeDriveBackRight;
-                board = RedLeftTrajectories.driveToBoardRight;
+//                pixelDrop = RedLeftTrajectories.rightPixelDrop;
+//                driveBack = RedLeftTrajectories.outtakeDriveBackRight;
+//                board = RedLeftTrajectories.driveToBoardRight;
                 break;
             case "left":
                 pixelDrop = RedLeftTrajectories.leftPixelDrop;
-                driveBack = RedLeftTrajectories.outtakeDriveBackLeft;
                 board = RedLeftTrajectories.driveToBoardLeft;
 
 
@@ -100,7 +98,7 @@ public class RedLeftAuto extends StealthOpMode {
         return new SequentialCommandGroup(
             new InstantCommand(() -> clawper.rotatinToggle()),
             new ParallelCommandGroup(
-                new FollowTrajectorySequence(drive, pixelDrop),
+                new FollowTrajectory(drive, pixelDrop),
                     new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
             ),
             new InstantCommand(() -> clawper.rotatinToggle()),
@@ -108,7 +106,7 @@ public class RedLeftAuto extends StealthOpMode {
             new InstantCommand(() -> clawper.clawperRelease()),
             new WaitCommand(1000),
             new StowPreset(elevator, clawper),
-            new FollowTrajectory(drive, driveBack)
+            new FollowTrajectory(drive, board)
             //new WaitCommand(1000),
             //new FollowTrajectory(drive, board)
 
