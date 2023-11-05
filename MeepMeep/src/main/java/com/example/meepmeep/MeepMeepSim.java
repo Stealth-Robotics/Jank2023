@@ -2,6 +2,8 @@ package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
@@ -11,6 +13,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.Arrays;
 
@@ -18,12 +22,15 @@ public class MeepMeepSim{
     private static TrajectoryVelocityConstraint veloConstraint(double angVel, double velo){
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(angVel),
-                new MecanumVelocityConstraint(velo, 15.5)
+                new MecanumVelocityConstraint(velo, 10.113)
         ));
     }
     private static TrajectoryAccelerationConstraint accelConstraint(double constraint){
         return new ProfileAccelerationConstraint(constraint);
     }
+
+
+
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
@@ -33,17 +40,11 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
-                                .back(1e-2)
-                                .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-                                .splineToSplineHeading(new Pose2d(-46.8, -37, Math.toRadians(270)), Math.toRadians(90))
-                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
-                                //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-35.6, -57.0, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToSplineHeading(new Pose2d(47.7, -29, Math.toRadians(180)), Math.toRadians(0))
-                                .strafeTo(new Vector2d(47.2, -59.2))
-                                .back(12)
+                                .addTrajectory(RedLeftTrajectories.redLeftLeftDrop)
 
+                                //.addTrajectory(RedLeftTrajectories.leftDriveForward)
+                                //.waitSeconds(0.5)
+                                .addTrajectory(RedLeftTrajectories.driveToBoardLeft)
                                 .build()
                 );
 
@@ -53,17 +54,8 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
-                                .back(1e-2)
-
-                                .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-                                .splineToSplineHeading(new Pose2d(-36.2, -30, Math.toRadians(270)), Math.toRadians(90))
-                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
-                                //.splineToConstantHeading(new Vector2d(-40.6, -44.9), Math.toRadians(270)).setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-35.6, -53, Math.toRadians(100)), Math.toRadians(315))
-                                .splineToSplineHeading(new Pose2d(-2.3, -56, Math.toRadians(180)), Math.toRadians(0))
-                                .splineToSplineHeading(new Pose2d(47.7, -36.5, Math.toRadians(180)), Math.toRadians(0))
-                                .strafeTo(new Vector2d(47.2, -59.2))
-                                .back(12)
+                                .addTrajectory(RedLeftTrajectories.redCenterDrop)
+                                .addTrajectory(RedLeftTrajectories.driveToBoardCenter)
                                 .build()
                 );
         RoadRunnerBotEntity redRightBot = new DefaultBotBuilder(meepMeep)
@@ -212,13 +204,13 @@ public class MeepMeepSim{
                 .setBackgroundAlpha(0.95f)
                 .addEntity(redCenterBot)
                 .addEntity(redLeftBot)
-                .addEntity(redRightBot)
-                .addEntity(rightRedRightBot)
-                .addEntity(rightRedCenterBot)
-                .addEntity(rightRedLeftBot)
-                .addEntity(rightBlueLeftBot)
-                .addEntity(rightBlueCenterBot)
-                .addEntity(rightBlueRightBot)
+//                .addEntity(redRightBot)
+//                .addEntity(rightRedRightBot)
+//                .addEntity(rightRedCenterBot)
+//                .addEntity(rightRedLeftBot)
+//                .addEntity(rightBlueLeftBot)
+//                .addEntity(rightBlueCenterBot)
+//                .addEntity(rightBlueRightBot)
                 .start();
     }
 }
