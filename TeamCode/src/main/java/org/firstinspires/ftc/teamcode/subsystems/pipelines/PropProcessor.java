@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subsystems.pipelines;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
@@ -32,7 +34,7 @@ public class PropProcessor implements VisionProcessor {
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
-            new Point(100, 480)
+            new Point(240, 480)
     );
 
     static final Rect RIGHT_RECTANGLE = new Rect(
@@ -40,7 +42,7 @@ public class PropProcessor implements VisionProcessor {
             new Point(640, 480)
     );
     static final Rect CENTER_RECT = new Rect(
-            new Point(100, 0),
+            new Point(240, 0),
             new Point(500, 480)
     );
 
@@ -53,10 +55,10 @@ public class PropProcessor implements VisionProcessor {
     public PropProcessor(Alliance alliance){
         //sets the color thresholds based on alliance
         if(alliance == Alliance.RED){
-            lowHSVColorLower = new Scalar(0, 170, 164); //beginning of red
-            lowHSVColorUpper = new Scalar(12.8, 255, 255);
+            lowHSVColorLower = new Scalar(0, 150, 150); //beginning of red
+            lowHSVColorUpper = new Scalar(20, 255, 255);
 
-            highHSVColorLower = new Scalar(138, 90, 160); //end of red
+            highHSVColorLower = new Scalar(138, 150, 150); //end of red
             highHSVColorUpper = new Scalar(255, 255, 255);
         }
 
@@ -103,6 +105,13 @@ public class PropProcessor implements VisionProcessor {
         else if(rightBox == max) outStr = "right";
         else outStr = "center";
 
+        if(leftBox < 500000 && centerBox < 500000 && rightBox < 500000 ){
+            outStr = "right";
+        }
+//        FtcDashboard.getInstance().getTelemetry().addData("left", leftBox);
+//        FtcDashboard.getInstance().getTelemetry().addData("center", centerBox);
+//        FtcDashboard.getInstance().getTelemetry().addData("right", rightBox);
+//        FtcDashboard.getInstance().getTelemetry().update();
 
         finalMat.copyTo(frame);
         //frame.copyTo(frame);

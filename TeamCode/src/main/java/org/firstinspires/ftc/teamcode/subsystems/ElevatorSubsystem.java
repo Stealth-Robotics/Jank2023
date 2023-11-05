@@ -59,8 +59,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         STOW_POSITION(0.0),
 
         LEVEL_ONE(500),
-        LEVEL_TWO(600),
-        LEVEL_THREE(700);
+        LEVEL_TWO(800),
+        LEVEL_THREE(1200),
+
+        AUTO_SCORE(300);
+
 
 
         private final double value;
@@ -188,17 +191,17 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
-        FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
-        FtcDashboard board = FtcDashboard.getInstance();
-        board.getTelemetry().addData("loop time: ", deltaT);
-
-
-        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
-        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
-        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
-
-        FtcDashboard.getInstance().getTelemetry().update();
+//        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
+//        FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
+//        FtcDashboard board = FtcDashboard.getInstance();
+//        board.getTelemetry().addData("loop time: ", deltaT);
+//
+//
+//        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
+//        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
+//        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
+//
+//        FtcDashboard.getInstance().getTelemetry().update();
 
 
     }

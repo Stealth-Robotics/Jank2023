@@ -23,8 +23,8 @@ public class ElevatorReset extends CommandBase {
     public void initialize() {
         elevator.setUsePID(false);
         elevator.setSlowly();
-        FtcDashboard.getInstance().getTelemetry().addData("running ", true);
-        FtcDashboard.getInstance().getTelemetry().update();
+//        FtcDashboard.getInstance().getTelemetry().addData("running ", true);
+//        FtcDashboard.getInstance().getTelemetry().update();
 
     }
 

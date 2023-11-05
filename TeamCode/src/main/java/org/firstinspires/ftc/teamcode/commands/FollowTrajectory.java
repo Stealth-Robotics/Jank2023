@@ -25,11 +25,11 @@ public class FollowTrajectory extends CommandBase {
     public void execute(){
 
         driveSubsystem.update();
-        FtcDashboard.getInstance().getTelemetry().addData("pos x ", driveSubsystem.getPoseEstimate().getX());
-        FtcDashboard.getInstance().getTelemetry().addData("pos y ", driveSubsystem.getPoseEstimate().getY());
-        FtcDashboard.getInstance().getTelemetry().addData("Trajectory x ", trajectory.end().getX());
-        FtcDashboard.getInstance().getTelemetry().addData("Trajectory y ", trajectory.end().getY());
-        FtcDashboard.getInstance().getTelemetry().update();
+//        FtcDashboard.getInstance().getTelemetry().addData("pos x ", driveSubsystem.getPoseEstimate().getX());
+//        FtcDashboard.getInstance().getTelemetry().addData("pos y ", driveSubsystem.getPoseEstimate().getY());
+//        FtcDashboard.getInstance().getTelemetry().addData("Trajectory x ", trajectory.end().getX());
+//        FtcDashboard.getInstance().getTelemetry().addData("Trajectory y ", trajectory.end().getY());
+//        FtcDashboard.getInstance().getTelemetry().update();
 
 
     }

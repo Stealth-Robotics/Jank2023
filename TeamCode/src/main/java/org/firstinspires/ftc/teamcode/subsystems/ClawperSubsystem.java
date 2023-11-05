@@ -14,11 +14,13 @@ public final class ClawperSubsystem extends SubsystemBase {
 
 
     private int positionCycle = 0;
+
+    private int rotationCycle = 0;
     public static double TEST_POSITION = 0.45;
 
 
     public static enum ClawperPosition {
-        ROTATION_STOW(0.41),
+        ROTATION_STOW(0.43),
         ROTATION_SCORE(0.57),
         RELEASE_ONE(0.4),
         RELEASE_SECOND(0.57),
@@ -63,6 +65,19 @@ public final class ClawperSubsystem extends SubsystemBase {
         if (positionCycle == 1) {
             clawServo.setPosition(ClawperPosition.RELEASE_SECOND.getValue());
             positionCycle = 0;
+        }
+    }
+
+    public void rotatinToggle() {
+        //sets clawper to position based on whether we have 1 or 2 hexes
+        if (rotationCycle == 0) {
+            rotationServo.setPosition(ClawperPosition.ROTATION_STOW.getValue());
+            rotationCycle++;
+            return;
+        }
+        if (rotationCycle == 1) {
+            rotationServo.setPosition(ClawperPosition.ROTATION_SCORE.getValue());
+            rotationCycle = 0;
         }
     }
 

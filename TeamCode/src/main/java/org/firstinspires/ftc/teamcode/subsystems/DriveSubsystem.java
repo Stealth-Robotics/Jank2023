@@ -117,7 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed, boolean strafe) {
         // This code is pulled from Game Manual 0
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
-        double speedMultiplier = halfSpeed ? 0.5 : 1.0;
+        double speedMultiplier = halfSpeed ? 0.3 : 1.0;
 
         Vector2d inputVector = new Vector2d(
                 -leftStickY,
