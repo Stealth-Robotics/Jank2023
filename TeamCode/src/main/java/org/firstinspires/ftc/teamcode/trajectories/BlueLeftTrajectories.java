@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.trajectories;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
@@ -9,17 +8,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class BlueLeftTrajectories {
-    private static Trajectory example = TrajectoryBuilder.buildTrajectory(new Pose2d(0,0,0))
-            .forward(5)
-            .build();
-    private static Trajectory slowExample = TrajectoryBuilder.buildTrajectory(example.end())
-            .forward(5,
-                    SampleMecanumDrive.getVelocityConstraint(15,
-                            DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
-            )
-            .build();
-
     //first trajectory, drives to tape line
     public static TrajectorySequence leftPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
@@ -39,7 +27,6 @@ public class BlueLeftTrajectories {
     public static TrajectorySequence rightPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
             .back(1e-2)
-
             .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(90)), Math.toRadians(90.0))
             .splineToSplineHeading(new Pose2d(-31, 28, Math.toRadians(160)), Math.toRadians(0))
             .build();
