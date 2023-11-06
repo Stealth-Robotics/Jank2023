@@ -54,9 +54,20 @@ public class RedLeftTrajectories {
             .build();
     static Trajectory driveToBoardCenter = buildSequence(redCenterDrop.end(), false)
 
-            .splineToSplineHeading(new Pose2d(-31, -56, Math.toRadians(180)), Math.toRadians(0))
-            .splineToSplineHeading(new Pose2d(10, -56, Math.toRadians(180)), Math.toRadians(0))
+            .splineToConstantHeading(new Vector2d(-31, -56), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(10, -56, Math.toRadians(270)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(47.7, -34, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
+
+    static Trajectory redRightDrop = buildSequence(new Pose2d(-39.5, -62, Math.toRadians(270)), false)
+            .back(1e-2)
+            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(180)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(160)), Math.toRadians(90))
+            .build();
+    static Trajectory driveToBoardRight = buildSequence(redRightDrop.end(), true)
+            .splineToConstantHeading(new Vector2d(-35.6, -56), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(47.7, -41, Math.toRadians(180)), Math.toRadians(0))
+            .build();
 }
