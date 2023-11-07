@@ -83,9 +83,8 @@ public class RedLeftAuto extends StealthOpMode {
                 board = RedLeftTrajectories.driveToBoardCenter;
                 break;
             case "right":
-//                pixelDrop = RedLeftTrajectories.rightPixelDrop;
-//                driveBack = RedLeftTrajectories.outtakeDriveBackRight;
-//                board = RedLeftTrajectories.driveToBoardRight;
+                pixelDrop = RedLeftTrajectories.rightPixelDrop;
+                board = RedLeftTrajectories.driveToBoardRight;
                 break;
             case "left":
                 pixelDrop = RedLeftTrajectories.leftPixelDrop;

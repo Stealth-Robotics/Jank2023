@@ -40,7 +40,7 @@ public class RedLeftTrajectories {
                     SampleMecanumDrive.getAccelerationConstraint(20)
             )
             .build();
-    public static TrajectorySequence rightPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
+    public static Trajectory rightPixelDrop = TrajectoryBuilder.buildTrajectory(
                     new Pose2d(-39.5, -62, Math.toRadians(270)))
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(180)), Math.toRadians(90))

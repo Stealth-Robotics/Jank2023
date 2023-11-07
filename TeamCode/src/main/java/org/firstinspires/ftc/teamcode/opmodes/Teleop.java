@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -41,6 +42,8 @@ public abstract class Teleop extends StealthOpMode {
 
     PlaneSubsystem plane;
 
+    DistanceSensorSubsystem distance;
+
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
 
@@ -64,6 +67,7 @@ public abstract class Teleop extends StealthOpMode {
         clawper = new ClawperSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         plane = new PlaneSubsystem(hardwareMap);
+        distance = new DistanceSensorSubsystem(hardwareMap);
 
         clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW);
 
