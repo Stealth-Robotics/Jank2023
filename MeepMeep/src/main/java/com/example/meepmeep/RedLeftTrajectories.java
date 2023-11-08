@@ -27,8 +27,8 @@ public class RedLeftTrajectories {
 
     private static TrajectoryBuilder buildSequence(Pose2d start, boolean reversed){
         return new TrajectoryBuilder(start, reversed,
-                veloConstraint(Math.toRadians(120), 100),
-                accelConstraint(70));
+                veloConstraint(Math.toRadians(120), 55),
+                accelConstraint(50));
     }
 
     static Trajectory redLeftLeftDrop = buildSequence(new Pose2d(-39.5, -62, Math.toRadians(270)), false)
