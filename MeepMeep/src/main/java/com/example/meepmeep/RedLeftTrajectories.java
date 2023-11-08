@@ -49,20 +49,18 @@ public class RedLeftTrajectories {
 
             .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
             .splineToSplineHeading(new Pose2d(-36.2, -27, Math.toRadians(270)), Math.toRadians(90))
-            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
-                    veloConstraint(Math.toRadians(180), 30),
-                    accelConstraint(20)
-            )
+            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270)            )
             .build();
     static Trajectory driveToBoardCenter = buildSequence(redCenterDrop.end(), false)
 
             //.splineToConstantHeading(new Vector2d(-34, -44), Math.toRadians(0))
-            .splineToSplineHeading(new Pose2d(-34, -56, Math.toRadians(180)), Math.toRadians(345))
-            .splineToSplineHeading(new Pose2d(-15, -56, Math.toRadians(180)), Math.toRadians(0))
-            .back(30)
+            .forward(1e-2)
+            .splineToConstantHeading(new Vector2d(-34, -58), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-25, -58, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-10, -58, Math.toRadians(180)), Math.toRadians(0))
+
             .splineToSplineHeading(new Pose2d(47.7, -34, Math.toRadians(180)), Math.toRadians(0))
             .build();
-
 
     static Trajectory redRightDrop = buildSequence(new Pose2d(-39.5, -62, Math.toRadians(270)), false)
             .back(1e-2)

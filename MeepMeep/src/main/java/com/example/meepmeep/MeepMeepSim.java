@@ -75,17 +75,9 @@ public class MeepMeepSim{
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
-                                .back(1e-2)
-
-                                .splineToSplineHeading(new Pose2d(16.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-                                .splineToSplineHeading(new Pose2d(22.6, -37, Math.toRadians(270)), Math.toRadians(90))
-                                .forward(5, veloConstraint(Math.toRadians(15), 5), accelConstraint(15))
-
-                                .splineToSplineHeading(new Pose2d(47.7, -42, Math.toRadians(180)), Math.toRadians(30))
-//
-                                .strafeTo(new Vector2d(47.2, -59.2))
-                                .back(12)
-
+                                .addTrajectory(RedRightTrajectories.redRightRightDrop)
+                                .addTrajectory(RedRightTrajectories.driveToBoardRight)
+                                .addTrajectory(RedRightTrajectories.parkRight)
                                 .build()
                 );
 
@@ -196,7 +188,7 @@ public class MeepMeepSim{
                 .addEntity(redCenterBot)
                 .addEntity(redLeftBot)
                 .addEntity(redRightBot)
-//                .addEntity(rightRedRightBot)
+                .addEntity(rightRedRightBot)
 //                .addEntity(rightRedCenterBot)
 //                .addEntity(rightRedLeftBot)
 //                .addEntity(rightBlueLeftBot)
