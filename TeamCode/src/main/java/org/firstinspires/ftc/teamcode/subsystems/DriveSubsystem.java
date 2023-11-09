@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
+import androidx.core.math.MathUtils;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -31,7 +34,15 @@ public class DriveSubsystem extends SubsystemBase {
     private final DcMotor backLeftMotor;
     private final DcMotor backRightMotor;
 
-    //private final DistanceSensor distanceSensor;
+    private final DistanceSensor rightDistance;
+    private final DistanceSensor leftDistance;
+
+    private final PIDController rightDrivePID = new PIDController(0, 0, 0);
+    private final PIDController leftDrivePID = new PIDController(0, 0, 0);
+
+
+    private boolean usePID = false;
+
     double headingOffset = 0;
 
     IMU imu;
@@ -43,6 +54,9 @@ public class DriveSubsystem extends SubsystemBase {
         frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
         backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
         backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
+
+        rightDistance = hardwareMap.get(DistanceSensor.class, "distanceRight");
+        leftDistance = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
@@ -98,23 +112,29 @@ public class DriveSubsystem extends SubsystemBase {
         roadrunnerDrive.setPoseEstimate(poseEstimate);
     }
 
-    public void driveTowardBoardSlow(){
-        driveTeleop(0.2, 0, 0, false, false);
+
+
+    public double getRightDistanceMillimeters(){
+        return rightDistance.getDistance(DistanceUnit.MM);
+    }
+    public double getLeftDistanceMillimeters(){
+
+        return leftDistance.getDistance(DistanceUnit.MM);
     }
 
-//    public double getDistance(){
-//        return distanceSensor.getDistance(DistanceUnit.MM);
-//    }
+    public void setUseAutoAlignPID(boolean usePID){
+        this.usePID = usePID;
+    }
 
     public Pose2d getPoseEstimate(){
         return roadrunnerDrive.getPoseEstimate();
     }
 
     public void stop(){
-        driveTeleop(0,0,0, false, false);
+    driveTeleop(0,0,0, false);
     }
 
-    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed, boolean strafe) {
+    public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed) {
         // This code is pulled from Game Manual 0
         // https://gm0.org/en/latest/docs/software/mecanum-drive.html
         double speedMultiplier = halfSpeed ? 0.3 : 1.0;
@@ -135,5 +155,15 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if(usePID){
+            double rightPower = MathUtils.clamp(rightDrivePID.calculate(getRightDistanceMillimeters()), -0.2, 0.2);
+            double leftPower = MathUtils.clamp(leftDrivePID.calculate(getLeftDistanceMillimeters()), -0.2, 0.2);
+
+
+            frontRightMotor.setPower(rightPower);
+            backRightMotor.setPower(rightPower);
+            frontLeftMotor.setPower(leftPower);
+            backLeftMotor.setPower(leftPower);
+        }
     }
 }

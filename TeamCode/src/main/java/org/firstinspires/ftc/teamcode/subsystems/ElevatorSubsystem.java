@@ -22,6 +22,7 @@ import org.stealthrobotics.library.math.filter.Debouncer;
 public class ElevatorSubsystem extends SubsystemBase {
     private final DcMotorEx motor1;
     private final DcMotorEx motor2;
+    private final DcMotorEx motor3;
     //PID Constants
     //TODO: Tune PID
     private final double kP = 0.015;
@@ -81,6 +82,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         stallDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
         motor1 = hardwareMap.get(DcMotorEx.class, "motor1");
         motor2 = hardwareMap.get(DcMotorEx.class, "motor2");
+        motor3 = hardwareMap.get(DcMotorEx.class, "motor3");
 
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -119,6 +121,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setPower(double power) {
         motor1.setPower(power);
         motor2.setPower(power);
+        motor3.setPower(power);
     }
 
     public void setSlowly() {
