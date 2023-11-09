@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.AutoAlignCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorNothingCommand;
@@ -83,8 +84,7 @@ public abstract class Teleop extends StealthOpMode {
                         () -> driverGamepad.getLeftY(),
                         () -> driverGamepad.getLeftX(),
                         () -> driverGamepad.getRightX(),
-                        () -> driverGamepad.gamepad.right_bumper,
-                        () -> driverGamepad.gamepad.left_bumper
+                        () -> driverGamepad.gamepad.right_bumper
                 )
         );
 
@@ -128,6 +128,8 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(1)));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new ElevatorNothingCommand(elevator));
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new AutoAlignCommand(driveSubsystem, () -> driverGamepad.getLeftY()));
 
     }
     @SuppressWarnings("unused")

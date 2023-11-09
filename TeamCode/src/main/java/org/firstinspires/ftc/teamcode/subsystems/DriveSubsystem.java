@@ -41,7 +41,6 @@ public class DriveSubsystem extends SubsystemBase {
     private final PIDController leftDrivePID = new PIDController(0, 0, 0);
 
 
-    private boolean usePID = false;
 
     double headingOffset = 0;
 
@@ -122,9 +121,6 @@ public class DriveSubsystem extends SubsystemBase {
         return leftDistance.getDistance(DistanceUnit.MM);
     }
 
-    public void setUseAutoAlignPID(boolean usePID){
-        this.usePID = usePID;
-    }
 
     public Pose2d getPoseEstimate(){
         return roadrunnerDrive.getPoseEstimate();
@@ -153,17 +149,14 @@ public class DriveSubsystem extends SubsystemBase {
         roadrunnerDrive.update();
     }
 
-    @Override
-    public void periodic() {
-        if(usePID){
-            double rightPower = MathUtils.clamp(rightDrivePID.calculate(getRightDistanceMillimeters()), -0.2, 0.2);
-            double leftPower = MathUtils.clamp(leftDrivePID.calculate(getLeftDistanceMillimeters()), -0.2, 0.2);
-
-
-            frontRightMotor.setPower(rightPower);
-            backRightMotor.setPower(rightPower);
-            frontLeftMotor.setPower(leftPower);
-            backLeftMotor.setPower(leftPower);
-        }
+    public void setLeftPower(double power){
+        frontLeftMotor.setPower(power);
+        backLeftMotor.setPower(power);
     }
+    public void setRightPower(double power){
+        frontRightMotor.setPower(power);
+        backRightMotor.setPower(power);
+    }
+
+
 }
