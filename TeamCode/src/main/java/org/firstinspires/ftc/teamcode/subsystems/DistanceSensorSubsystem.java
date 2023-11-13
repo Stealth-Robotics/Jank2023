@@ -30,6 +30,7 @@ public class DistanceSensorSubsystem extends SubsystemBase {
     public void periodic() {
         FtcDashboard.getInstance().getTelemetry().addData("left distance", getLeftDistanceMillimeters());
         FtcDashboard.getInstance().getTelemetry().addData("right distance", getRightDistanceMillimeters());
+        FtcDashboard.getInstance().getTelemetry().addData("Left - Right", getLeftDistanceMillimeters() - getRightDistanceMillimeters());
         FtcDashboard.getInstance().getTelemetry().update();
     }
 }

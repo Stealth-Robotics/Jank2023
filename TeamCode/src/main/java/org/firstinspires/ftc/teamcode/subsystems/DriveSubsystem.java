@@ -114,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     public double getRightDistanceMillimeters(){
-        return rightDistance.getDistance(DistanceUnit.MM);
+        return rightDistance.getDistance(DistanceUnit.MM) + 15;
     }
     public double getLeftDistanceMillimeters(){
 

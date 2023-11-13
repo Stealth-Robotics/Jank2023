@@ -86,11 +86,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor1.setDirection(DcMotorSimple.Direction.REVERSE);
         motor2.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        motor3.setDirection(DcMotorSimple.Direction.REVERSE);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         elevatorPID.setTolerance(20);
 
@@ -200,7 +202,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        board.getTelemetry().addData("loop time: ", deltaT);
 //
 //
-//        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
+        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
 //        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
 //        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
 //

@@ -14,19 +14,18 @@ public class AutoAlignCommand extends CommandBase {
     private final DriveSubsystem drive;
     private final DoubleSupplier leftY;
 
-    private final PIDController leftPID = new PIDController(0, 0, 0);
-    private final PIDController rightPID = new PIDController(0, 0, 0);
+    private final PIDController rotationController = new PIDController(0.01, 0, 0);
+    private final PIDController translationController = new PIDController(0.01, 0, 0);
 
     public AutoAlignCommand(DriveSubsystem drive, DoubleSupplier leftY) {
         this.drive = drive;
         this.leftY = leftY;
 
-        //TODO: FIND CORRECT DISTANCE VALUES
-        leftPID.setSetPoint(0);
-        rightPID.setSetPoint(0);
+        rotationController.setSetPoint(0);
+        translationController.setSetPoint(200);
 
-        leftPID.setTolerance(1);
-        rightPID.setTolerance(1);
+        rotationController.setTolerance(5);
+        translationController.setTolerance(5);
     }
 
     public AutoAlignCommand(DriveSubsystem drive) {
@@ -39,8 +38,14 @@ public class AutoAlignCommand extends CommandBase {
             drive.driveTeleop(leftY.getAsDouble(), 0, 0, false);
         }
         else {
-            drive.setLeftPower(MathUtils.clamp(leftPID.calculate(drive.getLeftDistanceMillimeters()), -0.2, 0.2));
-            drive.setRightPower(MathUtils.clamp(rightPID.calculate(drive.getRightDistanceMillimeters()), -0.2, 0.2));
+            drive.driveTeleop(
+                    0,
+                    translationController.calculate(
+                            -(drive.getRightDistanceMillimeters() + drive.getLeftDistanceMillimeters()
+                            )/2),
+                    rotationController.calculate(drive.getRightDistanceMillimeters() - drive.getLeftDistanceMillimeters()),
+                    false
+            );
         }
     }
 

@@ -1,29 +1,24 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import android.media.Image;
-
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.AutoAlignCommand;
+import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorNothingCommand;
-import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
-import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
-import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
+import org.firstinspires.ftc.teamcode.commands.ZeroHeadingWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PlaneSubsystem;
-import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 
@@ -96,14 +91,14 @@ public abstract class Teleop extends StealthOpMode {
         elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
                 () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)
         ));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new ElevatorReset(elevator)
-        );
+//        operatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                new ElevatorReset(elevator)
+//        );
 //        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
 //                new InstantCommand(() -> elevator.setSetpoint(500))
 //        );
 
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new StowPreset(elevator, clawper, () -> operatorGamepad.gamepad.b));
+        //operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new StowPreset(elevator, clawper, () -> operatorGamepad.gamepad.b));
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> plane.setPlane(0.6)));
 //
 //        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whileHeld(
@@ -126,10 +121,12 @@ public abstract class Teleop extends StealthOpMode {
 
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(-1)));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(1)));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
+        //operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new ElevatorNothingCommand(elevator));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new AutoAlignCommand(driveSubsystem, () -> driverGamepad.getLeftY()));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
+                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
+                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 280)));
 
     }
     @SuppressWarnings("unused")

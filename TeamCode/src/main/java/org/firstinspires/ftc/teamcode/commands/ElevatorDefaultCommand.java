@@ -30,7 +30,7 @@ public class ElevatorDefaultCommand extends CommandBase {
             elevator.setPower(input.getAsDouble());
             elevator.setUsePID(false);
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
-            elevator.setToCurrentPosition();
+            //elevator.setToCurrentPosition();
 
         } else {
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
