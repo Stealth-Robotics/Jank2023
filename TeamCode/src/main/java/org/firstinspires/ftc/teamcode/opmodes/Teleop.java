@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -72,7 +73,8 @@ public abstract class Teleop extends StealthOpMode {
 
         driverGamepad = new GamepadEx(gamepad1);
         operatorGamepad = new GamepadEx(gamepad2);
-
+        //TODO: ONLTY FOR TESTING, REMOVE LATER
+        new InstantCommand(() -> elevator.setUsePID(false));
         driveSubsystem.setDefaultCommand(
                 new DriveDefaultCommand(
                         driveSubsystem,
@@ -117,16 +119,20 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new InstantCommand(() -> clawper.rotatinToggle())
         );
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_CLIMB)));
-
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(-1)));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(1)));
         //operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new ElevatorNothingCommand(elevator));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> elevator.resetEncoderZero()));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> elevator.setSetpoint(500)));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
-                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
-                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 280)));
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new SequentialCommandGroup(
+//                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
+//                new WaitCommand(500),
+//                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 280)));
+
+
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> clawper.clawperClosedPosition()));
 
     }
     @SuppressWarnings("unused")

@@ -25,7 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DcMotorEx motor3;
     //PID Constants
     //TODO: Tune PID
-    private final double kP = 0.015;
+    private final double kP = 0.0015;
     private final double kI = 0;
     private final double kD = 0.0000;
     private final double kF = 0;
@@ -190,23 +190,24 @@ public class ElevatorSubsystem extends SubsystemBase {
                 motionProfilePID.setTargetPosition(state.getX());
                 double power = motionProfilePID.update(getEncoderPosition());
                 setPower(MathUtils.clamp(power, -SPEED_LIMIT, SPEED_LIMIT));
-            } else {
+            }
+            else {
                 double power = MathUtils.clamp(elevatorPID.calculate(getEncoderPosition()), -1, 1);
                 setPower(power);
             }
         }
 
-//        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
-//        FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
+        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
+        FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
 //        FtcDashboard board = FtcDashboard.getInstance();
 //        board.getTelemetry().addData("loop time: ", deltaT);
 //
 //
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
-//        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
+        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
 //        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
 //
-//        FtcDashboard.getInstance().getTelemetry().update();
+        FtcDashboard.getInstance().getTelemetry().update();
 
 
     }

@@ -20,12 +20,12 @@ public final class ClawperSubsystem extends SubsystemBase {
 
 
     public static enum ClawperPosition {
-        ROTATION_STOW(0.43),
-        ROTATION_SCORE(0.57),
-        RELEASE_ONE(0.4),
-        RELEASE_SECOND(0.57),
+        ROTATION_STOW(0.52),
+        ROTATION_SCORE(0.65),
+        RELEASE_ONE(0.5),
+        RELEASE_SECOND(0.68),
         RELEASE_BOTH(0.4),
-        CLAW_HOLD(0.7),
+        CLAW_HOLD(0.8),
 
         ROTATION_CLIMB(0.8);
 
@@ -84,6 +84,10 @@ public final class ClawperSubsystem extends SubsystemBase {
     public void clawperClosedPosition() {
         clawServo.setPosition(ClawperPosition.CLAW_HOLD.getValue());
         positionCycle = 0;
+    }
+
+    public void rotationTest(){
+        clawServo.setPosition(TEST_POSITION);
     }
 
     @Override

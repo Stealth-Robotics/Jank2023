@@ -10,6 +10,8 @@ public class ElevatorDefaultCommand extends CommandBase {
     private final DoubleSupplier input;
     private final ElevatorSubsystem elevator;
 
+    private boolean setCurrentPos = false;
+
     //Teleop Default Command
     public ElevatorDefaultCommand(ElevatorSubsystem elevator, DoubleSupplier input) {
         this.elevator = elevator;
@@ -27,16 +29,22 @@ public class ElevatorDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         if (input != null && Math.abs(input.getAsDouble()) > 0.1) {
+
             elevator.setPower(input.getAsDouble());
             elevator.setUsePID(false);
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
             //elevator.setToCurrentPosition();
+            setCurrentPos = true;
 
         } else {
             //sets elevator to hold in place after manual control, pid won't run until trigger is released
-//            elevator.setUsePID(true);
-////
-            elevator.setPower(0);
+            elevator.setUsePID(true);
+            if(setCurrentPos){
+                elevator.setToCurrentPosition();
+                setCurrentPos = false;
+            }
+//////
+//            elevator.setPower(0);
         }
     }
 }

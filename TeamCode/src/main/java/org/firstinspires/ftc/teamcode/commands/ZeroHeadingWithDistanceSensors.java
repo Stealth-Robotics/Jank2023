@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.commands;
 import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+@Config
 
 public class ZeroHeadingWithDistanceSensors extends CommandBase {
     private final DriveSubsystem driveSubsystem;
@@ -15,12 +17,14 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
 
     PIDController rotationalController;
 
+    public static double kP = 0.0, kI = 0.0, kD = 0.0;
+
     public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
-        rotationalController = new PIDController(0.025, 0, 0);
+        rotationalController = new PIDController(kP, kI, kD);
         rotationalController.setTolerance(3);
         rotationalController.setSetPoint(0);
 
@@ -30,7 +34,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
     @Override
     public void execute() {
 
-        double rotationalError = distanceSensorSubsystem.getRightDistanceMillimeters() - distanceSensorSubsystem.getLeftDistanceMillimeters();
+        double rotationalError = -(distanceSensorSubsystem.getRightDistanceMillimeters() - distanceSensorSubsystem.getLeftDistanceMillimeters());
         double calculation = rotationalController.calculate(rotationalError);
         calculation = MathUtils.clamp(calculation, -0.3, 0.3);
 

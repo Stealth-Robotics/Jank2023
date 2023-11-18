@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import androidx.core.math.MathUtils;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+@Config
 
 public class AlignTranslationWithDistanceSensors extends CommandBase {
     private final DriveSubsystem driveSubsystem;
@@ -14,12 +16,15 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     PIDController translationController;
 
+    public static double kP = 0.0, kI = 0.0, kD = 0.0;
+
+
     public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, double setpoint)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
-        translationController = new PIDController(0.02, 0, 0);
+        translationController = new PIDController(kI, kI, kD);
         translationController.setTolerance(5);
         translationController.setSetPoint(setpoint);
 
@@ -33,7 +38,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         double calculation = translationController.calculate(average);
         calculation = MathUtils.clamp(calculation, -0.3, 0.3);
 
-        driveSubsystem.driveTeleop(calculation, 0, 0, false);
+        driveSubsystem.driveTeleop(-calculation, 0, 0, false);
     }
 
     @Override
