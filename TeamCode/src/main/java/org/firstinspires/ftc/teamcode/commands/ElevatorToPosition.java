@@ -36,14 +36,16 @@ public class ElevatorToPosition extends CommandBase {
 
 
         if(level != null){
-            if(level.getAsInt() == 1){
-                position = ElevatorSubsystem.ElevatorPosition.LEVEL_ONE;
-            }
-            if(level.getAsInt() == 2){
-                position = ElevatorSubsystem.ElevatorPosition.LEVEL_TWO;
-            }
-            if(level.getAsInt() == 3){
-                position = ElevatorSubsystem.ElevatorPosition.LEVEL_THREE;
+            switch(level.getAsInt()){
+                case 1:
+                    position = ElevatorSubsystem.ElevatorPosition.LEVEL_ONE;
+                    break;
+                case 2:
+                    position = ElevatorSubsystem.ElevatorPosition.LEVEL_TWO;
+                    break;
+                case 3:
+                    position = ElevatorSubsystem.ElevatorPosition.LEVEL_THREE;
+                    break;
             }
         }
 

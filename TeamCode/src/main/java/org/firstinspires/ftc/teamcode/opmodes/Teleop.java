@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -11,8 +12,11 @@ import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSenso
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorNothingCommand;
+import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ZeroHeadingWithDistanceSensors;
+import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
+import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
@@ -68,7 +72,9 @@ public abstract class Teleop extends StealthOpMode {
 
         clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW);
 
-
+//        telemetry.addData("level: ", elevator.getLevel());
+//        telemetry.addData("elevator pos: ", elevator.getEncoderPosition());
+//        telemetry.update();
 
 
         driverGamepad = new GamepadEx(gamepad1);
@@ -122,17 +128,24 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(-1)));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(1)));
         //operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> elevator.resetEncoderZero()));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new ElevatorReset(elevator));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> elevator.setSetpoint(500)));
 
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new SequentialCommandGroup(
-//                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new SequentialCommandGroup(
+                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
+
 //                new WaitCommand(500),
-//                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 280)));
+                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 45),
+
+                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
+                new DriveDefaultCommand(driveSubsystem, () -> driverGamepad.getLeftY(), () -> 0, () -> 0, () -> true))
+        );
 
 
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> clawper.clawperClosedPosition()));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new StowPreset(elevator, clawper));
 
     }
     @SuppressWarnings("unused")

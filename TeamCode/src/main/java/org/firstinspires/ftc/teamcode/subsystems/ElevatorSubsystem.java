@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
+
 import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -25,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DcMotorEx motor3;
     //PID Constants
     //TODO: Tune PID
-    private final double kP = 0.0015;
+    private final double kP = 0.01;
     private final double kI = 0;
     private final double kD = 0.0000;
     private final double kF = 0;
@@ -59,9 +61,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         SCORE_POSITION(0.0),
         STOW_POSITION(0.0),
 
-        LEVEL_ONE(500),
-        LEVEL_TWO(800),
-        LEVEL_THREE(1200),
+        LEVEL_ONE(650),
+        LEVEL_TWO(770),
+        LEVEL_THREE(890),
 
         AUTO_SCORE(300);
 
@@ -155,6 +157,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void incrementLevel(int increment){
         level += increment;
+        if(level > 5){
+            level = 5;
+        }
+        if(level < 1){
+            level = 1;
+        }
+
     }
     public int getLevel(){
         return level;
@@ -197,17 +206,17 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
         }
 
-        FtcDashboard.getInstance().getTelemetry().addData("position: ", getEncoderPosition());
+        telemetry.addData("position: ", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
 //        FtcDashboard board = FtcDashboard.getInstance();
 //        board.getTelemetry().addData("loop time: ", deltaT);
 //
 //
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
-        FtcDashboard.getInstance().getTelemetry().addData("runpid", usePID);
-//        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
+        telemetry.addData("runpid", usePID);
+        telemetry.addData("level", getLevel());
 //
-        FtcDashboard.getInstance().getTelemetry().update();
+        telemetry.update();
 
 
     }
