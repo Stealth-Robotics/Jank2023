@@ -26,6 +26,11 @@ public class RedRightTrajectories {
     }
 
 
+    private static TrajectoryBuilder buildSequence(Pose2d start, double heading){
+        return new TrajectoryBuilder(start, heading,
+                veloConstraint(Math.toRadians(120), 55),
+                accelConstraint(50));
+    }
     private static TrajectoryBuilder buildSequence(Pose2d start, boolean reversed){
         return new TrajectoryBuilder(start, reversed,
                 veloConstraint(Math.toRadians(120), 55),
@@ -40,10 +45,10 @@ public class RedRightTrajectories {
             .splineToSplineHeading(new Pose2d(22.6, -45, Math.toRadians(270)), Math.toRadians(90))
             .build();
 
-    public static Trajectory driveToBoardRight = buildSequence(redRightRightDrop.end(), true)
+    public static Trajectory driveToBoardRight = buildSequence(redRightRightDrop.end(), false)
 
             .forward(2)
-            .splineToSplineHeading(new Pose2d(47.7, -42, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(42, -42, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
     public static Trajectory parkRight = buildSequence(driveToBoardRight.end(), false)

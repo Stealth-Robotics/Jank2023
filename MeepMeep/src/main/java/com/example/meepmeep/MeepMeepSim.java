@@ -77,7 +77,7 @@ public class MeepMeepSim{
                         drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
                                 .addTrajectory(RedRightTrajectories.redRightRightDrop)
                                 .addTrajectory(RedRightTrajectories.driveToBoardRight)
-                                .addTrajectory(RedRightTrajectories.parkRight)
+
                                 .build()
                 );
 
