@@ -51,8 +51,27 @@ public class RedRightTrajectories {
             .splineToSplineHeading(new Pose2d(42, -42, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
-    public static Trajectory parkRight = buildSequence(driveToBoardRight.end(), false)
-            .strafeTo(new Vector2d(47.7, -60))
+    public static Trajectory centerDrop = buildSequence(new Pose2d(16.5, -62, Math.toRadians(270)), false)
+            .back(1e-2)
+
+            .splineToSplineHeading(new Pose2d(16, -50, Math.toRadians(270)), Math.toRadians(90.0))
+            .splineToSplineHeading(new Pose2d(11, -27, Math.toRadians(270)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(11, -35, Math.toRadians(270)), Math.toRadians(270)            )
+            .build();
+    public static Trajectory boardCenter = buildSequence(centerDrop.end(), false)
+            .forward(2)
+            .splineToSplineHeading(new Pose2d(42, -35, Math.toRadians(180)), Math.toRadians(0))
+            .build();
+
+    public static Trajectory leftDrop = buildSequence(new Pose2d(16.5, -62, Math.toRadians(270)), false)
+            .back(1e-2)
+            .splineToSplineHeading(new Pose2d(16.5, -58, Math.toRadians(315)), Math.toRadians(90))
+            .splineToConstantHeading(new Vector2d(
+                    5, -38), Math.toRadians(180))
+            .build();
+    public static Trajectory boardLeft = buildSequence(leftDrop.end(), false)
+            .splineToConstantHeading(new Vector2d(15.5, -38), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(42, -30, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
 }
