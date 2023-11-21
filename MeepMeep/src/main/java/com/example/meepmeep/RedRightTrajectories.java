@@ -33,8 +33,8 @@ public class RedRightTrajectories {
     }
     private static TrajectoryBuilder buildSequence(Pose2d start, boolean reversed){
         return new TrajectoryBuilder(start, reversed,
-                veloConstraint(Math.toRadians(120), 55),
-                accelConstraint(50));
+                veloConstraint(Math.toRadians(100), 45),
+                accelConstraint(30));
     }
 
 
@@ -46,8 +46,7 @@ public class RedRightTrajectories {
             .build();
 
     public static Trajectory driveToBoardRight = buildSequence(redRightRightDrop.end(), false)
-
-            .forward(2)
+            .splineToConstantHeading(new Vector2d(26, -45), Math.toRadians(-1e-10))
             .splineToSplineHeading(new Pose2d(42, -42, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
@@ -59,18 +58,18 @@ public class RedRightTrajectories {
             .splineToSplineHeading(new Pose2d(16, -35, Math.toRadians(270)), Math.toRadians(270)            )
             .build();
     public static Trajectory boardCenter = buildSequence(centerDrop.end(), false)
-            .forward(2)
+            .splineToConstantHeading(new Vector2d(26, -35), Math.toRadians(-1e-10))
             .splineToSplineHeading(new Pose2d(42, -35, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
     public static Trajectory leftDrop = buildSequence(new Pose2d(16.5, -62, Math.toRadians(270)), false)
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(16.5, -58, Math.toRadians(315)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(14, -45, Math.toRadians(315)), Math.toRadians(110))
             .splineToConstantHeading(new Vector2d(
                     5, -38), Math.toRadians(180))
             .build();
     public static Trajectory boardLeft = buildSequence(leftDrop.end(), false)
-            .splineToConstantHeading(new Vector2d(15.5, -38), Math.toRadians(0))
+            .splineToConstantHeading(new Vector2d(10, -32), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(42, -30, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
