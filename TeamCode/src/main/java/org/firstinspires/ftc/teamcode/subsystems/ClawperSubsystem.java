@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.util.function.BooleanSupplier;
+
 @Config
 public final class ClawperSubsystem extends SubsystemBase {
     private final Servo clawServo;
@@ -17,6 +19,8 @@ public final class ClawperSubsystem extends SubsystemBase {
 
     private int rotationCycle = 0;
     public static double TEST_POSITION = 0.45;
+
+    private final BooleanSupplier intakeRunning;
 
 
     public static enum ClawperPosition {
@@ -40,9 +44,11 @@ public final class ClawperSubsystem extends SubsystemBase {
         }
     }
 
-    public ClawperSubsystem(HardwareMap hardwareMap) {
+    public ClawperSubsystem(HardwareMap hardwareMap, BooleanSupplier intakeRunning) {
         clawServo = hardwareMap.get(Servo.class, "claw");
         rotationServo = hardwareMap.get(Servo.class, "rotator");
+
+        this.intakeRunning = intakeRunning;
     }
 
     public void rotationToPosition(ClawperPosition position) {
@@ -82,7 +88,7 @@ public final class ClawperSubsystem extends SubsystemBase {
     }
 
     public void clawperClosedPosition() {
-        clawServo.setPosition(ClawperPosition.CLAW_HOLD.getValue());
+        clawperToPosition(ClawperPosition.CLAW_HOLD);
         positionCycle = 0;
     }
 
@@ -94,5 +100,10 @@ public final class ClawperSubsystem extends SubsystemBase {
     public void periodic() {
         FtcDashboard.getInstance().getTelemetry().addData("cycle: ", positionCycle);
         FtcDashboard.getInstance().getTelemetry().update();
+
+        if(intakeRunning.getAsBoolean())
+        {
+            clawperClosedPosition();
+        }
     }
 }

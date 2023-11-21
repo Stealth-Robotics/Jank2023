@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.trajectories.BlueLeftTrajectories;
 import org.firstinspires.ftc.teamcode.trajectories.RedLeftTrajectories;
 import org.stealthrobotics.library.Alliance;
@@ -32,7 +33,7 @@ public class BlueRightAuto extends StealthOpMode {
     CameraSubsystem camera;
     ElevatorSubsystem elevator;
     ClawperSubsystem clawper;
-//    IntakeSubsystem intake;
+    IntakeSubsystem intake;
 
 
     @Override
@@ -41,10 +42,8 @@ public class BlueRightAuto extends StealthOpMode {
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
         camera = new CameraSubsystem(hardwareMap, Alliance.BLUE);
         elevator = new ElevatorSubsystem(hardwareMap);
-        clawper = new ClawperSubsystem(hardwareMap);
-//        intake = new IntakeSubsystem(hardwareMap);
-
-
+        intake = new IntakeSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);
 
         register(drive, camera, clawper, elevator);
 

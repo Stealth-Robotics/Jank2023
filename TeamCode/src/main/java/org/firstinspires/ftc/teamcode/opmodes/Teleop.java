@@ -59,14 +59,11 @@ public abstract class Teleop extends StealthOpMode {
 
         //new ElevatorReset(elevator);
 
-
-
-
         roadrunnerDrive = new SampleMecanumDrive(hardwareMap);
         driveSubsystem = new DriveSubsystem(hardwareMap, roadrunnerDrive);
         elevator = new ElevatorSubsystem(hardwareMap);
-        clawper = new ClawperSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);
         plane = new PlaneSubsystem(hardwareMap);
         distance = new DistanceSensorSubsystem(hardwareMap);
 
@@ -135,7 +132,7 @@ public abstract class Teleop extends StealthOpMode {
                 new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
 
 //                new WaitCommand(500),
-                new AlignTranslationWithDistanceSensors(driveSubsystem, distance, 45),
+                new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
 
                 new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
                 new DriveDefaultCommand(driveSubsystem, () -> driverGamepad.getLeftY(), () -> 0, () -> 0, () -> true))

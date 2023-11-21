@@ -46,6 +46,12 @@ public class ElevatorToPosition extends CommandBase {
                 case 3:
                     position = ElevatorSubsystem.ElevatorPosition.LEVEL_THREE;
                     break;
+                case 4:
+                    position = ElevatorSubsystem.ElevatorPosition.LEVEL_FOUR;
+                    break;
+                case 5:
+                    position = ElevatorSubsystem.ElevatorPosition.LEVEL_FIVE;
+                    break;
             }
         }
 

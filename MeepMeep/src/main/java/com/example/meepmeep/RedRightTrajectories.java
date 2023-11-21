@@ -55,8 +55,8 @@ public class RedRightTrajectories {
             .back(1e-2)
 
             .splineToSplineHeading(new Pose2d(16, -50, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(11, -27, Math.toRadians(270)), Math.toRadians(90))
-            .splineToSplineHeading(new Pose2d(11, -35, Math.toRadians(270)), Math.toRadians(270)            )
+            .splineToSplineHeading(new Pose2d(16, -27, Math.toRadians(270)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(16, -35, Math.toRadians(270)), Math.toRadians(270)            )
             .build();
     public static Trajectory boardCenter = buildSequence(centerDrop.end(), false)
             .forward(2)
@@ -72,6 +72,11 @@ public class RedRightTrajectories {
     public static Trajectory boardLeft = buildSequence(leftDrop.end(), false)
             .splineToConstantHeading(new Vector2d(15.5, -38), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(42, -30, Math.toRadians(180)), Math.toRadians(0))
+            .build();
+
+
+    public static Trajectory parkRight = buildSequence(driveToBoardRight.end(), false)
+            .strafeTo(new Vector2d(47.5, -57.6))
             .build();
 
 }

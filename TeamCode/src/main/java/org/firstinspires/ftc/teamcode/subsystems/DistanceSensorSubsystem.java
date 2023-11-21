@@ -20,7 +20,7 @@ public class DistanceSensorSubsystem extends SubsystemBase {
     }
 
     public double getRightDistanceMillimeters(){
-        return rightDistance.getDistance(DistanceUnit.MM);
+        return rightDistance.getDistance(DistanceUnit.MM) + 20;
     }
     public double getLeftDistanceMillimeters(){
         return leftDistance.getDistance(DistanceUnit.MM);

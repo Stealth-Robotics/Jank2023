@@ -19,14 +19,14 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
     public static double kP = 0.05, kI = 0.0, kD = 0.0;
 
 
-    public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, double setpoint)
+    public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
         translationController = new PIDController(kP, kI, kD);
         translationController.setTolerance(15);
-        translationController.setSetPoint(setpoint);
+        translationController.setSetPoint(53);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 

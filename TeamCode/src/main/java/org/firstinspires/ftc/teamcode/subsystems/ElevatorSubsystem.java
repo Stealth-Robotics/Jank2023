@@ -62,8 +62,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         STOW_POSITION(0.0),
 
         LEVEL_ONE(650),
-        LEVEL_TWO(770),
-        LEVEL_THREE(890),
+        LEVEL_TWO(790),
+        LEVEL_THREE(820),
+
+        LEVEL_FOUR(1150),
+
+        LEVEL_FIVE(1380),
+        LEVEL_SIX(1610),
 
         AUTO_SCORE(300);
 

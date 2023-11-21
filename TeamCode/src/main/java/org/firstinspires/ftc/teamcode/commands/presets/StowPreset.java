@@ -15,22 +15,27 @@ import java.util.function.BooleanSupplier;
 
 public class StowPreset extends ParallelCommandGroup {
 
-    public StowPreset(ElevatorSubsystem elevator, ClawperSubsystem claw, BooleanSupplier cancel){
+    public StowPreset(ElevatorSubsystem elevator, ClawperSubsystem claw, BooleanSupplier cancel) {
         addRequirements(elevator, claw);
         addCommands(
-            new ParallelCommandGroup(
-                new SequentialCommandGroup(
-                    new ElevatorToPosition(elevator, ElevatorPosition.STOW_POSITION).withTimeout(1000),
-                        new RunCommand(() -> elevator.setPower(-1)).withTimeout(500),
+                new ParallelCommandGroup(
+                        new SequentialCommandGroup(
+                                new ElevatorToPosition(elevator, ElevatorPosition.STOW_POSITION).withTimeout(1000),
+                                new RunCommand(() -> elevator.setPower(-1)).withTimeout(500),
+                                new InstantCommand(() -> elevator.setPower(0))
+                        ),
+                        new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW)),
+                        new SequentialCommandGroup(
+                        new InstantCommand(() -> claw.clawperRelease()),
+                        new InstantCommand(() -> claw.clawperClosedPosition())),
+                        new InstantCommand(() -> elevator.setToCurrentPosition()),
                         new InstantCommand(() -> elevator.setPower(0))
-                ),
-                new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW)),
-                new InstantCommand(() -> claw.clawperClosedPosition())
-            )
+
+                )
         );
     }
 
-    public StowPreset(ElevatorSubsystem elevator, ClawperSubsystem claw){
+    public StowPreset(ElevatorSubsystem elevator, ClawperSubsystem claw) {
         this(elevator, claw, () -> false);
     }
 }

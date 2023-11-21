@@ -37,7 +37,7 @@ public class RedLeftAuto extends StealthOpMode {
     CameraSubsystem camera;
     ElevatorSubsystem elevator;
     ClawperSubsystem clawper;
-//    IntakeSubsystem intake;
+    IntakeSubsystem intake;
 
 
     @Override
@@ -46,10 +46,8 @@ public class RedLeftAuto extends StealthOpMode {
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
         camera = new CameraSubsystem(hardwareMap, Alliance.RED);
         elevator = new ElevatorSubsystem(hardwareMap);
-        clawper = new ClawperSubsystem(hardwareMap);
-//        intake = new IntakeSubsystem(hardwareMap);
-
-
+        intake = new IntakeSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);
 
         register(drive, camera, clawper, elevator);
 

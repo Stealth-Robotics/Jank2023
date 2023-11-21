@@ -22,8 +22,11 @@ public class RedRightTrajectories {
             .back(1e-2)
 
             .splineToSplineHeading(new Pose2d(16, -50, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(11, -27, Math.toRadians(270)), Math.toRadians(90))
-            .splineToSplineHeading(new Pose2d(11, -35, Math.toRadians(270)), Math.toRadians(270)            )
+            .splineToSplineHeading(new Pose2d(16, -27, Math.toRadians(270)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(16, -329, Math.toRadians(270)), Math.toRadians(270),
+                    SampleMecanumDrive.getVelocityConstraint(10, Math.toRadians(120),
+                            DriveConstants.TRACK_WIDTH),
+                    SampleMecanumDrive.getAccelerationConstraint(5))
             .build();
     public static Trajectory rightPixelDrop = TrajectoryBuilder.buildTrajectory(
                     new Pose2d(16.5, -62, Math.toRadians(270)), Math.toRadians(270))
