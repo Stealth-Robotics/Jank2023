@@ -34,8 +34,8 @@ public class DriveSubsystem extends SubsystemBase {
     private final DcMotor backLeftMotor;
     private final DcMotor backRightMotor;
 
-    private final DistanceSensor rightDistance;
-    private final DistanceSensor leftDistance;
+//    private final DistanceSensor rightDistance;
+//    private final DistanceSensor leftDistance;
 
     private final PIDController rightDrivePID = new PIDController(0, 0, 0);
     private final PIDController leftDrivePID = new PIDController(0, 0, 0);
@@ -53,9 +53,9 @@ public class DriveSubsystem extends SubsystemBase {
         frontRightMotor = hardwareMap.get(DcMotor.class, "rightFront");
         backLeftMotor = hardwareMap.get(DcMotor.class, "leftRear");
         backRightMotor = hardwareMap.get(DcMotor.class, "rightRear");
-
-        rightDistance = hardwareMap.get(DistanceSensor.class, "distanceRight");
-        leftDistance = hardwareMap.get(DistanceSensor.class, "distanceLeft");
+//
+//        rightDistance = hardwareMap.get(DistanceSensor.class, "distanceRight");
+//        leftDistance = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 
         //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
@@ -113,13 +113,13 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-    public double getRightDistanceMillimeters(){
-        return rightDistance.getDistance(DistanceUnit.MM) + 15;
-    }
-    public double getLeftDistanceMillimeters(){
-
-        return leftDistance.getDistance(DistanceUnit.MM);
-    }
+//    public double getRightDistanceMillimeters(){
+//        return rightDistance.getDistance(DistanceUnit.MM) + 15;
+//    }
+//    public double getLeftDistanceMillimeters(){
+//
+//        return leftDistance.getDistance(DistanceUnit.MM);
+//    }
 
 
     public Pose2d getPoseEstimate(){
@@ -149,13 +149,11 @@ public class DriveSubsystem extends SubsystemBase {
         roadrunnerDrive.update();
     }
 
-    public void setLeftPower(double power){
-        frontLeftMotor.setPower(power);
-        backLeftMotor.setPower(power);
-    }
-    public void setRightPower(double power){
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
+    public void setMotors(Number power){
+        frontRightMotor.setPower(power.doubleValue());
+        frontLeftMotor.setPower(power.doubleValue());
+        backRightMotor.setPower(power.doubleValue());
+        backLeftMotor.setPower(power.doubleValue());
     }
 
 

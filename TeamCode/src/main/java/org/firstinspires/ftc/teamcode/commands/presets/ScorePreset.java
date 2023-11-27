@@ -20,7 +20,7 @@ public class ScorePreset extends ParallelCommandGroup {
         addCommands(
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
-                    new ElevatorToPosition(elevator, level),
+                    new ElevatorToPosition(elevator, level).withTimeout(1500),
                     new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
                 )
 

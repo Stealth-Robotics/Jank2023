@@ -37,7 +37,7 @@ public class RedLeftAuto extends StealthOpMode {
     CameraSubsystem camera;
     ElevatorSubsystem elevator;
     ClawperSubsystem clawper;
-//    IntakeSubsystem intake;
+    IntakeSubsystem intake;
 
 
     @Override
@@ -46,10 +46,8 @@ public class RedLeftAuto extends StealthOpMode {
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
         camera = new CameraSubsystem(hardwareMap, Alliance.RED);
         elevator = new ElevatorSubsystem(hardwareMap);
-        clawper = new ClawperSubsystem(hardwareMap);
-//        intake = new IntakeSubsystem(hardwareMap);
-
-
+        intake = new IntakeSubsystem(hardwareMap);
+        clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);
 
         register(drive, camera, clawper, elevator);
 
@@ -74,8 +72,6 @@ public class RedLeftAuto extends StealthOpMode {
 
 
         telemetry.addData("pos: ", camera.getPosition());
-        FtcDashboard.getInstance().getTelemetry().addData("pos", camera.getPosition());
-        FtcDashboard.getInstance().getTelemetry().update();
         telemetry.update();
         switch(camera.getPosition()){
             case "center":
@@ -97,11 +93,11 @@ public class RedLeftAuto extends StealthOpMode {
         return new SequentialCommandGroup(
             new InstantCommand(() -> clawper.rotatinToggle()),
             new ParallelCommandGroup(
-                new FollowTrajectory(drive, pixelDrop),
-                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
+                new FollowTrajectory(drive, pixelDrop)
+//                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
             ),
-            new InstantCommand(() -> clawper.rotatinToggle()),
-            new WaitCommand(500),
+//            new InstantCommand(() -> clawper.rotatinToggle()),
+//            new WaitCommand(500),
             new InstantCommand(() -> clawper.clawperRelease()),
             new WaitCommand(1000),
             new StowPreset(elevator, clawper),
