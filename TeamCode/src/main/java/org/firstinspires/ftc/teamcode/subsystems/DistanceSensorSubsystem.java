@@ -6,28 +6,24 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.stealthrobotics.library.math.filter.LinearFilter;
 
 public class DistanceSensorSubsystem extends SubsystemBase {
 
 
     DistanceSensor rightDistance;
     DistanceSensor leftDistance;
-    AnalogInput analogSensor;
+    AnalogInput analogLeft;
+    AnalogInput analogRight;
 
-    private final LinearFilter rightFilter = LinearFilter.highPass(2, 0.2);
-    private final LinearFilter leftFilter = LinearFilter.highPass(2, 0.2);
 
-    private double filterLeft;
-    private double filterRight;
 
 
     public DistanceSensorSubsystem(HardwareMap hardwareMap){
         rightDistance = hardwareMap.get(DistanceSensor.class, "distanceRight");
         leftDistance = hardwareMap.get(DistanceSensor.class, "distanceLeft");
-        analogSensor = hardwareMap.get(AnalogInput.class, "analogDist");
+        analogLeft = hardwareMap.get(AnalogInput.class, "analogLeft");
+        analogRight = hardwareMap.get(AnalogInput.class, "analogRight");
 
     }
 
@@ -41,8 +37,12 @@ public class DistanceSensorSubsystem extends SubsystemBase {
 
     }
 
-    public double getAnalog(){
-        return analogSensor.getVoltage();
+    public double getAnalogLeft(){
+        return analogLeft.getVoltage();
+    }
+
+    public double getAnalogRight(){
+        return analogRight.getVoltage();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class DistanceSensorSubsystem extends SubsystemBase {
 
 
         FtcDashboard.getInstance().getTelemetry().addData("left distance", getLeftDistanceMillimeters());
-        FtcDashboard.getInstance().getTelemetry().addData("analogDistance", analogSensor.getVoltage());
+        FtcDashboard.getInstance().getTelemetry().addData("analogDistance", analogLeft.getVoltage());
 
 
         FtcDashboard.getInstance().getTelemetry().addData("right distance", getRightDistanceMillimeters());

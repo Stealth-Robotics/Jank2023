@@ -25,7 +25,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
         rotationalController = new PIDController(kP, kI, kD);
-        rotationalController.setTolerance(15);
+        rotationalController.setTolerance(0.1);
         rotationalController.setSetPoint(0);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
@@ -34,7 +34,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
     @Override
     public void execute() {
 
-        double rotationalError = -(distanceSensorSubsystem.getRightDistanceMillimeters() - distanceSensorSubsystem.getLeftDistanceMillimeters());
+        double rotationalError = -(distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
         double calculation = rotationalController.calculate(rotationalError);
         calculation = MathUtils.clamp(calculation, -0.3, 0.3);
 
