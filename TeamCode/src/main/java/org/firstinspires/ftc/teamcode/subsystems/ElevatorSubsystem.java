@@ -102,6 +102,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         elevatorPID.setTolerance(20);
+        timer.start();
+
 
     }
 
@@ -193,6 +195,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Tune PID
     //call setUsePID(true) to use PID
+    Timing.Timer timer = new Timing.Timer(500);
     @Override
     public void periodic() {
         if (usePID) {
@@ -210,6 +213,8 @@ public class ElevatorSubsystem extends SubsystemBase {
                 setPower(power);
             }
         }
+        FtcDashboard.getInstance().getTelemetry().addData("elapsed time: ", timer.elapsedTime());
+        timer.start();
 
         telemetry.addData("position: ", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
