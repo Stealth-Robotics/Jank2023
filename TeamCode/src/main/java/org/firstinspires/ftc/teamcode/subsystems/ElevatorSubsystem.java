@@ -210,6 +210,9 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
             else {
                 double power = MathUtils.clamp(elevatorPID.calculate(getEncoderPosition()), -1, 1);
+                if(elevatorPID.getSetPoint() <= 20 && checkZeroVelocity()) {
+                    power = 0;
+                }
                 setPower(power);
             }
         }
