@@ -56,9 +56,7 @@ public final class ClawperSubsystem extends SubsystemBase {
     }
 
     public void clawperToPosition(ClawperPosition position) {
-        positionCycle = 1;
         clawServo.setPosition(position.getValue());
-        positionCycle = 0;
     }
 
     public void clawperRelease() {
@@ -66,9 +64,8 @@ public final class ClawperSubsystem extends SubsystemBase {
         if (positionCycle == 0) {
             clawServo.setPosition(ClawperPosition.RELEASE_ONE.getValue());
             positionCycle++;
-            return;
         }
-        if (positionCycle == 1) {
+        else if (positionCycle == 1) {
             clawServo.setPosition(ClawperPosition.RELEASE_SECOND.getValue());
             positionCycle = 0;
         }
