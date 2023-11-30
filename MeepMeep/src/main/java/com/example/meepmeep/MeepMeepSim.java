@@ -138,6 +138,40 @@ public class MeepMeepSim{
                 );
 
 
+        RoadRunnerBotEntity rightBlueLeftBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .addTrajectory(BlueRightTrajectories.blueRightLeftDrop)
+                                .addTrajectory(BlueRightTrajectories.driveToBoardLeft)
+                                .build()
+                );
+        RoadRunnerBotEntity rightBlueCenterBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .addTrajectory(BlueRightTrajectories.centerDrop)
+                                .addTrajectory(BlueRightTrajectories.boardCenter)
+                                .build()
+                );
+
+        RoadRunnerBotEntity rightBlueRightBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+                                .addTrajectory(BlueRightTrajectories.rightDrop)
+                                .addTrajectory(BlueRightTrajectories.boardRight)
+                                .build()
+                );
+
+
+
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
@@ -152,9 +186,9 @@ public class MeepMeepSim{
                 .addEntity(blueLeftBot)
                 .addEntity(rightRedCenterBot)
                 .addEntity(rightRedLeftBot)
-//                .addEntity(rightBlueLeftBot)
-//                .addEntity(rightBlueCenterBot)
-//                .addEntity(rightBlueRightBot)
+                .addEntity(rightBlueLeftBot)
+                .addEntity(rightBlueCenterBot)
+                .addEntity(rightBlueRightBot)
                 .start();
     }
 }

@@ -99,6 +99,7 @@ public class RedRightAuto extends StealthOpMode {
                         .build();
                 break;
         }
+        camera.stopCamera();
 
                 return new SequentialCommandGroup(
                         new InstantCommand(() -> elevator.setUsePID(true)),
