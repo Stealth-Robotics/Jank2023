@@ -210,7 +210,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             }
             else {
                 double power = MathUtils.clamp(elevatorPID.calculate(getEncoderPosition()), -1, 1);
-                if(elevatorPID.getSetPoint() <= 20 && checkZeroVelocity()) {
+                if(elevatorPID.getSetPoint() <= 20 && getEncoderPosition() <= 20) {
                     power = 0;
                 }
                 setPower(power);
@@ -226,6 +226,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 //
 //
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
+        FtcDashboard.getInstance().getTelemetry().addData("position", getEncoderPosition());
+        FtcDashboard.getInstance().getTelemetry().addData("setpoint", elevatorPID.getSetPoint());
         telemetry.addData("runpid", usePID);
         telemetry.addData("level", getLevel());
 //

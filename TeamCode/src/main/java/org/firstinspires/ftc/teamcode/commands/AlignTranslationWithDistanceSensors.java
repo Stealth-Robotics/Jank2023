@@ -30,7 +30,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
         translationController = new PIDController(kP, kI, kD);
-        translationController.setTolerance(0.05);
+        translationController.setTolerance(0.03);
         translationController.setSetPoint(setpoint);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
