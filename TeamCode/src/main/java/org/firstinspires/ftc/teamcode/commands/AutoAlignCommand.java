@@ -18,14 +18,18 @@ public class AutoAlignCommand extends SequentialCommandGroup {
     private final DoubleSupplier leftY;
 
 
+
+
     public AutoAlignCommand(DriveSubsystem drive, DistanceSensorSubsystem distance, DoubleSupplier leftY) {
         this.drive = drive;
         this.distance = distance;
         this.leftY = leftY;
 
         addCommands(
-                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(1000),
-                new AlignTranslationWithDistanceSensors(drive, distance).withTimeout(1500)
+                new ZeroHeadingWithDistanceSensors(drive, distance),
+                new AlignTranslationWithDistanceSensors(drive, distance),
+                new ZeroHeadingWithDistanceSensors(drive, distance),
+                new DriveDefaultCommand(drive, leftY, () -> 0.0, () -> 0.0, () -> true)
         );
 
     }

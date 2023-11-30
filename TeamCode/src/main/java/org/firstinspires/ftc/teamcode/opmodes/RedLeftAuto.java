@@ -58,6 +58,8 @@ public class RedLeftAuto extends StealthOpMode {
     @Override
     public void whileWaitingToStart() {
         CommandScheduler.getInstance().run();
+        elevator.setUsePID(false);
+
     }
 
     @Override

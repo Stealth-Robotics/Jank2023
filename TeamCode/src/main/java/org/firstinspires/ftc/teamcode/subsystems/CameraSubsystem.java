@@ -39,6 +39,10 @@ public class CameraSubsystem extends SubsystemBase {
     public final String getPosition(){
         return position;
     }
+
+    public void stopCamera(){
+        portal.stopStreaming();
+    }
     @Override
     public void periodic() {
         telemetry.addData("position: ", processor.getOutStr());
