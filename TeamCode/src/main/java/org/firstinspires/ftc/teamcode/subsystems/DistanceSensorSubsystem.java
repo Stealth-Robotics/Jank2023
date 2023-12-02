@@ -32,7 +32,14 @@ public class DistanceSensorSubsystem extends SubsystemBase {
     }
 
     public double getAnalogRight(){
-        return analogRight.getVoltage() - 0.3;
+        if(analogRight.getVoltage() < 2){
+            return analogRight.getVoltage() + 0.1;
+        }
+        else{
+            return analogRight.getVoltage();
+
+        }
+
     }
 
     @Override

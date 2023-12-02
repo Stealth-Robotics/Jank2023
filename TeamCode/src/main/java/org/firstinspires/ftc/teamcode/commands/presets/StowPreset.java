@@ -20,17 +20,15 @@ public class StowPreset extends ParallelCommandGroup {
         addCommands(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new ElevatorToPosition(elevator, ElevatorPosition.STOW_POSITION).withTimeout(1000),
-                                new RunCommand(() -> elevator.setPower(-1)).withTimeout(1000),
-                                new InstantCommand(() -> elevator.setToCurrentPosition())
+                                new ElevatorToPosition(elevator, ElevatorPosition.STOW_POSITION).withTimeout(1000)
 
 
                         ),
                         new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW)),
                         new SequentialCommandGroup(
                             new InstantCommand(() -> claw.clawperRelease()),
-                            new InstantCommand(() -> claw.clawperClosedPosition())),
-                            new InstantCommand(() -> elevator.setPower(0)
+                            new InstantCommand(() -> claw.clawperClosedPosition())
+
                         )
 
                 )

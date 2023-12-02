@@ -21,10 +21,10 @@ public class CameraSubsystem extends SubsystemBase {
 
     private String position;
     PropProcessor processor;
-    public CameraSubsystem(HardwareMap hardwareMap, Alliance alliance){
+    public CameraSubsystem(HardwareMap hardwareMap, Alliance alliance, String defaultPos){
         this.alliance = alliance;
         //inits processor based on specified alliance
-        processor = new PropProcessor(alliance);
+        processor = new PropProcessor(alliance, defaultPos);
 
         //sets camera info using processor
         portal = new VisionPortal.Builder()

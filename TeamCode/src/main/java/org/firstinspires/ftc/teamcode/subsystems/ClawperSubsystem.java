@@ -18,18 +18,18 @@ public final class ClawperSubsystem extends SubsystemBase {
     private int positionCycle = 0;
 
     private int rotationCycle = 0;
-    public static double TEST_POSITION = 0.45;
+    public static double TEST_POSITION = 0.75;
 
     private final BooleanSupplier intakeRunning;
 
 
     public static enum ClawperPosition {
         ROTATION_STOW(0.50),
-        ROTATION_SCORE(0.65),
+        ROTATION_SCORE(0.70),
         RELEASE_ONE(0.5),
         RELEASE_SECOND(0.68),
         RELEASE_BOTH(0.4),
-        CLAW_HOLD(0.8),
+        CLAW_HOLD(0.80),
 
         ROTATION_CLIMB(0.8);
 
@@ -90,7 +90,7 @@ public final class ClawperSubsystem extends SubsystemBase {
     }
 
     public void rotationTest(){
-        clawServo.setPosition(TEST_POSITION);
+        rotationServo.setPosition(TEST_POSITION);
     }
 
     @Override

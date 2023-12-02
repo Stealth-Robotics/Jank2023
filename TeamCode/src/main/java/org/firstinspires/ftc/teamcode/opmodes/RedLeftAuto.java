@@ -44,7 +44,7 @@ public class RedLeftAuto extends StealthOpMode {
     public void initialize() {
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
-        camera = new CameraSubsystem(hardwareMap, Alliance.RED);
+        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "right");
         elevator = new ElevatorSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);

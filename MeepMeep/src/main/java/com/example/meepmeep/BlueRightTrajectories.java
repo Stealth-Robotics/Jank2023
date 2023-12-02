@@ -66,15 +66,25 @@ public class BlueRightTrajectories {
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(14, 45, Math.toRadians(45)), Math.toRadians(250))
             .splineToConstantHeading(new Vector2d(
-                    5, 38), Math.toRadians(180))
+                    6, 38), Math.toRadians(180))
             .build();
     public static Trajectory boardRight = buildSequence(rightDrop.end(), false)
-            .splineToConstantHeading(new Vector2d(10, 32), Math.toRadians(0))
+            .forward(5)
+            .splineToConstantHeading(new Vector2d(20, 32), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(42, 30, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
 
     public static Trajectory parkRight = buildSequence(boardRight.end(), false)
+            .strafeRight(30)
+
+            .build();
+
+    public static Trajectory parkLeft = buildSequence(driveToBoardLeft.end(), false)
+            .strafeTo(new Vector2d(47.5, -57.6))
+            .build();
+
+    public static Trajectory parkCenter = buildSequence(boardCenter.end(), false)
             .strafeTo(new Vector2d(47.5, -57.6))
             .build();
 

@@ -113,6 +113,7 @@ public class MeepMeepSim{
                                 //.addTrajectory(RedLeftTrajectories.leftDriveForward)
                                 //.waitSeconds(0.5)
                                 .addTrajectory(BlueLeftTrajectories.driveToBoardRight)
+
                                 .build()
                 );
 
@@ -167,6 +168,7 @@ public class MeepMeepSim{
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
                                 .addTrajectory(BlueRightTrajectories.rightDrop)
                                 .addTrajectory(BlueRightTrajectories.boardRight)
+                                .addTrajectory(BlueRightTrajectories.parkRight)
                                 .build()
                 );
 

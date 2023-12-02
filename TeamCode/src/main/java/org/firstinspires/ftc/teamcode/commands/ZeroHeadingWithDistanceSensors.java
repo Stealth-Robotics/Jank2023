@@ -17,7 +17,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
 
     PIDController rotationalController;
 
-    public static double kP = -3, kI = 0.0, kD = 0.0;
+    public static double kP = -3.75 , kI = 0.0, kD = -0.25;
 
     public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
     {
@@ -25,7 +25,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
         rotationalController = new PIDController(kP, kI, kD);
-        rotationalController.setTolerance(0.1);
+        rotationalController.setTolerance(0.03);
         rotationalController.setSetPoint(0);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);

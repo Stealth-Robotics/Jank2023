@@ -50,9 +50,12 @@ public class PropProcessor implements VisionProcessor {
     Scalar highHSVColorLower;
     Scalar lowHSVColorLower;
     Scalar highHSVColorUpper;
+    String defaultPos;
 
 
-    public PropProcessor(Alliance alliance){
+    public PropProcessor(Alliance alliance, String defaultPos){
+
+        this.defaultPos = defaultPos;
         //sets the color thresholds based on alliance
         if(alliance == Alliance.RED){
             lowHSVColorLower = new Scalar(0, 150, 150); //beginning of red
@@ -106,7 +109,7 @@ public class PropProcessor implements VisionProcessor {
         else outStr = "center";
 
         if(leftBox < 500000 && centerBox < 500000 && rightBox < 500000 ){
-            outStr = "right";
+            outStr = defaultPos;
         }
 //        FtcDashboard.getInstance().getTelemetry().addData("left", leftBox);
 //        FtcDashboard.getInstance().getTelemetry().addData("center", centerBox);

@@ -133,8 +133,7 @@ public abstract class Teleop extends StealthOpMode {
 //                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
 //                new DriveDefaultCommand(driveSubsystem, () -> driverGamepad.getLeftY(), () -> 0, () -> 0, () -> true))
 
-                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY()),
-                new DriveWhileAlignedCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY())
+                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY())
                 )
         );
 
@@ -142,7 +141,10 @@ public abstract class Teleop extends StealthOpMode {
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> clawper.clawperClosedPosition()));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ScorePreset(elevator, clawper, () -> elevator.getLevel()));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new StowPreset(elevator, clawper));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new StowPreset(elevator, clawper).andThen(new ElevatorReset(elevator)));
+
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> clawper.rotationTest()));
 
     }
     @SuppressWarnings("unused")

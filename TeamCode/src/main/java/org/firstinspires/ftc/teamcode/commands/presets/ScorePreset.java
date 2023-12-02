@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.commands.ElevatorToPosition;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem.ElevatorPosition;
+import org.stealthrobotics.library.commands.WaitBeforeCommand;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.IntSupplier;
@@ -19,10 +20,9 @@ public class ScorePreset extends ParallelCommandGroup {
 
         addCommands(
             new ParallelCommandGroup(
-                new SequentialCommandGroup(
-                    new ElevatorToPosition(elevator, level).withTimeout(1500),
-                    new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
-                )
+                    new ElevatorToPosition(elevator, level).withTimeout(2000),
+                    new WaitBeforeCommand(500, new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
+                    )
 
             )
         );

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
@@ -25,15 +26,16 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.trajectories.RedLeftTrajectories;
-import org.firstinspires.ftc.teamcode.trajectories.RedRightTrajectories;
+import org.firstinspires.ftc.teamcode.trajectories.BlueCloseTrajectories;
 import org.firstinspires.ftc.teamcode.trajectories.TrajectoryBuilder;
+import org.firstinspires.inspection.InspectionState;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 @SuppressWarnings("unused")
-@Autonomous(name="Red right auto", group="red auto")
-public class RedRightAuto extends StealthOpMode {
+@Autonomous(name="blue close")
+public class BlueCloseAuto extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
     ElevatorSubsystem elevator;
@@ -43,6 +45,8 @@ public class RedRightAuto extends StealthOpMode {
 
     DistanceSensorSubsystem distance;
 
+    double distanceStrafe = 0;
+
 
     @Override
     public void initialize() {
@@ -51,7 +55,7 @@ public class RedRightAuto extends StealthOpMode {
         elevator = new ElevatorSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap, () -> intakeSubsystem.getIntakeSpeed() != 0);
-        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "left");
+        camera = new CameraSubsystem(hardwareMap, Alliance.BLUE, "right");
         distance = new DistanceSensorSubsystem(hardwareMap);
         elevator.setUsePID(false);
         register(drive, elevator, clawper);
@@ -65,15 +69,15 @@ public class RedRightAuto extends StealthOpMode {
 
     @Override
     public Command getAutoCommand() {
-        Trajectory pixelDrop = RedRightTrajectories.rightPixelDrop;
+        Trajectory pixelDrop = BlueCloseTrajectories.rightDrop;
 
-        Trajectory board = RedRightTrajectories.driveToBoardRight;
-        Trajectory park = TrajectoryBuilder.buildTrajectory(RedRightTrajectories.driveToBoardRight.end())
-                .strafeLeft(10)
+        Trajectory board = BlueCloseTrajectories.boardRight;
+        Trajectory park = TrajectoryBuilder.buildTrajectory(BlueCloseTrajectories.boardRight.end())
+                .strafeRight(10)
                 .build();
 
 
-        drive.setPoseEstimate(RedRightTrajectories.rightPixelDrop.start());
+        drive.setPoseEstimate(BlueCloseTrajectories.rightDrop.start());
 
 
 
@@ -81,63 +85,69 @@ public class RedRightAuto extends StealthOpMode {
         telemetry.update();
         switch (camera.getPosition()) {
             case "center":
-                pixelDrop = RedRightTrajectories.centerPixelDrop;
-                board = RedRightTrajectories.driveToBoardCenter;
-                park = TrajectoryBuilder.buildTrajectory(RedRightTrajectories.driveToBoardCenter.end())
-                        .strafeLeft(17)
-                        .build();
+                pixelDrop = BlueCloseTrajectories.centerDrop;
+                board = BlueCloseTrajectories.boardCenter;
+                distanceStrafe = 25;
+
                 break;
             case "right":
-                pixelDrop = RedRightTrajectories.rightPixelDrop;
-                board = RedRightTrajectories.driveToBoardRight;
+                pixelDrop = BlueCloseTrajectories.rightDrop;
+                board = BlueCloseTrajectories.boardRight;
+                distanceStrafe = 20;
 
                 break;
             case "left":
-                pixelDrop = RedRightTrajectories.leftPixelDrop;
-                board = RedRightTrajectories.driveToBoardLeft;
-                park = TrajectoryBuilder.buildTrajectory(RedRightTrajectories.driveToBoardLeft.end())
-                        .strafeLeft(22)
-                        .build();
+                pixelDrop = BlueCloseTrajectories.leftDrop;
+                board = BlueCloseTrajectories.driveToBoardLeft;
+                distanceStrafe = 30;
+
                 break;
         }
         camera.stopCamera();
 
-                return new SequentialCommandGroup(
-                        new InstantCommand(() -> elevator.setUsePID(true)),
-                        new InstantCommand(() -> elevator.setToCurrentPosition()),
-                        new InstantCommand(() -> elevator.setPower(0)),
-                        new InstantCommand(() -> clawper.rotatinToggle()),
-                        new ParallelCommandGroup(
-                                new FollowTrajectory(drive, pixelDrop)
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> elevator.setUsePID(true)),
+                new InstantCommand(() -> elevator.setToCurrentPosition()),
+                new InstantCommand(() -> elevator.setPower(0)),
+                new InstantCommand(() -> clawper.rotatinToggle()),
+                new ParallelCommandGroup(
+                        new FollowTrajectory(drive, pixelDrop)
 //                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
-                        ),
+                ),
 //            new InstantCommand(() -> clawper.rotatinToggle()),
 //            new WaitCommand(500),
-                        new InstantCommand(() -> clawper.clawperRelease()),
-                        new WaitCommand(250),
-                        new ParallelCommandGroup(
-                            new FollowTrajectory(drive, board),
-                                new WaitBeforeCommand(500, new ScorePreset(elevator, clawper, () -> 1))
-                        ),
+                new InstantCommand(() -> clawper.clawperRelease()),
+                new WaitCommand(250),
+                new ParallelCommandGroup(
+                        new FollowTrajectory(drive, board),
+                        new WaitBeforeCommand(500, new ScorePreset(elevator, clawper, () -> 1))
+                ),
 
 
 
-                        new WaitBeforeCommand(500, new AlignTranslationWithDistanceSensors(drive, distance).withTimeout(4000)),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance).withTimeout(4000)),
 
-                        new WaitCommand(500),
-                        new InstantCommand(() -> clawper.clawperRelease()),
-                        new WaitBeforeCommand(500, new InstantCommand(() -> clawper.rotatinToggle())),
-                        new InstantCommand(() -> clawper.rotatinToggle()),
-                        new FollowTrajectory(drive, park),
-                        new StowPreset(elevator, clawper),
-                        new ElevatorReset(elevator)
+                new WaitCommand(500),
+                new InstantCommand(() -> clawper.clawperRelease()),
+                new WaitBeforeCommand(500, new InstantCommand(() -> clawper.rotatinToggle())),
+                new InstantCommand(() -> clawper.rotatinToggle()),
+                new WaitCommand(250),
+                new FollowTrajectory(drive,
+                        TrajectoryBuilder.buildTrajectory(board.end())
+                                .lineToSplineHeading(new Pose2d(board.end().getX(), board.end().getY() + distanceStrafe, Math.toRadians(180)))
+
+                                .build()
+                ),
+
+                new StowPreset(elevator, clawper),
+                new ElevatorReset(elevator)
 
 
 
 
 
-                );
-        }
+        );
+    }
 
 
 
