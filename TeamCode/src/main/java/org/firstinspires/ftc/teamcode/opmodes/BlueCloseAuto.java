@@ -30,11 +30,13 @@ import org.firstinspires.ftc.teamcode.trajectories.BlueCloseTrajectories;
 import org.firstinspires.ftc.teamcode.trajectories.TrajectoryBuilder;
 import org.firstinspires.inspection.InspectionState;
 import org.stealthrobotics.library.Alliance;
+import org.stealthrobotics.library.commands.EndOpModeCommand;
+import org.stealthrobotics.library.commands.SaveAutoHeadingCommand;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 @SuppressWarnings("unused")
-@Autonomous(name="blue close")
+@Autonomous(name="blue close", preselectTeleOp = "BLUE | Tele-Op")
 public class BlueCloseAuto extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
@@ -141,7 +143,10 @@ public class BlueCloseAuto extends StealthOpMode {
                 ),
 
                 new StowPreset(elevator, clawper),
-                new ElevatorReset(elevator)
+                new ElevatorReset(elevator),
+
+                new SaveAutoHeadingCommand(() -> drive.getPoseEstimate().getHeading()),
+                new EndOpModeCommand(this)
 
 
 

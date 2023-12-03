@@ -112,6 +112,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
 
+    public void headingAfterAuto(double heading){
+        resetAngle();
+        headingOffset += heading;
+    }
+
+
 
 //    public double getRightDistanceMillimeters(){
 //        return rightDistance.getDistance(DistanceUnit.MM) + 15;

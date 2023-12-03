@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PlaneSubsystem;
+import org.stealthrobotics.library.AutoToTeleStorage;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
 
@@ -78,6 +79,8 @@ public abstract class Teleop extends StealthOpMode {
         distance = new DistanceSensorSubsystem(hardwareMap);
 
         clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW);
+
+        driveSubsystem.headingAfterAuto(AutoToTeleStorage.finalAutoHeading);
 
 //        telemetry.addData("level: ", elevator.getLevel());
 //        telemetry.addData("elevator pos: ", elevator.getEncoderPosition());
