@@ -219,7 +219,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         FtcDashboard.getInstance().getTelemetry().addData("elapsed time: ", timer.elapsedTime());
         timer.start();
 
-        telemetry.addData("position: ", getEncoderPosition());
+//        telemetry.addData("position: ", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("getZeroVelo: ", checkZeroVelocity());
 //        FtcDashboard board = FtcDashboard.getInstance();
 //        board.getTelemetry().addData("loop time: ", deltaT);
@@ -228,10 +228,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
         FtcDashboard.getInstance().getTelemetry().addData("position", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("setpoint", elevatorPID.getSetPoint());
-        telemetry.addData("runpid", usePID);
-        telemetry.addData("level", getLevel());
+//        telemetry.addData("runpid", usePID);
+//        telemetry.addData("level", getLevel());
 //
-        telemetry.update();
+//        telemetry.update();
 
 
     }

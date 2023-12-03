@@ -147,6 +147,7 @@ public class MeepMeepSim{
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
                                 .addTrajectory(BlueRightTrajectories.blueRightLeftDrop)
                                 .addTrajectory(BlueRightTrajectories.driveToBoardLeft)
+                                .addTrajectory(BlueRightTrajectories.parkLeft)
                                 .build()
                 );
         RoadRunnerBotEntity rightBlueCenterBot = new DefaultBotBuilder(meepMeep)
@@ -157,6 +158,7 @@ public class MeepMeepSim{
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
                                 .addTrajectory(BlueRightTrajectories.centerDrop)
                                 .addTrajectory(BlueRightTrajectories.boardCenter)
+                                .addTrajectory(BlueRightTrajectories.parkCenter)
                                 .build()
                 );
 
@@ -169,6 +171,7 @@ public class MeepMeepSim{
                                 .addTrajectory(BlueRightTrajectories.rightDrop)
                                 .addTrajectory(BlueRightTrajectories.boardRight)
                                 .addTrajectory(BlueRightTrajectories.parkRight)
+
                                 .build()
                 );
 

@@ -43,6 +43,8 @@ public class RedRightAuto extends StealthOpMode {
 
     DistanceSensorSubsystem distance;
 
+    double distanceStrafe = 0;
+
 
     @Override
     public void initialize() {
@@ -83,21 +85,18 @@ public class RedRightAuto extends StealthOpMode {
             case "center":
                 pixelDrop = RedRightTrajectories.centerPixelDrop;
                 board = RedRightTrajectories.driveToBoardCenter;
-                park = TrajectoryBuilder.buildTrajectory(RedRightTrajectories.driveToBoardCenter.end())
-                        .strafeLeft(17)
-                        .build();
+                distanceStrafe = 25;
                 break;
             case "right":
                 pixelDrop = RedRightTrajectories.rightPixelDrop;
                 board = RedRightTrajectories.driveToBoardRight;
+                distanceStrafe = 18;
 
                 break;
             case "left":
                 pixelDrop = RedRightTrajectories.leftPixelDrop;
                 board = RedRightTrajectories.driveToBoardLeft;
-                park = TrajectoryBuilder.buildTrajectory(RedRightTrajectories.driveToBoardLeft.end())
-                        .strafeLeft(22)
-                        .build();
+                distanceStrafe = 30;
                 break;
         }
         camera.stopCamera();
@@ -107,6 +106,8 @@ public class RedRightAuto extends StealthOpMode {
                         new InstantCommand(() -> elevator.setToCurrentPosition()),
                         new InstantCommand(() -> elevator.setPower(0)),
                         new InstantCommand(() -> clawper.rotatinToggle()),
+//                        new ElevatorReset(elevator),
+
                         new ParallelCommandGroup(
                                 new FollowTrajectory(drive, pixelDrop)
 //                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
@@ -116,22 +117,28 @@ public class RedRightAuto extends StealthOpMode {
                         new InstantCommand(() -> clawper.clawperRelease()),
                         new WaitCommand(250),
                         new ParallelCommandGroup(
-                            new FollowTrajectory(drive, board),
-                                new WaitBeforeCommand(500, new ScorePreset(elevator, clawper, () -> 1))
+                            new FollowTrajectory(drive, board)
+//                                new WaitBeforeCommand(500, new ScorePreset(elevator, clawper, () -> 1))
                         ),
 
 
 
-                        new WaitBeforeCommand(500, new AlignTranslationWithDistanceSensors(drive, distance).withTimeout(4000)),
+                        new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.79).withTimeout(4000)),
 
                         new WaitCommand(500),
                         new InstantCommand(() -> clawper.clawperRelease()),
-                        new WaitBeforeCommand(500, new InstantCommand(() -> clawper.rotatinToggle())),
-                        new InstantCommand(() -> clawper.rotatinToggle()),
-                        new FollowTrajectory(drive, park),
-                        new StowPreset(elevator, clawper),
-                        new ElevatorReset(elevator)
+//                        new WaitBeforeCommand(500, new InstantCommand(() -> clawper.rotatinToggle())),
+//                        new InstantCommand(() -> clawper.rotatinToggle()),
+                        new WaitCommand(250),
+                        new FollowTrajectory(drive,
+                                TrajectoryBuilder.buildTrajectory(board.end())
+                                        .strafeLeft(distanceStrafe)
 
+                                        .build()
+                        )
+
+//                        new StowPreset(elevator, clawper)
+//                        new ElevatorReset(elevator)
 
 
 

@@ -34,7 +34,7 @@ public class PropProcessor implements VisionProcessor {
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
-            new Point(240, 480)
+            new Point(180, 480)
     );
 
     static final Rect RIGHT_RECTANGLE = new Rect(
@@ -42,7 +42,7 @@ public class PropProcessor implements VisionProcessor {
             new Point(640, 480)
     );
     static final Rect CENTER_RECT = new Rect(
-            new Point(240, 0),
+            new Point(180, 0),
             new Point(500, 480)
     );
 

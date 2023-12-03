@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.Arrays;
 
@@ -37,6 +39,12 @@ public class BlueRightTrajectories {
                 accelConstraint(30));
     }
 
+    private static TrajectorySequenceBuilder buildTrajSequence(Pose2d start){
+        return new TrajectorySequenceBuilder(start,
+                veloConstraint(Math.toRadians(100), 45),
+                accelConstraint(30), 100, 100)
+                ;
+    }
 
     public static Trajectory blueRightLeftDrop = buildSequence(new Pose2d(16.5, 62, Math.toRadians(90)), false)
             .back(1e-2)
@@ -76,16 +84,16 @@ public class BlueRightTrajectories {
 
 
     public static Trajectory parkRight = buildSequence(boardRight.end(), false)
-            .strafeRight(30)
+            .strafeLeft(18)
 
             .build();
 
     public static Trajectory parkLeft = buildSequence(driveToBoardLeft.end(), false)
-            .strafeTo(new Vector2d(47.5, -57.6))
+            .strafeLeft(30)
             .build();
 
     public static Trajectory parkCenter = buildSequence(boardCenter.end(), false)
-            .strafeTo(new Vector2d(47.5, -57.6))
+            .strafeLeft(25)
             .build();
 
 }

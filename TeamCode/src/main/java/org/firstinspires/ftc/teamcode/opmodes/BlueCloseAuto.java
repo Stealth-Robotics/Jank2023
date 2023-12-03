@@ -87,13 +87,13 @@ public class BlueCloseAuto extends StealthOpMode {
             case "center":
                 pixelDrop = BlueCloseTrajectories.centerDrop;
                 board = BlueCloseTrajectories.boardCenter;
-                distanceStrafe = 25;
+                distanceStrafe = 20;
 
                 break;
             case "right":
                 pixelDrop = BlueCloseTrajectories.rightDrop;
                 board = BlueCloseTrajectories.boardRight;
-                distanceStrafe = 20;
+                distanceStrafe = 18;
 
                 break;
             case "left":
@@ -110,6 +110,7 @@ public class BlueCloseAuto extends StealthOpMode {
                 new InstantCommand(() -> elevator.setToCurrentPosition()),
                 new InstantCommand(() -> elevator.setPower(0)),
                 new InstantCommand(() -> clawper.rotatinToggle()),
+                new ElevatorReset(elevator),
                 new ParallelCommandGroup(
                         new FollowTrajectory(drive, pixelDrop)
 //                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
@@ -125,7 +126,7 @@ public class BlueCloseAuto extends StealthOpMode {
 
 
 
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance).withTimeout(4000)),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.78).withTimeout(4000)),
 
                 new WaitCommand(500),
                 new InstantCommand(() -> clawper.clawperRelease()),
@@ -134,8 +135,8 @@ public class BlueCloseAuto extends StealthOpMode {
                 new WaitCommand(250),
                 new FollowTrajectory(drive,
                         TrajectoryBuilder.buildTrajectory(board.end())
-                                .lineToSplineHeading(new Pose2d(board.end().getX(), board.end().getY() + distanceStrafe, Math.toRadians(180)))
-
+                                .strafeLeft(distanceStrafe)
+                                .splineToSplineHeading(new Pose2d(55, 12, Math.toRadians(0)), Math.toRadians(0))
                                 .build()
                 ),
 

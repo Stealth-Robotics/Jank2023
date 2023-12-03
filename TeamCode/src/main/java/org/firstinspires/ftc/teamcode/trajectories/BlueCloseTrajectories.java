@@ -15,7 +15,7 @@ public class BlueCloseTrajectories {
             .back(1e-2)
 
             .splineToSplineHeading(new Pose2d(16.5, 62, Math.toRadians(90)), Math.toRadians(270))
-            .splineToSplineHeading(new Pose2d(22.6, 45, Math.toRadians(90)), Math.toRadians(270))
+            .splineToSplineHeading(new Pose2d(22.6, 43, Math.toRadians(90)), Math.toRadians(270))
             .build();
 
     public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(leftDrop.end())
@@ -27,8 +27,12 @@ public class BlueCloseTrajectories {
             .back(1e-2)
 
             .splineToSplineHeading(new Pose2d(16, 50, Math.toRadians(90)), Math.toRadians(270))
-            .splineToSplineHeading(new Pose2d(16, 27, Math.toRadians(90)), Math.toRadians(270))
-            .splineToSplineHeading(new Pose2d(16, 32, Math.toRadians(90)), Math.toRadians(270))
+            .splineToSplineHeading(new Pose2d(15, 27, Math.toRadians(90)), Math.toRadians(270))
+            .splineToSplineHeading(new Pose2d(15, 32.75, Math.toRadians(90)), Math.toRadians(270),
+                    SampleMecanumDrive.getVelocityConstraint(10, Math.toRadians(120),
+                            DriveConstants.TRACK_WIDTH),
+                    SampleMecanumDrive.getAccelerationConstraint(5)
+            )
             .build();
     public static Trajectory boardCenter = TrajectoryBuilder.buildTrajectory(centerDrop.end())
             .splineToConstantHeading(new Vector2d(26, 35), Math.toRadians(-1e-10))
