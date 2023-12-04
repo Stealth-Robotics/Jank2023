@@ -46,6 +46,7 @@ public class RedRightTrajectories {
             .build();
 
     public static Trajectory driveToBoardRight = buildSequence(redRightRightDrop.end(), false)
+            .strafeLeft(1e-2)
             .splineToConstantHeading(new Vector2d(26, -45), Math.toRadians(-1e-10))
             .splineToSplineHeading(new Pose2d(42, -42, Math.toRadians(180)), Math.toRadians(0))
             .build();
@@ -58,18 +59,20 @@ public class RedRightTrajectories {
             .splineToSplineHeading(new Pose2d(16, -35, Math.toRadians(270)), Math.toRadians(270)            )
             .build();
     public static Trajectory boardCenter = buildSequence(centerDrop.end(), false)
-            .splineToConstantHeading(new Vector2d(26, -35), Math.toRadians(-1e-10))
+            .strafeLeft(1e-2)
+            .splineToConstantHeading(new Vector2d(26, -35), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(42, -35, Math.toRadians(180)), Math.toRadians(0))
             .build();
 
     public static Trajectory leftDrop = buildSequence(new Pose2d(16.5, -62, Math.toRadians(270)), false)
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(14, -45, Math.toRadians(315)), Math.toRadians(110))
+            .splineToSplineHeading(new Pose2d(14, -50, Math.toRadians(315)), Math.toRadians(110))
             .splineToConstantHeading(new Vector2d(
                     5, -38), Math.toRadians(180))
             .build();
     public static Trajectory boardLeft = buildSequence(leftDrop.end(), false)
-            .splineToConstantHeading(new Vector2d(10, -32), Math.toRadians(0))
+            .strafeLeft(1e-2)
+            .splineToConstantHeading(new Vector2d(15, -32), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(42, -30, Math.toRadians(180)), Math.toRadians(0))
             .build();
 

@@ -22,6 +22,8 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
     public static double setpoint = 1.77;
 
 
+
+
     double averageRight = 0;
     double averageLeft = 0;
 
@@ -34,6 +36,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController = new PIDController(kP, kI, kD);
         translationController.setTolerance(0.03);
         translationController.setSetPoint(setpoint);
+        translationController.setIntegrationBounds(-0.2, 0.2);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 

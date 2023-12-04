@@ -41,9 +41,7 @@ public class MeepMeepSim{
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
                                 .addTrajectory(RedLeftTrajectories.redLeftLeftDrop)
-
-                                //.addTrajectory(RedLeftTrajectories.leftDriveForward)
-                                //.waitSeconds(0.5)
+                                .addTrajectory(RedLeftTrajectories.intakeFirstStackLeft)
                                 .addTrajectory(RedLeftTrajectories.driveToBoardLeft)
                                 .build()
                 );
@@ -55,6 +53,7 @@ public class MeepMeepSim{
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
                                 .addTrajectory(RedLeftTrajectories.redCenterDrop)
+                                .addTrajectory(RedLeftTrajectories.intakeFirstStackCenter)
                                 .addTrajectory(RedLeftTrajectories.driveToBoardCenter)
                                 .build()
                 );
@@ -65,6 +64,8 @@ public class MeepMeepSim{
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
                                 .addTrajectory(RedLeftTrajectories.redRightDrop)
+                                .addTrajectory(RedLeftTrajectories.intakeFirstStackRight)
+
                                 .addTrajectory(RedLeftTrajectories.driveToBoardRight)
                                 .build()
                 );
