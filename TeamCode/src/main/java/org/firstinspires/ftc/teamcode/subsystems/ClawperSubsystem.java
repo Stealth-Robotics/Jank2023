@@ -25,7 +25,7 @@ public final class ClawperSubsystem extends SubsystemBase {
 
     public static enum ClawperPosition {
         ROTATION_STOW(0.50),
-        ROTATION_SCORE(0.70),
+        ROTATION_SCORE(0.73),
         RELEASE_ONE(0.5),
         RELEASE_SECOND(0.68),
         RELEASE_BOTH(0.4),
@@ -53,6 +53,14 @@ public final class ClawperSubsystem extends SubsystemBase {
 
     public void rotationToPosition(ClawperPosition position) {
         rotationServo.setPosition(position.getValue());
+    }
+
+    public void rotationToPosition(double position) {
+        rotationServo.setPosition(position);
+    }
+
+    public double getRotation(){
+        return rotationServo.getPosition();
     }
 
     public void clawperToPosition(ClawperPosition position) {
@@ -96,6 +104,7 @@ public final class ClawperSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         FtcDashboard.getInstance().getTelemetry().addData("cycle: ", positionCycle);
+        FtcDashboard.getInstance().getTelemetry().addData("rotation: ", getRotation());
         FtcDashboard.getInstance().getTelemetry().update();
 
         if(intakeRunning.getAsBoolean())

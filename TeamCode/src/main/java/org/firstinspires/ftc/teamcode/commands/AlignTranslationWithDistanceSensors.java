@@ -18,8 +18,8 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     PIDController translationController;
 
-    public static double kP = 0.5, kI = 0.0, kD = 0.0;
-    public static double setpoint = 1.77;
+    public static double kP = 0, kI = -0.5, kD = 0.0;
+    public static double setpoint = 1.5;
 
 
 
@@ -34,7 +34,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         this.distanceSensorSubsystem = distanceSensorSubsystem;
 
         translationController = new PIDController(kP, kI, kD);
-        translationController.setTolerance(0.03);
+        translationController.setTolerance(0.01);
         translationController.setSetPoint(setpoint);
         translationController.setIntegrationBounds(-0.2, 0.2);
 
@@ -55,13 +55,15 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     }
 
+
+
     @Override
     public void execute() {
-        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
+//        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
         double average = (distanceSensorSubsystem.getAnalogRight() + distanceSensorSubsystem.getAnalogLeft()) / 2;
         double calculation = translationController.calculate(average);
 
-        calculation = MathUtils.clamp(-calculation, -0.2, 0.2);
+
 
         driveSubsystem.setMotors(calculation);
 

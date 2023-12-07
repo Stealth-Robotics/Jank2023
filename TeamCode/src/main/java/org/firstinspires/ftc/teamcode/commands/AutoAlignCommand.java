@@ -26,10 +26,10 @@ public class AutoAlignCommand extends SequentialCommandGroup {
         this.leftY = leftY;
 
         addCommands(
-                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(2500),
-                new AlignTranslationWithDistanceSensors(drive, distance),
-                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(1000),
-                new DriveDefaultCommand(drive, leftY, () -> 0.0, () -> 0.0, () -> true)
+//                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(2500),
+                new AlignTranslationWithDistanceSensors(drive, distance)
+//                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(1000),
+//                new DriveDefaultCommand(drive, leftY, () -> 0.0, () -> 0.0, () -> true)
         );
 
     }

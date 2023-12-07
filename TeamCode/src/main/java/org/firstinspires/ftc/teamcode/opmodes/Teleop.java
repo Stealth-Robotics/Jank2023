@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.AutoAlignCommand;
+import org.firstinspires.ftc.teamcode.commands.ClawperDefault;
 import org.firstinspires.ftc.teamcode.commands.DriveDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveWhileAlignedCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
@@ -99,6 +100,8 @@ public abstract class Teleop extends StealthOpMode {
                         () -> driverGamepad.gamepad.right_bumper
                 )
         );
+
+        clawper.setDefaultCommand(new ClawperDefault(clawper, () -> operatorGamepad.getLeftY()));
 
         intake.setDefaultCommand(
                new IntakeDefaultCommand(intake, () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger))
