@@ -4,6 +4,7 @@ import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -22,6 +23,8 @@ public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
 
     private final AprilTagProcessor processor;
     private final VisionPortal portal;
+
+    double heading = -1;
 
     public AprilTagVisionProcessorSubsystem(HardwareMap hardwareMap){
         processor = new AprilTagProcessor.Builder()
@@ -43,28 +46,44 @@ public class AprilTagVisionProcessorSubsystem extends SubsystemBase {
 
     }
 
-    public Pose2d robotPoseFromAprilTagDetection(){
-        AprilTagDetection detection = processor.getFreshDetections().get(0);
-        if(detection != null){
-            VectorF aprilTagFieldPosition = detection.metadata.fieldPosition;
-            AprilTagPoseFtc distanceFromTag = detection.ftcPose;
-            Vector2d tagDistance = new Vector2d(distanceFromTag.x, distanceFromTag.y);
-            Vector2d aprilTagPose = new Vector2d(aprilTagFieldPosition.get(0), aprilTagFieldPosition.get(1));
-            Vector2d robotPose = aprilTagPose.minus(tagDistance);
-            return new Pose2d(robotPose.getX(), robotPose.getY(), distanceFromTag.bearing);
+//    public Pose2d robotPoseFromAprilTagDetection(){
+//        AprilTagDetection detection = processor.getFreshDetections().get(0);
+//        if(detection != null){
+//            VectorF aprilTagFieldPosition = detection.metadata.fieldPosition;
+//            AprilTagPoseFtc distanceFromTag = detection.ftcPose;
+//            Vector2d tagDistance = new Vector2d(distanceFromTag.x, distanceFromTag.y);
+//            Vector2d aprilTagPose = new Vector2d(aprilTagFieldPosition.get(0), aprilTagFieldPosition.get(1));
+//            Vector2d robotPose = aprilTagPose.minus(tagDistance);
+//            return new Pose2d(robotPose.getX(), robotPose.getY(), distanceFromTag.bearing);
+//
+//        }
+//        else return null;
+//    }
+    public void getHeadingAprilTags(){
+        if(processor.getDetections() != null) {
+            if (processor.getDetections().size() > 0) {
+                for(int i = 0; i < processor.getDetections().size(); i++){
+                    if(processor.getDetections().get(i).id == 5){
+                        heading = processor.getDetections().get(i).ftcPose.bearing;
+                    }
+                }
 
+            }
+            else{
+                heading = -1;
+            }
         }
-        else return null;
+
+    }
+
+    public double getRotation(){
+        return heading;
     }
 
     @Override
     public void periodic() {
-        AprilTagDetection detection = processor.getFreshDetections().get(0);
-        if (detection != null) {
-            telemetry.addData("Tag ID: ", detection.id);
-            telemetry.addData("Tag Pose: ", detection.metadata.fieldPosition);
-            telemetry.addData("distance to tag: ", detection.ftcPose);
-            telemetry.update();
-        }
+        getHeadingAprilTags();
+        FtcDashboard.getInstance().getTelemetry().addData("aprilTagHHeading", heading);
+        FtcDashboard.getInstance().getTelemetry().update();
     }
 }

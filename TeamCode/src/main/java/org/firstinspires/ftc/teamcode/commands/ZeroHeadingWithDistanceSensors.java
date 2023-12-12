@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
+import org.firstinspires.ftc.teamcode.subsystems.AprilTagVisionProcessorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 @Config
@@ -14,18 +15,20 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 public class ZeroHeadingWithDistanceSensors extends CommandBase {
     private final DriveSubsystem driveSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
+    AprilTagVisionProcessorSubsystem cam;
 
     PIDController rotationalController;
 
     public static double kP = -3.75 , kI = 0.0, kD = -0.25;
 
-    public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
+    public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, AprilTagVisionProcessorSubsystem cam)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
+        this.cam = cam;
 
         rotationalController = new PIDController(kP, kI, kD);
-        rotationalController.setTolerance(0.03);
+        rotationalController.setTolerance(2);
         rotationalController.setSetPoint(0);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
@@ -35,7 +38,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
     public void execute() {
 
         double rotationalError = -(distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
-        double calculation = rotationalController.calculate(rotationalError);
+        double calculation = rotationalController.calculate(cam.getRotation());
         calculation = MathUtils.clamp(calculation, -0.3, 0.3);
 
         FtcDashboard.getInstance().getTelemetry().addData("Rotational Error", rotationalError);

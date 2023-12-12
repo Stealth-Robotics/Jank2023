@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.AutoAlignCommand;
 import org.firstinspires.ftc.teamcode.commands.ClawperDefault;
@@ -22,6 +23,8 @@ import org.firstinspires.ftc.teamcode.commands.ZeroHeadingWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTagCameraSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTagVisionProcessorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -53,7 +56,7 @@ public abstract class Teleop extends StealthOpMode {
     GamepadEx driverGamepad;
     GamepadEx operatorGamepad;
 
-    //private CameraSubsystem cameraSubsystem;
+    AprilTagVisionProcessorSubsystem camera;
 
 
     @Override
@@ -78,6 +81,7 @@ public abstract class Teleop extends StealthOpMode {
         clawper = new ClawperSubsystem(hardwareMap, () -> Math.abs(intake.getIntakeSpeed()) > 0.1);
         plane = new PlaneSubsystem(hardwareMap);
         distance = new DistanceSensorSubsystem(hardwareMap);
+        camera = new AprilTagVisionProcessorSubsystem(hardwareMap);
 
         clawper.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_STOW);
 
@@ -159,6 +163,7 @@ public abstract class Teleop extends StealthOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> distance.incrementDistance(.02)));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> distance.incrementDistance(-0.02)));
 
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenHeld(new ZeroHeadingWithDistanceSensors(driveSubsystem, distance, camera));
 
 
     }
