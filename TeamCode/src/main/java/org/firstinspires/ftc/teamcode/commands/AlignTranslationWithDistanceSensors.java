@@ -18,8 +18,10 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     PIDController translationController;
 
-    public static double kP = 0, kI = -0.5, kD = 0.0;
-    public static double setpoint = 1.5;
+    public static double kP = -0.325, kI = -0.5, kD = -0.16;
+    public static double setpoint = 1.85;
+
+    String trustedSensor;
 
 
 
@@ -37,6 +39,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController.setTolerance(0.01);
         translationController.setSetPoint(setpoint);
         translationController.setIntegrationBounds(-0.2, 0.2);
+        trustedSensor = null;
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 
@@ -50,7 +53,23 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController = new PIDController(kP, kI, kD);
         translationController.setTolerance(0.02);
         translationController.setSetPoint(position);
+        trustedSensor = null;
 
+        addRequirements(driveSubsystem, distanceSensorSubsystem);
+
+    }
+
+    public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, double distance, String trust)
+    {
+        this.driveSubsystem = driveSubsystem;
+        this.distanceSensorSubsystem = distanceSensorSubsystem;
+        translationController.setSetPoint(distance);
+
+        translationController = new PIDController(kP, kI, kD);
+        translationController.setTolerance(0.01);
+        translationController.setSetPoint(setpoint);
+        translationController.setIntegrationBounds(-0.2, 0.2);
+        trustedSensor = trust;
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 
     }
@@ -61,6 +80,14 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
     public void execute() {
 //        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
         double average = (distanceSensorSubsystem.getAnalogRight() + distanceSensorSubsystem.getAnalogLeft()) / 2;
+        if(trustedSensor != null){
+            if(trustedSensor == "left"){
+                average = distanceSensorSubsystem.getAnalogLeft();
+            }
+            if(trustedSensor == "right"){
+                average = distanceSensorSubsystem.getAnalogRight();
+            }
+        }
         double calculation = translationController.calculate(average);
 
 
@@ -68,7 +95,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         driveSubsystem.setMotors(calculation);
 
         telemetry.addData("sp", translationController.getSetPoint());
-        telemetry.update();
+
     }
 
     @Override

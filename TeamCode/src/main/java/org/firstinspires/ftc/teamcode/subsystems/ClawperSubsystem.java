@@ -24,7 +24,7 @@ public final class ClawperSubsystem extends SubsystemBase {
 
 
     public static enum ClawperPosition {
-        ROTATION_STOW(0.50),
+        ROTATION_STOW(0.48),
         ROTATION_SCORE(0.73),
         RELEASE_ONE(0.5),
         RELEASE_SECOND(0.68),

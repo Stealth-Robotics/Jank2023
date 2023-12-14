@@ -42,10 +42,10 @@ public class DistanceSensorSubsystem extends SubsystemBase {
 
     public double getAnalogRight(){
         if(analogRight.getVoltage() < 2){
-            return analogRight.getVoltage() + 0.1 - rightOffset;
+            return analogRight.getVoltage() + 0.1 - 0.05;
         }
         else{
-            return analogRight.getVoltage();
+            return analogRight.getVoltage() - 0.05;
 
         }
 

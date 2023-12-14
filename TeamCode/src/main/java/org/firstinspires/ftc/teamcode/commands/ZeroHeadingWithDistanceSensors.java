@@ -15,31 +15,35 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 public class ZeroHeadingWithDistanceSensors extends CommandBase {
     private final DriveSubsystem driveSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
-    AprilTagVisionProcessorSubsystem cam;
 
     PIDController rotationalController;
 
-    public static double kP = -3.75 , kI = 0.0, kD = -0.25;
+    public static double kP = 1.35 , kI = 1.45, kD = 0.05;
 
-    public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, AprilTagVisionProcessorSubsystem cam)
+    public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
-        this.cam = cam;
 
         rotationalController = new PIDController(kP, kI, kD);
-        rotationalController.setTolerance(2);
+
+        rotationalController.setTolerance(0.005);
         rotationalController.setSetPoint(0);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
     }
 
     @Override
+    public void initialize() {
+        rotationalController.reset();
+    }
+
+    @Override
     public void execute() {
 
-        double rotationalError = -(distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
-        double calculation = rotationalController.calculate(cam.getRotation());
-        calculation = MathUtils.clamp(calculation, -0.3, 0.3);
+        double rotationalError = (distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
+        double calculation = rotationalController.calculate(rotationalError);
+
 
         FtcDashboard.getInstance().getTelemetry().addData("Rotational Error", rotationalError);
         FtcDashboard.getInstance().getTelemetry().addData("Controller Error", rotationalController.getPositionError());

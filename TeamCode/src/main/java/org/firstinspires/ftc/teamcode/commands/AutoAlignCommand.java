@@ -4,6 +4,7 @@ import androidx.core.math.MathUtils;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
@@ -27,6 +28,11 @@ public class AutoAlignCommand extends SequentialCommandGroup {
 
         addCommands(
 //                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(2500),
+                new AlignTranslationWithDistanceSensors(drive, distance, 1.0).withTimeout(750),
+                new WaitCommand(100),
+                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(750),
+                new WaitCommand(100),
+
                 new AlignTranslationWithDistanceSensors(drive, distance)
 //                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(1000),
 //                new DriveDefaultCommand(drive, leftY, () -> 0.0, () -> 0.0, () -> true)

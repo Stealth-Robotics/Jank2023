@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -134,17 +135,13 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new ElevatorReset(elevator));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> elevator.setSetpoint(500)));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new SequentialCommandGroup(
-//                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
-//
-////                new WaitCommand(500),
-//                new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
-//
-//                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance),
-//                new DriveDefaultCommand(driveSubsystem, () -> driverGamepad.getLeftY(), () -> 0, () -> 0, () -> true))
-
-                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY())
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
+                new ConditionalCommand(
+                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY()),
+                        new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
+                        () -> (distance.getAnalogRight() < 1.7)
                 )
+
         );
 
 
@@ -163,7 +160,7 @@ public abstract class Teleop extends StealthOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> distance.incrementDistance(.02)));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> distance.incrementDistance(-0.02)));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenHeld(new ZeroHeadingWithDistanceSensors(driveSubsystem, distance, camera));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenHeld(new ZeroHeadingWithDistanceSensors(driveSubsystem, distance));
 
 
     }
