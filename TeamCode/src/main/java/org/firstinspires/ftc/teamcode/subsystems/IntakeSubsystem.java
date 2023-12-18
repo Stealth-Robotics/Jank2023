@@ -10,7 +10,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        //TODO: SET DIRECTION
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
