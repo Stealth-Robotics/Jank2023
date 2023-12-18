@@ -27,18 +27,12 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class DriveSubsystem extends SubsystemBase {
-    FtcDashboard dashboard  = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
     private final DcMotor frontLeftMotor;
     private final DcMotor frontRightMotor;
     private final DcMotor backLeftMotor;
     private final DcMotor backRightMotor;
 
-//    private final DistanceSensor rightDistance;
-//    private final DistanceSensor leftDistance;
-
-    private final PIDController rightDrivePID = new PIDController(0, 0, 0);
-    private final PIDController leftDrivePID = new PIDController(0, 0, 0);
 
 
 
@@ -119,15 +113,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-//    public double getRightDistanceMillimeters(){
-//        return rightDistance.getDistance(DistanceUnit.MM) + 15;
-//    }
-//    public double getLeftDistanceMillimeters(){
-//
-//        return leftDistance.getDistance(DistanceUnit.MM);
-//    }
-
-
     public Pose2d getPoseEstimate(){
         return roadrunnerDrive.getPoseEstimate();
     }
@@ -137,8 +122,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveTeleop(double leftStickY, double leftStickX, double rightStickX, boolean halfSpeed) {
-        // This code is pulled from Game Manual 0
-        // https://gm0.org/en/latest/docs/software/mecanum-drive.html
+
         double speedMultiplier = halfSpeed ? 0.3 : 1.0;
 
         Vector2d inputVector = new Vector2d(

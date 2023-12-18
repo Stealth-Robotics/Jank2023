@@ -11,6 +11,9 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -22,9 +25,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.stealthrobotics.library.math.filter.Debouncer;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    private final DcMotorEx motor1;
-    private final DcMotorEx motor2;
-    private final DcMotorEx motor3;
+    private final MotorEx motor1;
+    private final MotorEx motor2;
+    private final MotorEx motor3;
     //PID Constants
     //TODO: Tune PID
     private final double kP = 0.01;
@@ -53,6 +56,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     private final Debouncer stallDebouncer;
+
+    private final MotorGroup elevatorMotors;
 
 
     private int level = 1;
@@ -86,23 +91,21 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem(HardwareMap hardwareMap) {
         stallDebouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
-        motor1 = hardwareMap.get(DcMotorEx.class, "motor1");
-        motor2 = hardwareMap.get(DcMotorEx.class, "motor2");
-        motor3 = hardwareMap.get(DcMotorEx.class, "motor3");
 
-        motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor3.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor1 = new MotorEx(hardwareMap, "motor1", Motor.GoBILDA.RPM_312);
+        motor2 = new MotorEx(hardwareMap, "motor2", Motor.GoBILDA.RPM_312);
+        motor3 = new MotorEx(hardwareMap, "motor3", Motor.GoBILDA.RPM_312);
+
+        elevatorMotors = new MotorGroup(motor1, motor2, motor3);
+
+
+        elevatorMotors.setRunMode(Motor.RunMode.RawPower);
+        elevatorMotors.setInverted(true);
+        elevatorMotors.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+
 
         elevatorPID.setTolerance(20);
-        timer.start();
-
 
     }
 
@@ -120,8 +123,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void resetEncoderZero() {
-        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor2.resetEncoder();
     }
 
     public void setToCurrentPosition() {
@@ -129,9 +131,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPower(double power) {
-        motor1.setPower(power);
-        motor2.setPower(power);
-        motor3.setPower(power);
+        elevatorMotors.set(power);
     }
 
     public void setSlowly() {
@@ -145,7 +145,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getVelo() {
-        return motor1.getVelocity();
+        return motor2.getVelocity();
     }
 
     public boolean motionProfilingAtSetpoint() {
@@ -153,7 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean checkZeroVelocity() {
-        return stallDebouncer.calculate(Math.abs(motor2.getVelocity()) < 10);
+        return stallDebouncer.calculate(Math.abs(getVelo()) < 10);
     }
 
     public void resetElevatorStall() {
@@ -192,7 +192,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
     }
 
-    //TODO: Tune PID
     //call setUsePID(true) to use PID
     Timing.Timer timer = new Timing.Timer(500);
     @Override
@@ -224,7 +223,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        board.getTelemetry().addData("loop time: ", deltaT);
 //
 //
-        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.getPower());
+        FtcDashboard.getInstance().getTelemetry().addData("power", motor1.get());
         FtcDashboard.getInstance().getTelemetry().addData("position", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("setpoint", elevatorPID.getSetPoint());
 //        telemetry.addData("runpid", usePID);
