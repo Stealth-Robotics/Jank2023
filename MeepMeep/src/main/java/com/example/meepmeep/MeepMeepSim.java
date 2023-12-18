@@ -176,6 +176,39 @@ public class MeepMeepSim{
                                 .build()
                 );
 
+        RoadRunnerBotEntity rrpathgentest = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(55, 50, Math.toRadians(250), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-48.03, -33.50, Math.toRadians(270.00)), Math.toRadians(82.07))
+                                .forward(1e-2)
+                                .splineToSplineHeading(new Pose2d(-60.11, -36.71, Math.toRadians(180)), Math.toRadians(180.00))
+                                .back(1e-2)
+                                .splineTo(new Vector2d(-7.72, -35.32), Math.toRadians(5.69))
+                                .splineToSplineHeading(new Pose2d(45.82, -31.16, Math.toRadians(180.00)), Math.toRadians(5.13))
+                                .forward(1e-2)
+                                .splineTo(new Vector2d(0.20, -34.82), Math.toRadians(184.59))
+                                .splineTo(new Vector2d(-60.11, -36.71), Math.toRadians(180.54))
+                                .back(1e-2)
+                                .splineTo(new Vector2d(-7.72, -40), Math.toRadians(5.69))
+                                .splineToSplineHeading(new Pose2d(45.82, -40, Math.toRadians(180.00)), Math.toRadians(5.13))
+                                .forward(1e-2)
+                                .splineTo(new Vector2d(0.20, -34.82), Math.toRadians(184.59))
+                                .splineTo(new Vector2d(-60.11, -36.71), Math.toRadians(180.54))
+                                .back(1e-2)
+                                .splineTo(new Vector2d(-7.72, -40), Math.toRadians(5.69))
+                                .splineToSplineHeading(new Pose2d(45.82, -40, Math.toRadians(180.00)), Math.toRadians(5.13))
+
+
+
+
+                                .build()
+                );
+
+
 
 
 
@@ -183,18 +216,19 @@ public class MeepMeepSim{
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(redCenterBot)
-                .addEntity(redLeftBot)
-                .addEntity(redRightBot)
-                .addEntity(rightRedRightBot)
-                .addEntity(blueRightBot)
-                .addEntity(blueCenterBot)
-                .addEntity(blueLeftBot)
-                .addEntity(rightRedCenterBot)
-                .addEntity(rightRedLeftBot)
-                .addEntity(rightBlueLeftBot)
-                .addEntity(rightBlueCenterBot)
-                .addEntity(rightBlueRightBot)
+//                .addEntity(redCenterBot)
+//                .addEntity(redLeftBot)
+//                .addEntity(redRightBot)
+//                .addEntity(rightRedRightBot)
+//                .addEntity(blueRightBot)
+//                .addEntity(blueCenterBot)
+//                .addEntity(blueLeftBot)
+//                .addEntity(rightRedCenterBot)
+//                .addEntity(rightRedLeftBot)
+//                .addEntity(rightBlueLeftBot)
+//                .addEntity(rightBlueCenterBot)
+//                .addEntity(rightBlueRightBot)
+                .addEntity(rrpathgentest)
                 .start();
     }
 }

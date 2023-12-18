@@ -34,8 +34,7 @@ public class AutoAlignCommand extends SequentialCommandGroup {
                 new WaitCommand(100),
 
                 new AlignTranslationWithDistanceSensors(drive, distance)
-//                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(1000),
-//                new DriveDefaultCommand(drive, leftY, () -> 0.0, () -> 0.0, () -> true)
+
         );
 
     }

@@ -21,6 +21,8 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
     public static double kP = -0.325, kI = -0.5, kD = -0.16;
     public static double setpoint = 1.85;
 
+    private boolean useDistanceOffset = false;
+
     String trustedSensor;
 
 
@@ -39,6 +41,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController.setTolerance(0.01);
         translationController.setSetPoint(setpoint);
         translationController.setIntegrationBounds(-0.2, 0.2);
+        useDistanceOffset = true;
         trustedSensor = null;
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
@@ -74,7 +77,12 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     }
 
-
+    @Override
+    public void initialize() {
+        if(useDistanceOffset){
+            translationController.setSetPoint(setpoint - distanceSensorSubsystem.getDistanceOffset());
+        }
+    }
 
     @Override
     public void execute() {

@@ -58,7 +58,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     private int level = 1;
 
     public enum ElevatorPosition {
-        SCORE_POSITION(0.0),
         STOW_POSITION(0.0),
 
         LEVEL_ONE(695),
