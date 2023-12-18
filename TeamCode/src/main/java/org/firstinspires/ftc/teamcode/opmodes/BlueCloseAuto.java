@@ -115,10 +115,8 @@ public class BlueCloseAuto extends StealthOpMode {
                 new ElevatorReset(elevator),
                 new ParallelCommandGroup(
                         new FollowTrajectory(drive, pixelDrop)
-//                    new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.AUTO_SCORE)
                 ),
-//            new InstantCommand(() -> clawper.rotatinToggle()),
-//            new WaitCommand(500),
+
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(250),
                 new ParallelCommandGroup(
@@ -130,13 +128,13 @@ public class BlueCloseAuto extends StealthOpMode {
 
                 new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(4000)),
 
-                new WaitCommand(500),
+                new WaitCommand(100),
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitBeforeCommand(500, new InstantCommand(() -> clawper.rotatinToggle())),
                 new InstantCommand(() -> clawper.rotatinToggle()),
                 new WaitCommand(250),
                 new FollowTrajectory(drive,
-                        TrajectoryBuilder.buildTrajectory(board.end())
+                        TrajectoryBuilder.buildTrajectory(() -> drive.getPoseEstimate().getX(), () -> drive.getPoseEstimate().getY(), () -> drive.getPoseEstimate().getHeading())
                                 .strafeLeft(distanceStrafe)
                                 .splineToSplineHeading(new Pose2d(55, 12, Math.toRadians(0)), Math.toRadians(0))
                                 .build()
