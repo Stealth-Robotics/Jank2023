@@ -197,7 +197,7 @@ public class MeepMeepSim{
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
                                 .back(10)
-                                .splineToSplineHeading(new Pose2d(45.82, -40, Math.toRadians(180.00)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(45.82, -48, Math.toRadians(180.00)), Math.toRadians(0))
                                 .forward(1e-2)
                                 .splineToSplineHeading(new Pose2d(-3, -59.5, Math.toRadians(180)), Math.toRadians(180))
                                 .forward(1)
@@ -205,7 +205,7 @@ public class MeepMeepSim{
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
                                 .back(10)
-                                .splineToSplineHeading(new Pose2d(45.82, -40, Math.toRadians(180.00)), Math.toRadians(5.13))
+                                .splineToSplineHeading(new Pose2d(45.82, -48, Math.toRadians(180.00)), Math.toRadians(5.13))
 
 
 

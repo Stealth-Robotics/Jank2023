@@ -26,7 +26,7 @@ public class RedLeftTrajectories {
 
     private static Pose2d stackLocation = new Pose2d(-55, -40, Math.toRadians(140));
 
-    private static Pose2d leftBoardScore = new Pose2d(47.7, -29, Math.toRadians(180));
+    private static Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
 
     private static Pose2d centerBoardScore;
 
@@ -110,8 +110,6 @@ public class RedLeftTrajectories {
             .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(160)), Math.toRadians(90))
             .build();
 
-
-    //TODO: CHECK IF NEED TO ADD 180 DEGREE HEADING FOLLOWER
 
     public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(leftPixelDrop.end())
             .splineToSplineHeading(new Pose2d(-29.8, -56.0, Math.toRadians(180)), Math.toRadians(0))
