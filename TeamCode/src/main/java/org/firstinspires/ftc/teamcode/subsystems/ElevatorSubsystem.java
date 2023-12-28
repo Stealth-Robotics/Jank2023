@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -65,14 +66,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     public enum ElevatorPosition {
         STOW_POSITION(0.0),
 
-        LEVEL_ONE(695),
-        LEVEL_TWO(825),
-        LEVEL_THREE(950),
+        LEVEL_ONE(800),
+        LEVEL_TWO(1000),
+        LEVEL_THREE(1200),
 
-        LEVEL_FOUR(1150),
+        LEVEL_FOUR(1400),
 
-        LEVEL_FIVE(1200),
-        LEVEL_SIX(1350),
+        LEVEL_FIVE(1600),
+        LEVEL_SIX(1800),
 
         AUTO_SCORE(300);
 
@@ -163,8 +164,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void incrementLevel(int increment){
         level += increment;
-        if(level > 5){
-            level = 5;
+        if(level > 12){
+            level = 12;
         }
         if(level < 1){
             level = 1;

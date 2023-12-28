@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTagVisionProcessorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -18,7 +19,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
 
     PIDController rotationalController;
 
-    public static double kP = 1.35 , kI = 1.45, kD = 0.05;
+    public static double kP = 3 , kI = 0, kD = 0.1;
 
     public ZeroHeadingWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem)
     {
@@ -27,7 +28,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
 
         rotationalController = new PIDController(kP, kI, kD);
 
-        rotationalController.setTolerance(0.005);
+        rotationalController.setTolerance(0.0025);
         rotationalController.setSetPoint(0);
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
@@ -39,8 +40,9 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
     }
 
     @Override
-    public void execute() {
 
+    public void execute() {
+        rotationalController.setPID(kP, kI, kD);
         double rotationalError = (distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
         double calculation = rotationalController.calculate(rotationalError);
 
@@ -50,7 +52,10 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
         FtcDashboard.getInstance().getTelemetry().addData("Calculation", calculation);
         FtcDashboard.getInstance().getTelemetry().update();
 
-        driveSubsystem.driveTeleop(0,0, calculation,false);
+        double staticPower = calculation > 0 ? DriveConstants.kStatic : -DriveConstants.kStatic;
+//        staticPower *= 12;
+
+        driveSubsystem.driveTeleop(0,0, calculation + staticPower,false);
     }
 
     @Override

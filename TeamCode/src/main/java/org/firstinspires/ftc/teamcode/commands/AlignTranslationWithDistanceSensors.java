@@ -5,9 +5,11 @@ import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 @Config
@@ -18,7 +20,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     PIDController translationController;
 
-    public static double kP = -0.325, kI = -0.5, kD = -0.16;
+    public static double kP = -0.29, kI = -0.2, kD = -0.05;
     public static double setpoint = 1.85;
 
     private boolean useDistanceOffset = false;
@@ -86,6 +88,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     @Override
     public void execute() {
+        translationController.setPID(kP, kI, kD);
 //        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
         double average = (distanceSensorSubsystem.getAnalogRight() + distanceSensorSubsystem.getAnalogLeft()) / 2;
         if(trustedSensor != null){
@@ -96,11 +99,13 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
                 average = distanceSensorSubsystem.getAnalogRight();
             }
         }
+
         double calculation = translationController.calculate(average);
+        double staticPower = calculation > 0 ? DriveConstants.kStatic : -DriveConstants.kStatic;
 
 
 
-        driveSubsystem.setMotors(calculation);
+        driveSubsystem.setMotors(calculation + staticPower);
 
         telemetry.addData("sp", translationController.getSetPoint());
 
