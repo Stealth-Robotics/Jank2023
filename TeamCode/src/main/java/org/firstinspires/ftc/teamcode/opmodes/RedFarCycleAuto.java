@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.commands.FollowTrajectory;
+import org.firstinspires.ftc.teamcode.commands.FollowTrajectorySequence;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -66,6 +67,7 @@ public class RedFarCycleAuto extends StealthOpMode {
     @Override
     public Command getAutoCommand() {
         drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
+        clawper.clawperClosedPosition();
         return new SequentialCommandGroup(
                 //all init stuff
                 new InstantCommand(() -> elevator.setUsePID(true)),
@@ -75,37 +77,57 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new ElevatorReset(elevator),
 
                 //TODO: FIND THIS
-                new InstantCommand(() -> intakeSubsystem.setHeight(-1)),
+                new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level5Height)),
                 new FollowTrajectory(drive, RedLeftTrajectories.leftPixelDrop),
                 new WaitCommand(500),
 
                 new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(250),
+                new WaitCommand(750),
                 new ParallelDeadlineGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.leftFirstStackIntake),
+                        new FollowTrajectorySequence(drive, RedLeftTrajectories.leftFirstStackIntake),
                         new RunCommand(() -> intakeSubsystem.setSpeed(1))
 
-                ).andThen(new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
+                ),
                 new WaitCommand(100),
                 new ParallelCommandGroup(
                     new FollowTrajectory(drive, RedLeftTrajectories.yellowAndWhiteBoardDropLeft),
+                    new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                     new WaitBeforeCommand(3000, new ScorePreset(elevator, clawper, () -> 2))
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(4000)),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(3000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(250),
+                new WaitCommand(500),
                 new InstantCommand(() -> clawper.clawperRelease()),
 
                 new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
                 new InstantCommand(() -> clawper.rotatinToggle()),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level4Height)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.LEFT, 0.5)),
+                        new StowPreset(elevator, clawper),
+                        new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
+                ),
 
-                new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.LEFT)),
                 new WaitCommand(500),
-                new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
+                new ParallelCommandGroup(
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
+                        new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
+                        new WaitBeforeCommand(3000, new ScorePreset(elevator, clawper, () -> 2))
+                ),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(3000)),
+                new WaitCommand(250),
+                new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
+                new InstantCommand(() -> clawper.clawperRelease()),
 
-                new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT)),
+                new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
+                new InstantCommand(() -> clawper.rotatinToggle()),
+                new WaitCommand(500),
+                new ParallelCommandGroup(
+                    new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT)),
+                        new StowPreset(elevator, clawper)
+                ),
                 new WaitCommand(500),
 
                 new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT))

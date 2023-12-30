@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 public class TrajectorySequenceBuilder {
-    public static org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder buildTrajectorySequence(Pose2d startPose){
+    public static org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder buildTrajectory(Pose2d startPose){
         return new org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder(
                 startPose,
                 SampleMecanumDrive.VEL_CONSTRAINT,

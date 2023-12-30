@@ -9,13 +9,13 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 
 public class BlueLeftTrajectories {
     //first trajectory, drives to tape line
-    public static TrajectorySequence leftPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
+    public static TrajectorySequence leftPixelDrop = TrajectorySequenceBuilder.buildTrajectory(
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(-39.5, 60, Math.toRadians(90)), Math.toRadians(90.0))
             .splineToSplineHeading(new Pose2d(-46.8, 45, Math.toRadians(90)), Math.toRadians(90))
             .build();
-    public static TrajectorySequence centerPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
+    public static TrajectorySequence centerPixelDrop = TrajectorySequenceBuilder.buildTrajectory(
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
             .back(1e-2)
 
@@ -24,7 +24,7 @@ public class BlueLeftTrajectories {
             .waitSeconds(0.5)
             .forward(9)
             .build();
-    public static TrajectorySequence rightPixelDrop = TrajectorySequenceBuilder.buildTrajectorySequence(
+    public static TrajectorySequence rightPixelDrop = TrajectorySequenceBuilder.buildTrajectory(
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(-39.5, 50, Math.toRadians(90)), Math.toRadians(90.0))

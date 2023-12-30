@@ -24,13 +24,13 @@ public class RedLeftTrajectories {
             )
             .build();
 
-    private static Pose2d stackLocation = new Pose2d(-55, -40, Math.toRadians(140));
+    private static Pose2d stackLocation = new Pose2d(-57.25, -42, Math.toRadians(140));
 
     private static Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
 
     private static Pose2d centerBoardScore;
 
-    private static Pose2d rightBoardScore = new Pose2d(47.7, -48, Math.toRadians(180));
+    private static Pose2d rightBoardScore = new Pose2d(47.7, -43, Math.toRadians(180));
 
 
 
@@ -40,14 +40,17 @@ public class RedLeftTrajectories {
             new Pose2d(-39.5, -62, Math.toRadians(270)))
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-46.8, -45, Math.toRadians(270)), Math.toRadians(90))
+            .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
             .build();
 
     //trajectory to pick up first hex from stack
-    public static Trajectory leftFirstStackIntake = TrajectoryBuilder.buildTrajectory(leftPixelDrop.end())
-            .lineToSplineHeading(new Pose2d(-57, -36.71, Math.toRadians(180)))
+    public static TrajectorySequence leftFirstStackIntake = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
+            .lineTo(new Vector2d(-50, -42))
+
+            .lineToSplineHeading(stackLocation)
 
             .build();
+
 
     //drives to board to drop yellow and white corresponding to marker location
     public static Trajectory yellowAndWhiteBoardDropLeft = TrajectoryBuilder.buildTrajectory(leftFirstStackIntake.end())
@@ -87,6 +90,22 @@ public class RedLeftTrajectories {
                 .splineToSplineHeading(new Pose2d(-3, -62, Math.toRadians(180)), Math.toRadians(180))
                 .forward(1)
                 .splineToSplineHeading(stackLocation, Math.toRadians(145))
+                .build();
+
+    }
+    public static Trajectory driveToStack(Position start, double yOffset){
+        Pose2d startPose = new Pose2d();
+        if(start == Position.LEFT){
+            startPose = leftBoardScore;
+        }
+        else if(start == Position.RIGHT){
+            startPose = rightBoardScore;
+        }
+        return TrajectoryBuilder.buildTrajectory(startPose)
+                .forward(1e-2)
+                .splineToSplineHeading(new Pose2d(-3, -62, Math.toRadians(180)), Math.toRadians(180))
+                .forward(1)
+                .splineToSplineHeading(new Pose2d(stackLocation.getX(), stackLocation.getY() - yOffset, stackLocation.getHeading()), Math.toRadians(145))
                 .build();
 
     }

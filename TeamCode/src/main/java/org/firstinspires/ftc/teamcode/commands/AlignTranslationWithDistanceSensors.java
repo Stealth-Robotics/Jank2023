@@ -88,6 +88,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     @Override
     public void execute() {
+        driveSubsystem.update();
         translationController.setPID(kP, kI, kD);
 //        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
         double average = (distanceSensorSubsystem.getAnalogRight() + distanceSensorSubsystem.getAnalogLeft()) / 2;

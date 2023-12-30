@@ -184,7 +184,6 @@ public class MeepMeepSim{
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-48.03, -33.50, Math.toRadians(270.00)), Math.toRadians(82.07))
-//                                .forward(1e-2)
                                 .lineToSplineHeading(new Pose2d(-60.11, -36.71, Math.toRadians(180)))
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
