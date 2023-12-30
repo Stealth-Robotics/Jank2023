@@ -51,11 +51,17 @@ public class RedLeftTrajectories {
 
             .build();
 
+    public static TrajectorySequence groundPickup = TrajectorySequenceBuilder.buildTrajectory(leftFirstStackIntake.end())
+            .back(5)
+            .forward(2)
+            .build();
+
+
 
     //drives to board to drop yellow and white corresponding to marker location
-    public static Trajectory yellowAndWhiteBoardDropLeft = TrajectoryBuilder.buildTrajectory(leftFirstStackIntake.end())
+    public static Trajectory yellowAndWhiteBoardDropLeft = TrajectoryBuilder.buildTrajectory(groundPickup.end())
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-22.8, -56, Math.toRadians(180)), Math.toRadians(0))
             .back(15)
             .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
             .build();

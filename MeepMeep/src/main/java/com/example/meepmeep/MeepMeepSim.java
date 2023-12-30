@@ -175,6 +175,8 @@ public class MeepMeepSim{
 
                                 .build()
                 );
+        Pose2d stackLocation = new Pose2d(-57.25, -42, Math.toRadians(140));
+        Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
 
         RoadRunnerBotEntity rrpathgentest = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -183,12 +185,15 @@ public class MeepMeepSim{
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
                                 .back(1e-2)
-                                .splineToSplineHeading(new Pose2d(-48.03, -33.50, Math.toRadians(270.00)), Math.toRadians(82.07))
-                                .lineToSplineHeading(new Pose2d(-60.11, -36.71, Math.toRadians(180)))
+                                .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
+                                .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
+                                .lineTo(new Vector2d(-50, -42))
+
+                                .lineToSplineHeading(stackLocation)
                                 .back(1e-2)
-                                .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
-                                .back(15)
-                                .splineToSplineHeading(new Pose2d(45.82, -31.16, Math.toRadians(180.00)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(-30, -58, Math.toRadians(180)), Math.toRadians(0))
+                                .back(18)
+                                .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
                                 .forward(1e-2)
                                 .splineToSplineHeading(new Pose2d(-3, -59.5, Math.toRadians(180)), Math.toRadians(180))
                                 .forward(1)

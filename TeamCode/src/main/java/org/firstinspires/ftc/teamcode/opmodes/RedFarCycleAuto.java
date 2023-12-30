@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.commands.FollowTrajectorySequence;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.trajectories.RedCloseTrajectories;
 import org.firstinspires.ftc.teamcode.trajectories.RedLeftTrajectories;
 import org.firstinspires.ftc.teamcode.trajectories.TrajectoryBuilder;
+import org.firstinspires.ftc.teamcode.trajectories.TrajectorySequenceBuilder;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.commands.EndOpModeCommand;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
@@ -66,6 +69,7 @@ public class RedFarCycleAuto extends StealthOpMode {
 
     @Override
     public Command getAutoCommand() {
+        FtcDashboard.getInstance().getTelemetry().addLine("fast load works");
         drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
         clawper.clawperClosedPosition();
         return new SequentialCommandGroup(
@@ -88,13 +92,15 @@ public class RedFarCycleAuto extends StealthOpMode {
                         new RunCommand(() -> intakeSubsystem.setSpeed(1))
 
                 ),
-                new WaitCommand(100),
+                new FollowTrajectorySequence(drive, RedLeftTrajectories.groundPickup),
+                new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
+                new WaitCommand(500),
                 new ParallelCommandGroup(
                     new FollowTrajectory(drive, RedLeftTrajectories.yellowAndWhiteBoardDropLeft),
                     new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                     new WaitBeforeCommand(3000, new ScorePreset(elevator, clawper, () -> 2))
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(3000)),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.85, AlignTranslationWithDistanceSensors.SensorSide.LEFT).withTimeout(3000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
@@ -109,13 +115,13 @@ public class RedFarCycleAuto extends StealthOpMode {
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
 
-                new WaitCommand(500),
+                new WaitCommand(1000),
                 new ParallelCommandGroup(
                         new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new WaitBeforeCommand(3000, new ScorePreset(elevator, clawper, () -> 2))
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(3000)),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.85).withTimeout(3000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
@@ -125,12 +131,27 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new InstantCommand(() -> clawper.rotatinToggle()),
                 new WaitCommand(500),
                 new ParallelCommandGroup(
-                    new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT)),
-                        new StowPreset(elevator, clawper)
+                        new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT, 1.25)),
+                        new StowPreset(elevator, clawper),
+                        new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
-                new WaitCommand(500),
 
-                new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT))
+                new WaitCommand(1000),
+                new ParallelCommandGroup(
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
+                        new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
+                        new WaitBeforeCommand(3000, new ScorePreset(elevator, clawper, () -> 2))
+                ),
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.85).withTimeout(3000)),
+                new WaitCommand(250),
+                new InstantCommand(() -> clawper.clawperRelease()),
+                new WaitCommand(500),
+                new InstantCommand(() -> clawper.clawperRelease()),
+
+                new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
+                new InstantCommand(() -> clawper.rotatinToggle())
+
 
 
                 );

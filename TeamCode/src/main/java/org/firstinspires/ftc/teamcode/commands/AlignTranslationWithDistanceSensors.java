@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import static org.stealthrobotics.library.opmodes.StealthOpMode.telemetry;
 
+import android.hardware.Sensor;
+
 import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -15,6 +17,12 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 @Config
 
 public class AlignTranslationWithDistanceSensors extends CommandBase {
+
+    public enum SensorSide{
+        RIGHT,
+        LEFT,
+        NONE
+    }
     private final DriveSubsystem driveSubsystem;
     private final DistanceSensorSubsystem distanceSensorSubsystem;
 
@@ -25,8 +33,8 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     private boolean useDistanceOffset = false;
 
-    String trustedSensor;
 
+    private SensorSide side = SensorSide.NONE;
 
 
 
@@ -44,7 +52,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController.setSetPoint(setpoint);
         translationController.setIntegrationBounds(-0.2, 0.2);
         useDistanceOffset = true;
-        trustedSensor = null;
+
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 
@@ -58,23 +66,22 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController = new PIDController(kP, kI, kD);
         translationController.setTolerance(0.02);
         translationController.setSetPoint(position);
-        trustedSensor = null;
 
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 
     }
 
-    public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, double distance, String trust)
+    public AlignTranslationWithDistanceSensors(DriveSubsystem driveSubsystem, DistanceSensorSubsystem distanceSensorSubsystem, double distance, SensorSide side)
     {
         this.driveSubsystem = driveSubsystem;
         this.distanceSensorSubsystem = distanceSensorSubsystem;
-        translationController.setSetPoint(distance);
 
         translationController = new PIDController(kP, kI, kD);
         translationController.setTolerance(0.01);
-        translationController.setSetPoint(setpoint);
         translationController.setIntegrationBounds(-0.2, 0.2);
-        trustedSensor = trust;
+        translationController.setSetPoint(distance);
+
+        this.side = side;
         addRequirements(driveSubsystem, distanceSensorSubsystem);
 
     }
@@ -92,11 +99,11 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
         translationController.setPID(kP, kI, kD);
 //        translationController.setSetPoint(1.8 - distanceSensorSubsystem.getDistanceOffset());
         double average = (distanceSensorSubsystem.getAnalogRight() + distanceSensorSubsystem.getAnalogLeft()) / 2;
-        if(trustedSensor != null){
-            if(trustedSensor == "left"){
+        if(side != SensorSide.NONE){
+            if(side == SensorSide.LEFT){
                 average = distanceSensorSubsystem.getAnalogLeft();
             }
-            if(trustedSensor == "right"){
+            if(side == SensorSide.RIGHT){
                 average = distanceSensorSubsystem.getAnalogRight();
             }
         }
