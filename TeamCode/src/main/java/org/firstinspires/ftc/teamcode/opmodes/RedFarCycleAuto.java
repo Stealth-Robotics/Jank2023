@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.commands.FollowTrajectory;
 import org.firstinspires.ftc.teamcode.commands.FollowTrajectorySequence;
 import org.firstinspires.ftc.teamcode.commands.presets.AutoAlignDepositSequence;
 import org.firstinspires.ftc.teamcode.commands.presets.DriveToBoardSequence;
+import org.firstinspires.ftc.teamcode.commands.presets.DriveToStackSequence;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -102,12 +103,9 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new WaitBeforeCommand(400, new InstantCommand(() -> clawper.rotatinToggle())),
                 new InstantCommand(() -> clawper.rotatinToggle()),
 
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level4Height)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.LEFT, 0.5)),
-                        new StowPreset(elevator, clawper),
-                        new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
-                ),
+                new DriveToStackSequence(drive, intakeSubsystem, elevator, clawper, RedLeftTrajectories.Position.LEFT,
+                        intakeSubsystem.level4Height, 0.5),
+
 
                 new WaitCommand(1000),
                 new DriveToBoardSequence(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT), intakeSubsystem, elevator, clawper, 2),
@@ -116,12 +114,9 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new AutoAlignDepositSequence(elevator, clawper, drive, distance),
 
                 new WaitCommand(500),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT, 1.25)),
-                        new StowPreset(elevator, clawper),
-                        new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
-                ),
+                new DriveToStackSequence(drive, intakeSubsystem, elevator, clawper, RedLeftTrajectories.Position.RIGHT,
+                        0.2, 1.25),
+
 
                 new WaitCommand(500),
                 new DriveToBoardSequence(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT), intakeSubsystem, elevator, clawper, 3),
