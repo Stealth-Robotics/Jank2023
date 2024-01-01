@@ -17,7 +17,7 @@ import java.util.function.IntSupplier;
 public class ScorePreset extends ParallelCommandGroup {
 
     public ScorePreset(ElevatorSubsystem elevator, ClawperSubsystem claw, IntSupplier level){
-
+        addRequirements(elevator, claw);
         addCommands(
             new ParallelCommandGroup(
                     new ElevatorToPosition(elevator, level).withTimeout(2000),
