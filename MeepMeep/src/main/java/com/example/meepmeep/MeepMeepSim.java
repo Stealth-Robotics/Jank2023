@@ -187,7 +187,9 @@ public class MeepMeepSim{
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
                                 .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
-                                .lineTo(new Vector2d(-50, -42))
+                                .forward(1e-2)
+                                .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
+
 
                                 .lineToSplineHeading(stackLocation)
                                 .back(1e-2)

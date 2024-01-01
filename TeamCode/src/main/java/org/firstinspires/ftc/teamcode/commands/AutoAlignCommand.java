@@ -28,7 +28,7 @@ public class AutoAlignCommand extends SequentialCommandGroup {
 
         addCommands(
 //                new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(2500),
-                new AlignTranslationWithDistanceSensors(drive, distance, 1.0).withTimeout(750),
+                new AlignTranslationWithDistanceSensors(drive, distance, 0.7).withTimeout(750),
                 new WaitCommand(100),
                 new ZeroHeadingWithDistanceSensors(drive, distance).withTimeout(750),
                 new WaitCommand(100),

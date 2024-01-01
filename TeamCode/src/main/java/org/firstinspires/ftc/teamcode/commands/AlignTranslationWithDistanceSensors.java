@@ -28,7 +28,7 @@ public class AlignTranslationWithDistanceSensors extends CommandBase {
 
     PIDController translationController;
 
-    public static double kP = -0.29, kI = -0.2, kD = -0.05;
+    public static double kP = -0.29, kI = -0.4, kD = -0.05;
     public static double setpoint = 1.85;
 
     private boolean useDistanceOffset = false;

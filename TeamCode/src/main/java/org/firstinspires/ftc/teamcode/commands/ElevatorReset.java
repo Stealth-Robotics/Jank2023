@@ -39,7 +39,7 @@ public class ElevatorReset extends CommandBase {
     @Override
     //runs code to reset encoder position
     public void end(boolean interrupted) {
-
+        elevator.setPower(0);
         elevator.resetElevatorStall();
         elevator.setUsePID(true);
         elevator.setSetpoint(elevator.getEncoderPosition());

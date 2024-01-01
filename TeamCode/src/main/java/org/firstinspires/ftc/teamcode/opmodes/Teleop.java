@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.commands.ElevatorDefaultCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.commands.ElevatorToPosition;
 import org.firstinspires.ftc.teamcode.commands.IntakeDefaultCommand;
+import org.firstinspires.ftc.teamcode.commands.ZeroHeadingWithDistanceSensors;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -118,16 +120,12 @@ public abstract class Teleop extends StealthOpMode {
         //drive commands
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(driveSubsystem::resetAngle));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenHeld(
-                new ConditionalCommand(
-                        new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY()),
-                        new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
-                        () -> (distance.getAnalogRight() < 1.5)
-                )
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new StowPreset(elevator, clawper).andThen(new ElevatorReset(elevator))
 
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenHeld(
-                new AlignTranslationWithDistanceSensors(driveSubsystem, distance)
+                new ZeroHeadingWithDistanceSensors(driveSubsystem, distance)
         );
         operatorGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()  -> distance.resetRightOffset()));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> distance.incrementRightOffset(.001)));
@@ -156,6 +154,16 @@ public abstract class Teleop extends StealthOpMode {
         operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> elevator.incrementLevel(1)));
         operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new ScorePreset(elevator, clawper, () -> elevator.getLevel())
+        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(
+                new ParallelCommandGroup(
+                        new ConditionalCommand(
+                                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY()),
+                                new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
+                                () -> (distance.getAnalogRight() < 1.2)
+                        ),
+                    new ScorePreset(elevator, clawper, () -> elevator.getLevel())
+                )
         );
 //        operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
 //                new SelectCommand(

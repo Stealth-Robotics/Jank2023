@@ -37,12 +37,13 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
     @Override
     public void initialize() {
         rotationalController.reset();
+        rotationalController.setPID(kP, kI, kD);
+
     }
 
     @Override
 
     public void execute() {
-        rotationalController.setPID(kP, kI, kD);
         double rotationalError = (distanceSensorSubsystem.getAnalogRight() - distanceSensorSubsystem.getAnalogLeft());
         double calculation = rotationalController.calculate(rotationalError);
 
@@ -55,7 +56,7 @@ public class ZeroHeadingWithDistanceSensors extends CommandBase {
         double staticPower = calculation > 0 ? DriveConstants.kStatic : -DriveConstants.kStatic;
 //        staticPower *= 12;
 
-        driveSubsystem.driveTeleop(0,0, calculation + staticPower,false);
+        driveSubsystem.driveTeleop(0,0, calculation,false);
     }
 
     @Override

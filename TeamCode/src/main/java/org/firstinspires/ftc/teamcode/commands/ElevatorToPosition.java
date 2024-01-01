@@ -14,7 +14,7 @@ public class ElevatorToPosition extends CommandBase {
     private final ElevatorSubsystem elevator;
     ElevatorSubsystem.ElevatorPosition position;
 
-    public static int positionIncrement = 200;
+    public static int positionIncrement = 120;
 
     double setpoint = 0;
 

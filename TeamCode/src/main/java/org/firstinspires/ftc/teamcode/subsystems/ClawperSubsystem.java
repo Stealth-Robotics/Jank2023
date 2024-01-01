@@ -27,9 +27,9 @@ public final class ClawperSubsystem extends SubsystemBase {
         ROTATION_STOW(0.48),
         ROTATION_SCORE(0.73),
         RELEASE_ONE(0.5),
-        RELEASE_SECOND(0.68),
+        RELEASE_SECOND(0.64),
         RELEASE_BOTH(0.4),
-        CLAW_HOLD(0.80),
+        CLAW_HOLD(0.75),
 
         ROTATION_CLIMB(0.8);
 

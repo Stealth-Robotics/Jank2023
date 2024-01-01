@@ -227,6 +227,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         FtcDashboard.getInstance().getTelemetry().addData("power", motor1.get());
         FtcDashboard.getInstance().getTelemetry().addData("position", getEncoderPosition());
         FtcDashboard.getInstance().getTelemetry().addData("setpoint", elevatorPID.getSetPoint());
+        FtcDashboard.getInstance().getTelemetry().addData("level", getLevel());
+
 //        telemetry.addData("runpid", usePID);
 //        telemetry.addData("level", getLevel());
 //

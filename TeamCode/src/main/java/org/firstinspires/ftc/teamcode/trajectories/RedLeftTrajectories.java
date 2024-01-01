@@ -26,11 +26,11 @@ public class RedLeftTrajectories {
 
     private static Pose2d stackLocation = new Pose2d(-57.25, -42, Math.toRadians(140));
 
-    private static Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
+    private static Pose2d leftBoardScore = new Pose2d(53.5, -34, Math.toRadians(180));
 
     private static Pose2d centerBoardScore;
 
-    private static Pose2d rightBoardScore = new Pose2d(47.7, -43, Math.toRadians(180));
+    private static Pose2d rightBoardScore = new Pose2d(53.5, -43, Math.toRadians(180));
 
 
 
@@ -38,14 +38,14 @@ public class RedLeftTrajectories {
     public static Trajectory leftPixelDrop = TrajectoryBuilder.buildTrajectory(
 
             new Pose2d(-39.5, -62, Math.toRadians(270)))
-            .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
+
+            .lineTo(new Vector2d(-44.5, -36))
             .build();
 
     //trajectory to pick up first hex from stack
     public static TrajectorySequence leftFirstStackIntake = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
-            .lineTo(new Vector2d(-50, -42))
+            .forward(3)
+            .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
 
             .lineToSplineHeading(stackLocation)
 
