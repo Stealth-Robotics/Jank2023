@@ -19,12 +19,9 @@ public class ScorePreset extends ParallelCommandGroup {
     public ScorePreset(ElevatorSubsystem elevator, ClawperSubsystem claw, IntSupplier level){
         addRequirements(elevator, claw);
         addCommands(
-            new ParallelCommandGroup(
-                    new ElevatorToPosition(elevator, level).withTimeout(2000),
-                    new WaitBeforeCommand(500, new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE))
-                    )
+            new ElevatorToPosition(elevator, level).withTimeout(2000),
+            new WaitBeforeCommand(500, new InstantCommand(() -> claw.rotationToPosition(ClawperSubsystem.ClawperPosition.ROTATION_SCORE)))
 
-            )
         );
     }
 }

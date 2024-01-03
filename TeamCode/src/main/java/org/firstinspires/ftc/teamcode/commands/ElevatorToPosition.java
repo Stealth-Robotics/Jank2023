@@ -32,7 +32,7 @@ public class ElevatorToPosition extends CommandBase {
         this.level = level;
         position = ElevatorSubsystem.ElevatorPosition.STOW_POSITION;
 
-        addRequirements(elevator);
+//        addRequirements(elevator);
     }
 
 

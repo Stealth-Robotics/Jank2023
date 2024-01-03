@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
+import java.util.Vector;
+
 public class RedLeftTrajectories {
     public enum Position{
         RIGHT,
@@ -24,13 +26,15 @@ public class RedLeftTrajectories {
             )
             .build();
 
-    private static Pose2d stackLocation = new Pose2d(-57.25, -42, Math.toRadians(140));
+    private static Pose2d stackLocation = new Pose2d(-59, -41, Math.toRadians(140));
 
-    private static Pose2d leftBoardScore = new Pose2d(53.5, -34, Math.toRadians(180));
+    private static Vector2d middleStackLocation = new Vector2d(-55, -37);
+
+    private static Pose2d leftBoardScore = new Pose2d(50, -36, Math.toRadians(180));
 
     private static Pose2d centerBoardScore;
 
-    private static Pose2d rightBoardScore = new Pose2d(53.5, -43, Math.toRadians(180));
+    private static Pose2d rightBoardScore = new Pose2d(50, -43, Math.toRadians(180));
 
 
 
@@ -45,7 +49,7 @@ public class RedLeftTrajectories {
     //trajectory to pick up first hex from stack
     public static TrajectorySequence leftFirstStackIntake = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
             .forward(3)
-            .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
+            .splineTo(new Vector2d(-50, -41), Math.toRadians(180))
 
             .lineToSplineHeading(stackLocation)
 
@@ -59,10 +63,17 @@ public class RedLeftTrajectories {
 
 
     //drives to board to drop yellow and white corresponding to marker location
-    public static Trajectory yellowAndWhiteBoardDropLeft = TrajectoryBuilder.buildTrajectory(groundPickup.end())
+    public static Trajectory yellowAndWhiteBoardDropLeft = TrajectoryBuilder.buildTrajectory(leftFirstStackIntake.end())
             .back(1e-2)
             .splineToSplineHeading(new Pose2d(-22.8, -56, Math.toRadians(180)), Math.toRadians(0))
             .back(15)
+            .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
+            .build();
+
+    public static Trajectory yellowAndWhiteBoardDropLeftSpicyPath = TrajectoryBuilder.buildTrajectory(groundPickup.end())
+            .back(1e-2)
+            .splineToSplineHeading(new Pose2d(-30, -38, Math.toRadians(180)), Math.toRadians(0))
+            .back(18)
             .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
             .build();
 
@@ -78,6 +89,23 @@ public class RedLeftTrajectories {
         return TrajectoryBuilder.buildTrajectory(stackLocation)
                 .back(1e-2)
                 .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
+                .back(10)
+                .splineToSplineHeading(endPose, Math.toRadians(0))
+                .build();
+    }
+
+    public static Trajectory dropTwoWhitesSpicyPath(Position side){
+        Pose2d endPose = new Pose2d();
+        if(side == Position.LEFT){
+            endPose = leftBoardScore;
+        }
+        else if(side == Position.RIGHT){
+            endPose = rightBoardScore;
+        }
+        return TrajectoryBuilder.buildTrajectory(new Pose2d(middleStackLocation.getX(), middleStackLocation.getY(),
+                        Math.toRadians(180)))
+                .back(1e-2)
+                .splineToSplineHeading(new Pose2d(-22.8, -38, Math.toRadians(180)), Math.toRadians(0))
                 .back(10)
                 .splineToSplineHeading(endPose, Math.toRadians(0))
                 .build();
@@ -112,6 +140,23 @@ public class RedLeftTrajectories {
                 .splineToSplineHeading(new Pose2d(-3, -62, Math.toRadians(180)), Math.toRadians(180))
                 .forward(1)
                 .splineToSplineHeading(new Pose2d(stackLocation.getX(), stackLocation.getY() - yOffset, stackLocation.getHeading()), Math.toRadians(145))
+                .build();
+
+    }
+
+    public static Trajectory driveToStackSpicyPath(Position start, double yOffset){
+        Pose2d startPose = new Pose2d();
+        if(start == Position.LEFT){
+            startPose = leftBoardScore;
+        }
+        else if(start == Position.RIGHT){
+            startPose = rightBoardScore;
+        }
+        return TrajectoryBuilder.buildTrajectory(startPose)
+                .forward(1e-2)
+                .splineToSplineHeading(new Pose2d(-3, -38, Math.toRadians(180)), Math.toRadians(180))
+                .forward(1)
+                .splineTo(new Vector2d(middleStackLocation.getX(), middleStackLocation.getY() - yOffset), Math.toRadians(180))
                 .build();
 
     }

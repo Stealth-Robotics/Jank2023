@@ -165,21 +165,6 @@ public abstract class Teleop extends StealthOpMode {
                     new ScorePreset(elevator, clawper, () -> elevator.getLevel())
                 )
         );
-//        operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-//                new SelectCommand(
-//                        new HashMap<Object, Command>(){{
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_ONE, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_ONE));
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_TWO, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_TWO));
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_THREE, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_THREE));
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_FOUR, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_FOUR));
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_FIVE, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_FIVE));
-//                            put(ElevatorSubsystem.ElevatorPosition.LEVEL_SIX, new ElevatorToPosition(elevator, ElevatorSubsystem.ElevatorPosition.LEVEL_SIX));
-//                        }},
-//
-//                        elevator::getLevel
-//                )
-//        );
-
 
 
 

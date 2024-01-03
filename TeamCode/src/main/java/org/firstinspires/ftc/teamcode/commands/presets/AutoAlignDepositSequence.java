@@ -19,7 +19,6 @@ public class AutoAlignDepositSequence extends SequentialCommandGroup {
                 new AlignTranslationWithDistanceSensors(drive, distance, 1.84, AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000),
                 new WaitCommand(250),
                 new InstantCommand(() -> claw.clawperRelease()),
-                new WaitCommand(100),
                 new InstantCommand(() -> claw.clawperRelease()),
 
                 new WaitBeforeCommand(300, new InstantCommand(() -> claw.rotatinToggle())),

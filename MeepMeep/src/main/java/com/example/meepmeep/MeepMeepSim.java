@@ -11,12 +11,14 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.core.colorscheme.ColorScheme;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.Arrays;
+import java.util.Vector;
 
 public class MeepMeepSim{
     private static TrajectoryVelocityConstraint veloConstraint(double angVel, double velo){
@@ -175,7 +177,8 @@ public class MeepMeepSim{
 
                                 .build()
                 );
-        Pose2d stackLocation = new Pose2d(-57.25, -42, Math.toRadians(140));
+        Pose2d stackLocation = new Pose2d(-58, -41, Math.toRadians(140));
+        Vector2d middleStackLocation = new Vector2d(-57.25, -37);
         Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
 
         RoadRunnerBotEntity rrpathgentest = new DefaultBotBuilder(meepMeep)
@@ -188,10 +191,11 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
                                 .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
                                 .forward(1e-2)
-                                .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
+                                .splineTo(new Vector2d(-50, -41), Math.toRadians(180))
 
 
                                 .lineToSplineHeading(stackLocation)
+
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-30, -58, Math.toRadians(180)), Math.toRadians(0))
                                 .back(18)
@@ -212,6 +216,48 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
                                 .back(10)
                                 .splineToSplineHeading(new Pose2d(45.82, -48, Math.toRadians(180.00)), Math.toRadians(5.13))
+
+
+
+
+
+                                .build()
+                );
+
+        RoadRunnerBotEntity middlePath = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(55, 85, Math.toRadians(180), Math.toRadians(180), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
+                                .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
+                                .forward(1e-2)
+                                .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
+
+
+                                .lineToSplineHeading(stackLocation)
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-30, -38, Math.toRadians(180)), Math.toRadians(0))
+                                .back(18)
+                                .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
+                                .forward(1e-2)
+                                .splineToSplineHeading(new Pose2d(-3, -38, Math.toRadians(180)), Math.toRadians(180))
+                                .forward(1)
+                                .splineTo(middleStackLocation, Math.toRadians(180))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-22.8, -38, Math.toRadians(180)), Math.toRadians(0))
+                                .back(10)
+                                .splineToSplineHeading(new Pose2d(45.82, -43, Math.toRadians(180.00)), Math.toRadians(0))
+                                .forward(1e-2)
+                                .splineToSplineHeading(new Pose2d(-3, -38, Math.toRadians(180)), Math.toRadians(180))
+                                .forward(1)
+                                .splineTo(middleStackLocation, Math.toRadians(180))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-22.8, -38, Math.toRadians(180)), Math.toRadians(0))
+                                .back(10)
+                                .splineToSplineHeading(new Pose2d(45.82, -43, Math.toRadians(180.00)), Math.toRadians(5.13))
 
 
 
@@ -243,6 +289,7 @@ public class MeepMeepSim{
 //                .addEntity(rightBlueCenterBot)
 //                .addEntity(rightBlueRightBot)
                 .addEntity(rrpathgentest)
+                .addEntity(middlePath)
                 .start();
     }
 }
