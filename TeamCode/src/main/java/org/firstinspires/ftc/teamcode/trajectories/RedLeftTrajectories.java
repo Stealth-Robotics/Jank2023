@@ -26,11 +26,11 @@ public class RedLeftTrajectories {
             )
             .build();
 
-    private static Pose2d stackLocation = new Pose2d(-59, -41, Math.toRadians(140));
+    private static Pose2d stackLocation = new Pose2d(-60, -40, Math.toRadians(140));
 
     private static Vector2d middleStackLocation = new Vector2d(-55, -37);
 
-    private static Pose2d leftBoardScore = new Pose2d(50, -36, Math.toRadians(180));
+    private static Pose2d leftBoardScore = new Pose2d(50, -32, Math.toRadians(180));
 
     private static Pose2d centerBoardScore;
 
@@ -49,7 +49,7 @@ public class RedLeftTrajectories {
     //trajectory to pick up first hex from stack
     public static TrajectorySequence leftFirstStackIntake = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
             .forward(3)
-            .splineTo(new Vector2d(-50, -41), Math.toRadians(180))
+            .splineTo(new Vector2d(-50, -40), Math.toRadians(180))
 
             .lineToSplineHeading(stackLocation)
 
@@ -88,7 +88,7 @@ public class RedLeftTrajectories {
         }
         return TrajectoryBuilder.buildTrajectory(stackLocation)
                 .back(1e-2)
-                .splineToSplineHeading(new Pose2d(-22.8, -59.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-22.8, -58, Math.toRadians(180)), Math.toRadians(0))
                 .back(10)
                 .splineToSplineHeading(endPose, Math.toRadians(0))
                 .build();
@@ -137,7 +137,7 @@ public class RedLeftTrajectories {
         }
         return TrajectoryBuilder.buildTrajectory(startPose)
                 .forward(1e-2)
-                .splineToSplineHeading(new Pose2d(-3, -62, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-3, -58 - yOffset, Math.toRadians(180)), Math.toRadians(180))
                 .forward(1)
                 .splineToSplineHeading(new Pose2d(stackLocation.getX(), stackLocation.getY() - yOffset, stackLocation.getHeading()), Math.toRadians(145))
                 .build();

@@ -36,7 +36,7 @@ import org.stealthrobotics.library.commands.EndOpModeCommand;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
-@Autonomous(name="Red far cycle auto", group="red auto")
+@Autonomous(name="Red far cycle thru middle", group="red auto")
 public class RedFarCycleSpicy extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
