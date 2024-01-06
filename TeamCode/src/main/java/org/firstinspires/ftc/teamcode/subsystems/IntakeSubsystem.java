@@ -32,6 +32,10 @@ public class IntakeSubsystem extends SubsystemBase {
         heightServo.setPosition(height);
     }
 
+    public double getHeight(){
+        return heightServo.getPosition();
+    }
+
     public void testHeight(){
         heightServo.setPosition(testPos);
     }

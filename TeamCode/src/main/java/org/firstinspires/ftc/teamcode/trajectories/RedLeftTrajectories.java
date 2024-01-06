@@ -13,7 +13,8 @@ import java.util.Vector;
 public class RedLeftTrajectories {
     public enum Position{
         RIGHT,
-        LEFT
+        LEFT,
+        CENTER
     }
     private static Trajectory example = TrajectoryBuilder.buildTrajectory(new Pose2d(0,0,0))
             .forward(5)
@@ -32,9 +33,97 @@ public class RedLeftTrajectories {
 
     private static Pose2d leftBoardScore = new Pose2d(50, -32, Math.toRadians(180));
 
-    private static Pose2d centerBoardScore;
+    private static Pose2d centerBoardScore = new Pose2d(47.7, -34, Math.toRadians(180));
 
     private static Pose2d rightBoardScore = new Pose2d(50, -43, Math.toRadians(180));
+
+
+    public static TrajectorySequence[] getPositionSpecificPaths(String position){
+        TrajectorySequence[] trajectories = new TrajectorySequence[3];
+        if(position.equals("left")){
+            trajectories[0] = TrajectorySequenceBuilder.buildTrajectory(
+
+                            new Pose2d(-39.5, -62, Math.toRadians(270)))
+
+                    .lineTo(new Vector2d(-44.5, -36))
+                    .build();
+            trajectories[1] = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
+                    .forward(3)
+                    .splineTo(new Vector2d(-50, -40), Math.toRadians(180))
+
+                    .lineToSplineHeading(stackLocation)
+
+                    .build();
+
+            trajectories[2] = TrajectorySequenceBuilder.buildTrajectory(leftFirstStackIntake.end())
+                    .back(1e-2)
+                    .splineToSplineHeading(new Pose2d(-22.8, -56, Math.toRadians(180)), Math.toRadians(0))
+                    .back(15)
+                    .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
+                    .build();
+
+            return trajectories;
+
+        }
+        else if(position.equals("right")){
+            trajectories[0] = TrajectorySequenceBuilder.buildTrajectory(
+                            new Pose2d(-39.5, -62, Math.toRadians(270)))
+                    .back(1e-2)
+                    .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(180)), Math.toRadians(90))
+                    .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(160)), Math.toRadians(90))
+                    .build();
+
+            trajectories[1] = TrajectorySequenceBuilder.buildTrajectory(rightPixelDrop.end())
+                    .forward(3)
+                    .splineTo(new Vector2d(-50, -40), Math.toRadians(180))
+
+                    .lineToSplineHeading(stackLocation)
+
+                    .build();
+
+            trajectories[2] = TrajectorySequenceBuilder.buildTrajectory(trajectories[1].end())
+                    .back(1e-2)
+                    .splineToSplineHeading(new Pose2d(-22.8, -56, Math.toRadians(180)), Math.toRadians(0))
+                    .back(15)
+                    .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
+                    .build();
+
+            return trajectories;
+        }
+
+        else{
+            trajectories[0] = TrajectorySequenceBuilder.buildTrajectory(
+                            new Pose2d(-39.5, -62, Math.toRadians(270)))
+                    .back(1e-2)
+
+                    .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
+                    .splineToSplineHeading(new Pose2d(-36.2, -27, Math.toRadians(270)), Math.toRadians(90))
+                    .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
+                            SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(120),
+                                    DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(20)
+                    )
+                    .build();
+
+            trajectories[1] = TrajectorySequenceBuilder.buildTrajectory(centerPixelDrop.end())
+                    .forward(3)
+                    .splineTo(new Vector2d(-50, -40), Math.toRadians(180))
+
+                    .lineToSplineHeading(stackLocation)
+
+                    .build();
+
+            trajectories[2] = TrajectorySequenceBuilder.buildTrajectory(trajectories[1].end())
+                    .splineToSplineHeading(new Pose2d(-34, -56, Math.toRadians(180)), Math.toRadians(345))
+                    .splineToSplineHeading(new Pose2d(-15, -56, Math.toRadians(180)), Math.toRadians(0))
+                    .back(30)
+                    .splineToSplineHeading(centerBoardScore, Math.toRadians(0))
+                    .build();
+
+            return trajectories;
+
+        }
+    }
 
 
 
@@ -43,7 +132,7 @@ public class RedLeftTrajectories {
 
             new Pose2d(-39.5, -62, Math.toRadians(270)))
 
-            .lineTo(new Vector2d(-44.5, -36))
+            .lineTo(new Vector2d(-46.5, -32))
             .build();
 
     //trajectory to pick up first hex from stack
@@ -54,6 +143,25 @@ public class RedLeftTrajectories {
             .lineToSplineHeading(stackLocation)
 
             .build();
+
+    public static TrajectorySequence firstStackIntake(Position start) {
+        Pose2d startPose;
+        if(start == Position.LEFT) startPose = leftPixelDrop.end();
+        if(start == Position.RIGHT) startPose = rightPixelDrop.end();
+        else startPose = centerPixelDrop.end();
+
+        TrajectorySequence trajectorySequence = TrajectorySequenceBuilder.buildTrajectory(startPose)
+                .forward(3)
+                .splineTo(new Vector2d(-50, -40), Math.toRadians(180))
+
+                .lineToSplineHeading(stackLocation)
+
+                .build();
+
+        return trajectorySequence;
+
+
+    }
 
     public static TrajectorySequence groundPickup = TrajectorySequenceBuilder.buildTrajectory(leftFirstStackIntake.end())
             .back(5)
@@ -135,6 +243,9 @@ public class RedLeftTrajectories {
         else if(start == Position.RIGHT){
             startPose = rightBoardScore;
         }
+        else if(start == Position.CENTER){
+            startPose = centerBoardScore;
+        }
         return TrajectoryBuilder.buildTrajectory(startPose)
                 .forward(1e-2)
                 .splineToSplineHeading(new Pose2d(-3, -58 - yOffset, Math.toRadians(180)), Math.toRadians(180))
@@ -163,15 +274,14 @@ public class RedLeftTrajectories {
 
     public static Trajectory centerPixelDrop = TrajectoryBuilder.buildTrajectory(
                     new Pose2d(-39.5, -62, Math.toRadians(270)))
-            .back(1e-2)
+//            .back(1e-2)
 
-            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(270)), Math.toRadians(90.0))
-            .splineToSplineHeading(new Pose2d(-36.2, -27, Math.toRadians(270)), Math.toRadians(90))
-            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
-                    SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(120),
-                            DriveConstants.TRACK_WIDTH),
-                    SampleMecanumDrive.getAccelerationConstraint(20)
-            )
+            .lineTo(new Vector2d(-39, -28))
+//            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
+//                    SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(120),
+//                            DriveConstants.TRACK_WIDTH),
+//                    SampleMecanumDrive.getAccelerationConstraint(20)
+//            )
             .build();
     public static Trajectory rightPixelDrop = TrajectoryBuilder.buildTrajectory(
                     new Pose2d(-39.5, -62, Math.toRadians(270)))
@@ -181,17 +291,18 @@ public class RedLeftTrajectories {
             .build();
 
 
-    public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(leftPixelDrop.end())
+    public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(firstStackIntake(Position.LEFT).end())
+            .back(1e-2)
             .splineToSplineHeading(new Pose2d(-29.8, -56.0, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(new Pose2d(-2.3, -57, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
             .build();
 
-    public static Trajectory driveToBoardCenter = TrajectoryBuilder.buildTrajectory(centerPixelDrop.end())
-            .splineToSplineHeading(new Pose2d(-34, -56, Math.toRadians(180)), Math.toRadians(345))
-            .splineToSplineHeading(new Pose2d(-15, -56, Math.toRadians(180)), Math.toRadians(0))
-            .back(30)
-            .splineToSplineHeading(new Pose2d(47.7, -34, Math.toRadians(180)), Math.toRadians(0))
+    public static Trajectory driveToBoardCenter = TrajectoryBuilder.buildTrajectory(firstStackIntake(Position.CENTER).end())
+            .back(1e-2)
+            .splineToSplineHeading(new Pose2d(-30, -58, Math.toRadians(180)), Math.toRadians(0))
+            .back(18)
+            .splineToSplineHeading(centerBoardScore, Math.toRadians(0))
             .build();
 
 

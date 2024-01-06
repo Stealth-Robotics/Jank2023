@@ -109,8 +109,12 @@ public abstract class Teleop extends StealthOpMode {
         clawper.setDefaultCommand(new ClawperDefault(clawper, () -> operatorGamepad.getLeftY()));
 
         intake.setDefaultCommand(
-               new IntakeDefaultCommand(intake, () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger))
+               new IntakeDefaultCommand(intake,
+                       () -> (driverGamepad.gamepad.right_trigger - driverGamepad.gamepad.left_trigger),
+                       () -> operatorGamepad.getRightX())
         );
+
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(new InstantCommand(() -> intake.setHeight(0.2)));
 
         elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator,
                 () -> (operatorGamepad.gamepad.right_trigger - operatorGamepad.gamepad.left_trigger)

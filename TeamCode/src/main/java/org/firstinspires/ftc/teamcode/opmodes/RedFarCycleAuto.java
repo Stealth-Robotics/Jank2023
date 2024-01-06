@@ -70,9 +70,39 @@ public class RedFarCycleAuto extends StealthOpMode {
 
     @Override
     public Command getAutoCommand() {
+        Trajectory pixelDrop = RedLeftTrajectories.centerPixelDrop;
+        Trajectory board = RedLeftTrajectories.driveToBoardCenter;
+        RedLeftTrajectories.Position position = RedLeftTrajectories.Position.CENTER;
+        RedLeftTrajectories.Position whitePosition = RedLeftTrajectories.Position.RIGHT;
         FtcDashboard.getInstance().getTelemetry().addLine("fast load works");
         drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
         clawper.clawperClosedPosition();
+
+        telemetry.addData("pos: ", camera.getPosition());
+        telemetry.update();
+        switch (camera.getPosition()) {
+            case "center":
+                pixelDrop = RedLeftTrajectories.centerPixelDrop;
+                board = RedLeftTrajectories.driveToBoardCenter;
+                position = RedLeftTrajectories.Position.CENTER;
+                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                break;
+            case "right":
+                pixelDrop = RedLeftTrajectories.rightPixelDrop;
+                board = RedLeftTrajectories.driveToBoardRight;
+                position = RedLeftTrajectories.Position.RIGHT;
+                whitePosition = RedLeftTrajectories.Position.LEFT;
+
+                break;
+            case "left":
+                pixelDrop = RedLeftTrajectories.leftPixelDrop;
+                board = RedLeftTrajectories.driveToBoardLeft;
+
+                position = RedLeftTrajectories.Position.LEFT;
+                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                break;
+        }
+
         return new SequentialCommandGroup(
                 //all init stuff
                 new InstantCommand(() -> elevator.setUsePID(true)),
@@ -83,13 +113,13 @@ public class RedFarCycleAuto extends StealthOpMode {
 
                 //TODO: FIND THIS
                 new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level5Height)),
-                new FollowTrajectory(drive, RedLeftTrajectories.leftPixelDrop),
+                new FollowTrajectory(drive, pixelDrop),
 //                new WaitCommand(500),
 
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
                 new ParallelDeadlineGroup(
-                        new FollowTrajectorySequence(drive, RedLeftTrajectories.leftFirstStackIntake),
+                        new FollowTrajectorySequence(drive, RedLeftTrajectories.firstStackIntake(position)),
                         new RunCommand(() -> intakeSubsystem.setSpeed(1))
 
                 ),
@@ -99,43 +129,43 @@ public class RedFarCycleAuto extends StealthOpMode {
 //                ),
 
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.yellowAndWhiteBoardDropLeft),
+                        new FollowTrajectory(drive, board),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
                                 new ScorePreset(elevator, clawper, () -> 2)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.84,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
                         AlignTranslationWithDistanceSensors.SensorSide.LEFT).withTimeout(1000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(200),
+                new WaitCommand(350),
                 new InstantCommand(() -> clawper.clawperRelease()),
 
                 new WaitBeforeCommand(400, new InstantCommand(() -> clawper.rotatinToggle())),
                 new InstantCommand(() -> clawper.rotatinToggle()),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level4Height)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.LEFT, 0.5)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(position, 0.5)),
                         new StowPreset(elevator, clawper),
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
 
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
-                                new ScorePreset(elevator, clawper, () -> 3)
+                                new ScorePreset(elevator, clawper, () -> 4)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.84,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
                         AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000)),
-                new WaitCommand(0),
+                new WaitCommand(50),
                 new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(75),
+                new WaitCommand(125),
                 new InstantCommand(() -> clawper.clawperRelease()),
 
                 new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
@@ -143,25 +173,25 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new WaitCommand(0),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(RedLeftTrajectories.Position.RIGHT, 1.25)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(whitePosition, 1.25)),
                         new StowPreset(elevator, clawper),
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
 
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(RedLeftTrajectories.Position.RIGHT)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
-                                new ScorePreset(elevator, clawper, () -> 3)
+                                new ScorePreset(elevator, clawper, () -> 4)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.84,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
                         AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000)),
-                new WaitCommand(0),
+                new WaitCommand(50),
                 new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(75),
+                new WaitCommand(125),
                 new InstantCommand(() -> clawper.clawperRelease()),
 
                 new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
