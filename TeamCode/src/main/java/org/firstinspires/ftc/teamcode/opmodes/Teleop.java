@@ -161,11 +161,9 @@ public abstract class Teleop extends StealthOpMode {
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(
                 new ParallelCommandGroup(
-                        new ConditionalCommand(
-                                new AutoAlignCommand(driveSubsystem, distance, () -> driverGamepad.getLeftY()),
+
                                 new AlignTranslationWithDistanceSensors(driveSubsystem, distance),
-                                () -> (distance.getAnalogRight() < 1.2)
-                        ),
+
                     new ScorePreset(elevator, clawper, () -> elevator.getLevel())
                 )
         );

@@ -80,12 +80,14 @@ public class RedFarCycleAuto extends StealthOpMode {
 
         telemetry.addData("pos: ", camera.getPosition());
         telemetry.update();
+        double yOffset = 0;
         switch (camera.getPosition()) {
             case "center":
                 pixelDrop = RedLeftTrajectories.centerPixelDrop;
                 board = RedLeftTrajectories.driveToBoardCenter;
                 position = RedLeftTrajectories.Position.CENTER;
                 whitePosition = RedLeftTrajectories.Position.RIGHT;
+                yOffset = 4;
                 break;
             case "right":
                 pixelDrop = RedLeftTrajectories.rightPixelDrop;
@@ -136,7 +138,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                                 new ScorePreset(elevator, clawper, () -> 2)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.84,
                         AlignTranslationWithDistanceSensors.SensorSide.LEFT).withTimeout(1000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
@@ -154,14 +156,16 @@ public class RedFarCycleAuto extends StealthOpMode {
 
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition)),
+                        new WaitBeforeCommand(1000, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
+
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition, yOffset)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
                                 new ScorePreset(elevator, clawper, () -> 4)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.84,
                         AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000)),
                 new WaitCommand(50),
                 new InstantCommand(() -> clawper.clawperRelease()),
@@ -180,14 +184,15 @@ public class RedFarCycleAuto extends StealthOpMode {
 
                 new WaitCommand(300),
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition)),
+                        new WaitBeforeCommand(1000, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
+                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition, yOffset)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
                                 new ScorePreset(elevator, clawper, () -> 4)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.83,
                         AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000)),
                 new WaitCommand(50),
                 new InstantCommand(() -> clawper.clawperRelease()),
