@@ -20,17 +20,17 @@ import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBui
 import java.util.Arrays;
 import java.util.Vector;
 
-public class MeepMeepSim{
-    private static TrajectoryVelocityConstraint veloConstraint(double angVel, double velo){
+public class MeepMeepSim {
+    private static TrajectoryVelocityConstraint veloConstraint(double angVel, double velo) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(angVel),
                 new MecanumVelocityConstraint(velo, 10.113)
         ));
     }
-    private static TrajectoryAccelerationConstraint accelConstraint(double constraint){
+
+    private static TrajectoryAccelerationConstraint accelConstraint(double constraint) {
         return new ProfileAccelerationConstraint(constraint);
     }
-
 
 
     public static void main(String[] args) {
@@ -88,10 +88,10 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
-                                        .addTrajectory(RedRightTrajectories.centerDrop)
-                                        .addTrajectory(RedRightTrajectories.boardCenter)
-                                        .build()
+                        drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
+                                .addTrajectory(RedRightTrajectories.centerDrop)
+                                .addTrajectory(RedRightTrajectories.boardCenter)
+                                .build()
                 );
 
         RoadRunnerBotEntity rightRedLeftBot = new DefaultBotBuilder(meepMeep)
@@ -99,10 +99,10 @@ public class MeepMeepSim{
                 .setConstraints(40, 40, Math.toRadians(250), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                                drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
-                                        .addTrajectory(RedRightTrajectories.leftDrop)
-                                        .addTrajectory(RedRightTrajectories.boardLeft)
-                                        .build()
+                        drive.trajectorySequenceBuilder(new Pose2d(16.5, -62, Math.toRadians(270)))
+                                .addTrajectory(RedRightTrajectories.leftDrop)
+                                .addTrajectory(RedRightTrajectories.boardLeft)
+                                .build()
                 );
 
         RoadRunnerBotEntity blueRightBot = new DefaultBotBuilder(meepMeep)
@@ -178,15 +178,17 @@ public class MeepMeepSim{
                                 .build()
                 );
         Pose2d stackLocation = new Pose2d(-58, -41, Math.toRadians(140));
+        Pose2d bluestackLocation = new Pose2d(-58, 42, Math.toRadians(220));
         Vector2d middleStackLocation = new Vector2d(-57.25, -37);
         Pose2d leftBoardScore = new Pose2d(47.7, -32, Math.toRadians(180));
+        Pose2d blueRightBoardScore = new Pose2d(47.7, 32, Math.toRadians(180));
 
         RoadRunnerBotEntity rrpathgentest = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(50, 150, Math.toRadians(200), Math.toRadians(200), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
                                 .back(1e-2)
                                 .lineTo(new Vector2d(-43, -27))
                                 .forward(1e-2)
@@ -217,9 +219,6 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(45.82, -48, Math.toRadians(180.00)), Math.toRadians(5.13))
 
 
-
-
-
                                 .build()
                 );
 
@@ -228,12 +227,12 @@ public class MeepMeepSim{
                 .setConstraints(55, 85, Math.toRadians(180), Math.toRadians(180), 10.113)
                 .setDimensions(13.75, 17)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-39.5,   -62, Math.toRadians(270)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, -62, Math.toRadians(270)))
                                 .back(1e-2)
                                 .splineToSplineHeading(new Pose2d(-39.5, -60, Math.toRadians(270)), Math.toRadians(90.0))
                                 .splineToSplineHeading(new Pose2d(-44.5, -36, Math.toRadians(270)), Math.toRadians(90))
-                                .forward(1e-2)
-                                .splineTo(new Vector2d(-50, -42), Math.toRadians(180))
+                                .forward(3)
+                                .splineTo(new Vector2d(-50, -42), Math.toRadians(0))
 
 
                                 .lineToSplineHeading(stackLocation)
@@ -259,17 +258,49 @@ public class MeepMeepSim{
                                 .splineToSplineHeading(new Pose2d(45.82, -43, Math.toRadians(180.00)), Math.toRadians(5.13))
 
 
-
-
-
                                 .build()
                 );
 
 
+        RoadRunnerBotEntity blueFarAuto = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(50, 150, Math.toRadians(200), Math.toRadians(200), 10.113)
+                .setDimensions(13.75, 17)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-39.5, 62, Math.toRadians(90)))
+
+                                .lineTo(new Vector2d(-48, 34))
 
 
+                                .forward(3)
+                                .splineTo(new Vector2d(-48, 42), Math.toRadians(100))
+
+                                .lineToSplineHeading(bluestackLocation)
+
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-30, 60, Math.toRadians(180)), Math.toRadians(0))
+                                .back(18)
+                                .splineToSplineHeading(blueRightBoardScore, Math.toRadians(0))
+                                .forward(1e-2)
+                                .splineToSplineHeading(new Pose2d(-3, 60, Math.toRadians(180)), Math.toRadians(180))
+                                .forward(1)
+                                .splineToSplineHeading(bluestackLocation, Math.toRadians(215))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-30, 60, Math.toRadians(180)), Math.toRadians(0))
+                                .back(18)
+                                .splineToSplineHeading(blueRightBoardScore, Math.toRadians(0))
+                                .forward(1e-2)
+                                .splineToSplineHeading(new Pose2d(-3, 60, Math.toRadians(180)), Math.toRadians(180))
+                                .forward(1)
+                                .splineToSplineHeading(bluestackLocation, Math.toRadians(215))
+                                .back(1e-2)
+                                .splineToSplineHeading(new Pose2d(-30, 60, Math.toRadians(180)), Math.toRadians(0))
+                                .back(18)
+                                .splineToSplineHeading(blueRightBoardScore, Math.toRadians(0))
 
 
+                                .build()
+                );
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
@@ -288,7 +319,8 @@ public class MeepMeepSim{
 //                .addEntity(rightBlueCenterBot)
 //                .addEntity(rightBlueRightBot)
                 .addEntity(rrpathgentest)
-                .addEntity(middlePath)
+//                .addEntity(middlePath)
+                .addEntity(blueFarAuto)
                 .start();
     }
 }

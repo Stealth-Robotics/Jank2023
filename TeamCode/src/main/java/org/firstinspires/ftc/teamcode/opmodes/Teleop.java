@@ -131,13 +131,13 @@ public abstract class Teleop extends StealthOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenHeld(
                 new ZeroHeadingWithDistanceSensors(driveSubsystem, distance)
         );
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()  -> distance.resetRightOffset()));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> distance.incrementRightOffset(.001)));
-        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> distance.incrementRightOffset(-.001)));
+//        operatorGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()  -> distance.resetRightOffset()));
+//        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> distance.incrementRightOffset(.001)));
+//        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> distance.incrementRightOffset(-.001)));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(() -> distance.resetDistanceOffset()));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> distance.incrementDistance(.02)));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> distance.incrementDistance(-0.02)));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(() -> distance.resetDistanceOffset()));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> distance.incrementDistance(.02)));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> distance.incrementDistance(-0.02)));
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> intake.testHeight()));
 
@@ -170,7 +170,7 @@ public abstract class Teleop extends StealthOpMode {
 
 
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> plane.setPlane(0.6)));
+        operatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> plane.setPlane(0.6)));
 
 
 

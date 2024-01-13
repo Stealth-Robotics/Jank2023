@@ -14,31 +14,25 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.AlignTranslationWithDistanceSensors;
-import org.firstinspires.ftc.teamcode.commands.ElevatorReset;
 import org.firstinspires.ftc.teamcode.commands.FollowTrajectory;
 import org.firstinspires.ftc.teamcode.commands.FollowTrajectorySequence;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.trajectories.RedCloseTrajectories;
-import org.firstinspires.ftc.teamcode.trajectories.RedLeftTrajectories;
-import org.firstinspires.ftc.teamcode.trajectories.TrajectoryBuilder;
-import org.firstinspires.ftc.teamcode.trajectories.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.trajectories.BlueFarTrajectories;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.AutoToTeleStorage;
-import org.stealthrobotics.library.commands.EndOpModeCommand;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
-@Autonomous(name="Red far cycle auto", group="red auto", preselectTeleOp = "BLUE | Tele-Op")
-public class RedFarCycleAuto extends StealthOpMode {
+@Autonomous(name="Blue far cycle auto", group="red auto", preselectTeleOp = "BLUE | Tele-Op")
+public class BlueFarCycleAuto extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
     ElevatorSubsystem elevator;
@@ -52,13 +46,13 @@ public class RedFarCycleAuto extends StealthOpMode {
 
     @Override
     public void initialize() {
-            Trajectory e = RedLeftTrajectories.leftPixelDrop;
+            Trajectory e = BlueFarTrajectories.leftPixelDrop;
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
         elevator = new ElevatorSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap, () -> intakeSubsystem.getIntakeSpeed() != 0);
-        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "left");
+        camera = new CameraSubsystem(hardwareMap, Alliance.BLUE, "left");
         distance = new DistanceSensorSubsystem(hardwareMap);
         elevator.setUsePID(false);
         register(drive, elevator, clawper);
@@ -75,12 +69,12 @@ public class RedFarCycleAuto extends StealthOpMode {
         FtcDashboard.getInstance().getTelemetry().addData("heading measurment",
                 Math.toDegrees(drive.getPoseEstimate().getHeading()));
         FtcDashboard.getInstance().getTelemetry().update();
-        Trajectory pixelDrop = RedLeftTrajectories.centerPixelDrop;
-        Trajectory board = RedLeftTrajectories.driveToBoardCenter;
-        RedLeftTrajectories.Position position = RedLeftTrajectories.Position.CENTER;
-        RedLeftTrajectories.Position whitePosition = RedLeftTrajectories.Position.RIGHT;
+        Trajectory pixelDrop = BlueFarTrajectories.centerPixelDrop;
+        Trajectory board = BlueFarTrajectories.driveToBoardCenter;
+        BlueFarTrajectories.Position position = BlueFarTrajectories.Position.CENTER;
+        BlueFarTrajectories.Position whitePosition = BlueFarTrajectories.Position.RIGHT;
         FtcDashboard.getInstance().getTelemetry().addLine("fast load works");
-        drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
+        drive.setPoseEstimate(BlueFarTrajectories.leftPixelDrop.start());
         clawper.clawperClosedPosition();
 
         telemetry.addData("pos: ", camera.getPosition());
@@ -88,25 +82,25 @@ public class RedFarCycleAuto extends StealthOpMode {
         double yOffset = 0;
         switch (camera.getPosition()) {
             case "center":
-                pixelDrop = RedLeftTrajectories.centerPixelDrop;
-                board = RedLeftTrajectories.driveToBoardCenter;
-                position = RedLeftTrajectories.Position.CENTER;
-                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                pixelDrop = BlueFarTrajectories.centerPixelDrop;
+                board = BlueFarTrajectories.driveToBoardCenter;
+                position = BlueFarTrajectories.Position.CENTER;
+                whitePosition = BlueFarTrajectories.Position.LEFT;
                 yOffset = 4;
                 break;
             case "right":
-                pixelDrop = RedLeftTrajectories.rightPixelDrop;
-                board = RedLeftTrajectories.driveToBoardRight;
-                position = RedLeftTrajectories.Position.RIGHT;
-                whitePosition = RedLeftTrajectories.Position.LEFT;
+                pixelDrop = BlueFarTrajectories.rightPixelDrop;
+                board = BlueFarTrajectories.driveToBoardRight;
+                position = BlueFarTrajectories.Position.RIGHT;
+                whitePosition = BlueFarTrajectories.Position.LEFT;
 
                 break;
             case "left":
-                pixelDrop = RedLeftTrajectories.leftPixelDrop;
-                board = RedLeftTrajectories.driveToBoardLeft;
+                pixelDrop = BlueFarTrajectories.leftPixelDrop;
+                board = BlueFarTrajectories.driveToBoardLeft;
 
-                position = RedLeftTrajectories.Position.LEFT;
-                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                position = BlueFarTrajectories.Position.LEFT;
+                whitePosition = BlueFarTrajectories.Position.RIGHT;
                 break;
         }
 
@@ -126,12 +120,12 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
                 new ParallelDeadlineGroup(
-                        new FollowTrajectorySequence(drive, RedLeftTrajectories.firstStackIntake(position)),
+                        new FollowTrajectorySequence(drive, BlueFarTrajectories.firstStackIntake(position)),
                         new RunCommand(() -> intakeSubsystem.setSpeed(1))
 
                 ),
 //                new ParallelCommandGroup(
-////                        new FollowTrajectorySequence(drive, RedLeftTrajectories.groundPickup),
+////                        new FollowTrajectorySequence(drive, BlueFarTrajectories.groundPickup),
 //                        new WaitBeforeCommand(800, new InstantCommand(() -> intakeSubsystem.setHeight(0.2)))
 //                ),
 
@@ -155,7 +149,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new InstantCommand(() -> clawper.rotatinToggle()),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level4Height)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(position, 0)),
+                        new FollowTrajectory(drive, BlueFarTrajectories.driveToStack(position, 0)),
                         new StowPreset(elevator, clawper),
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
@@ -164,7 +158,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new ParallelCommandGroup(
                         new WaitBeforeCommand(1000, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
 
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition, yOffset)),
+                        new FollowTrajectory(drive, BlueFarTrajectories.dropTwoWhites(whitePosition, yOffset)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
@@ -183,7 +177,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new WaitCommand(0),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(whitePosition, 0)),
+                        new FollowTrajectory(drive, BlueFarTrajectories.driveToStack(whitePosition, 0)),
                         new StowPreset(elevator, clawper),
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),
@@ -191,7 +185,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new WaitCommand(300),
                 new ParallelCommandGroup(
                         new WaitBeforeCommand(1000, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition, yOffset)),
+                        new FollowTrajectory(drive, BlueFarTrajectories.dropTwoWhites(whitePosition, yOffset)),
                         new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
