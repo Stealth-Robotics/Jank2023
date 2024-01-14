@@ -58,7 +58,7 @@ public class RedFarCycleAuto extends StealthOpMode {
         elevator = new ElevatorSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap, () -> intakeSubsystem.getIntakeSpeed() != 0);
-        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "left");
+        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "right");
         distance = new DistanceSensorSubsystem(hardwareMap);
         elevator.setUsePID(false);
         register(drive, elevator, clawper);
@@ -183,7 +183,7 @@ public class RedFarCycleAuto extends StealthOpMode {
                 new WaitCommand(0),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.setHeight(0.2)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(whitePosition, 0)),
+                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(whitePosition, 2)),
                         new StowPreset(elevator, clawper),
                         new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
                 ),

@@ -19,20 +19,23 @@ import org.firstinspires.ftc.teamcode.commands.FollowTrajectorySequence;
 import org.firstinspires.ftc.teamcode.commands.presets.ScorePreset;
 import org.firstinspires.ftc.teamcode.commands.presets.StowPreset;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.CameraSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.trajectories.RedLeftTrajectories;
+import org.firstinspires.ftc.teamcode.trajectories.BlueFarTrajectories;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.stealthrobotics.library.Alliance;
 import org.stealthrobotics.library.AutoToTeleStorage;
 import org.stealthrobotics.library.commands.WaitBeforeCommand;
 import org.stealthrobotics.library.opmodes.StealthOpMode;
 
-@Autonomous(name="Red far DELAY cycle auto", group="red auto", preselectTeleOp = "BLUE | Tele-Op")
-public class RedFarDelayCycle extends StealthOpMode {
+@Autonomous(name="Blue far SUPER DELAY cycle auto", group="red auto", preselectTeleOp = "BLUE | Tele-Op")
+public class BlueSuperDelayAuto extends StealthOpMode {
     DriveSubsystem drive;
     SampleMecanumDrive mecanumDrive;
     ElevatorSubsystem elevator;
@@ -46,13 +49,29 @@ public class RedFarDelayCycle extends StealthOpMode {
 
     @Override
     public void initialize() {
-            Trajectory e = RedLeftTrajectories.leftPixelDrop;
+            Trajectory e = BlueFarTrajectories.leftPixelDrop;
         mecanumDrive = new SampleMecanumDrive(hardwareMap);
         drive = new DriveSubsystem(hardwareMap, mecanumDrive);
         elevator = new ElevatorSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         clawper = new ClawperSubsystem(hardwareMap, () -> intakeSubsystem.getIntakeSpeed() != 0);
-        camera = new CameraSubsystem(hardwareMap, Alliance.RED, "right");
+        camera = new CameraSubsystem(hardwareMap, Alliance.BLUE, "left");
+        camera.setRects(
+            new Rect(
+                    new Point(0, 0),
+                    new Point(180, 480)
+            ),
+
+
+            new Rect(
+                    new Point(180, 0),
+                    new Point(450, 480)
+            ),
+            new Rect(
+                    new Point(450, 0),
+                    new Point(640, 480)
+            )
+        );
         distance = new DistanceSensorSubsystem(hardwareMap);
         elevator.setUsePID(false);
         register(drive, elevator, clawper);
@@ -69,12 +88,13 @@ public class RedFarDelayCycle extends StealthOpMode {
         FtcDashboard.getInstance().getTelemetry().addData("heading measurment",
                 Math.toDegrees(drive.getPoseEstimate().getHeading()));
         FtcDashboard.getInstance().getTelemetry().update();
-        Trajectory pixelDrop = RedLeftTrajectories.centerPixelDrop;
-        Trajectory board = RedLeftTrajectories.driveToBoardCenter;
-        RedLeftTrajectories.Position position = RedLeftTrajectories.Position.CENTER;
-        RedLeftTrajectories.Position whitePosition = RedLeftTrajectories.Position.RIGHT;
+        Trajectory pixelDrop = BlueFarTrajectories.centerPixelDrop;
+        Trajectory board = BlueFarTrajectories.driveToBoardCenter;
+        TrajectorySequence stackIntake = BlueFarTrajectories.intakeBlueLeft;
+        BlueFarTrajectories.Position position = BlueFarTrajectories.Position.CENTER;
+        BlueFarTrajectories.Position whitePosition = BlueFarTrajectories.Position.RIGHT;
         FtcDashboard.getInstance().getTelemetry().addLine("fast load works");
-        drive.setPoseEstimate(RedLeftTrajectories.leftPixelDrop.start());
+        drive.setPoseEstimate(BlueFarTrajectories.leftPixelDrop.start());
         clawper.clawperClosedPosition();
 
         telemetry.addData("pos: ", camera.getPosition());
@@ -82,25 +102,29 @@ public class RedFarDelayCycle extends StealthOpMode {
         double yOffset = 0;
         switch (camera.getPosition()) {
             case "center":
-                pixelDrop = RedLeftTrajectories.centerPixelDrop;
-                board = RedLeftTrajectories.driveToBoardCenter;
-                position = RedLeftTrajectories.Position.CENTER;
-                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                pixelDrop = BlueFarTrajectories.centerPixelDrop;
+                board = BlueFarTrajectories.driveToBoardCenter;
+                position = BlueFarTrajectories.Position.CENTER;
+                whitePosition = BlueFarTrajectories.Position.LEFT;
                 yOffset = 4;
+                stackIntake = BlueFarTrajectories.firstStackIntake(position);
                 break;
             case "right":
-                pixelDrop = RedLeftTrajectories.rightPixelDrop;
-                board = RedLeftTrajectories.driveToBoardRight;
-                position = RedLeftTrajectories.Position.RIGHT;
-                whitePosition = RedLeftTrajectories.Position.LEFT;
+                pixelDrop = BlueFarTrajectories.rightPixelDrop;
+                board = BlueFarTrajectories.driveToBoardRight;
+                position = BlueFarTrajectories.Position.RIGHT;
+                whitePosition = BlueFarTrajectories.Position.LEFT;
+                stackIntake = BlueFarTrajectories.intakeBlueLeft;
 
                 break;
             case "left":
-                pixelDrop = RedLeftTrajectories.leftPixelDrop;
-                board = RedLeftTrajectories.driveToBoardLeft;
+                pixelDrop = BlueFarTrajectories.leftPixelDrop;
+                board = BlueFarTrajectories.driveToBoardLeft;
 
-                position = RedLeftTrajectories.Position.LEFT;
-                whitePosition = RedLeftTrajectories.Position.RIGHT;
+                position = BlueFarTrajectories.Position.LEFT;
+                whitePosition = BlueFarTrajectories.Position.RIGHT;
+
+                stackIntake = BlueFarTrajectories.firstStackIntake(position);
                 break;
         }
 
@@ -113,35 +137,37 @@ public class RedFarDelayCycle extends StealthOpMode {
                 new InstantCommand(() -> elevator.resetEncoderZero()),
 
                 //TODO: FIND THIS
-                new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level5Height + 0.005)),
+                new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level5Height)),
                 new FollowTrajectory(drive, pixelDrop),
 //                new WaitCommand(500),
 
                 new InstantCommand(() -> clawper.clawperRelease()),
                 new WaitCommand(500),
                 new ParallelDeadlineGroup(
-                        new FollowTrajectorySequence(drive, RedLeftTrajectories.firstStackIntake(position)),
+                        new FollowTrajectorySequence(drive, stackIntake),
                         new RunCommand(() -> intakeSubsystem.setSpeed(1))
 
                 ),
-//                new ParallelCommandGroup(
-////                        new FollowTrajectorySequence(drive, RedLeftTrajectories.groundPickup),
-//                        new WaitBeforeCommand(800, new InstantCommand(() -> intakeSubsystem.setHeight(0.2)))
-//                ),
                 new WaitCommand(1000),
                 new InstantCommand(() -> intakeSubsystem.setSpeed(0)),
-                new WaitCommand(4000),
+                new WaitCommand(16000),
+//                new ParallelCommandGroup(
+////                        new FollowTrajectorySequence(drive, BlueFarTrajectories.groundPickup),
+//                        new WaitBeforeCommand(800, new InstantCommand(() -> intakeSubsystem.setHeight(0.2)))
+//                ),
+
 
                 new ParallelCommandGroup(
-                        new FollowTrajectory(drive, board),
                         new WaitBeforeCommand(500, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
                         new WaitBeforeCommand(1500, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
+                        new FollowTrajectory(drive, board),
+                        new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
                                 new ScorePreset(elevator, clawper, () -> 2)
                         )
                 ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
+                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.85,
                         AlignTranslationWithDistanceSensors.SensorSide.LEFT).withTimeout(1000)),
                 new WaitCommand(250),
                 new InstantCommand(() -> clawper.clawperRelease()),
@@ -150,38 +176,9 @@ public class RedFarDelayCycle extends StealthOpMode {
 
                 new WaitBeforeCommand(400, new InstantCommand(() -> clawper.rotatinToggle())),
                 new InstantCommand(() -> clawper.rotatinToggle()),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> intakeSubsystem.setHeight(intakeSubsystem.level4Height)),
-                        new FollowTrajectory(drive, RedLeftTrajectories.driveToStack(position, 0)),
-                        new StowPreset(elevator, clawper),
-                        new WaitBeforeCommand(2000, new InstantCommand(() -> intakeSubsystem.setSpeed(1)))
-                ),
 
-                new WaitCommand(300),
-                new ParallelCommandGroup(
-                        new WaitBeforeCommand(1000, new InstantCommand(() -> intakeSubsystem.setSpeed(-1))),
-
-                        new FollowTrajectory(drive, RedLeftTrajectories.dropTwoWhites(whitePosition, yOffset)),
-                        new WaitBeforeCommand(3000, new InstantCommand(() -> intakeSubsystem.setSpeed(0))),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> drive.getPoseEstimate().getX() > 10),
-                                new ScorePreset(elevator, clawper, () -> 4)
-                        )
-                ),
-                new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87,
-                        AlignTranslationWithDistanceSensors.SensorSide.RIGHT).withTimeout(1000)),
                 new InstantCommand(() -> AutoToTeleStorage.finalAutoHeading =
-                        drive.getPoseEstimate().getHeading() + Math.PI / 2.0),
-                new WaitCommand(50),
-                new InstantCommand(() -> clawper.clawperRelease()),
-                new WaitCommand(125),
-                new InstantCommand(() -> clawper.clawperRelease()),
-
-                new WaitBeforeCommand(300, new InstantCommand(() -> clawper.rotatinToggle())),
-                new InstantCommand(() -> clawper.rotatinToggle()),
-                new WaitCommand(0)
-
-
+                        drive.getPoseEstimate().getHeading() + Math.PI / 2.0)
 
 
 

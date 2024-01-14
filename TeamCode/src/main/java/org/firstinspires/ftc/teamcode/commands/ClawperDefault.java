@@ -18,6 +18,6 @@ public class ClawperDefault extends CommandBase {
 
     @Override
     public void execute() {
-        clawper.rotationToPosition(clawper.getRotation() + leftY.getAsDouble() * 0.01);
+        clawper.rotationToPosition(clawper.getRotation() - leftY.getAsDouble() * 0.01);
     }
 }

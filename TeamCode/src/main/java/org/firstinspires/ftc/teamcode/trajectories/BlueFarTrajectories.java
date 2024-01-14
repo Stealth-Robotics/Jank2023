@@ -31,11 +31,11 @@ public class BlueFarTrajectories {
 
     private static Vector2d middleStackLocation = new Vector2d(-55, 37);
 
-    private static Pose2d leftBoardScore = new Pose2d(48, 39, Math.toRadians(180));
+    private static Pose2d leftBoardScore = new Pose2d(48, 36, Math.toRadians(180));
 
     private static Pose2d centerBoardScore = new Pose2d(48, 34, Math.toRadians(180));
 
-    private static Pose2d rightBoardScore = new Pose2d(48, 32, Math.toRadians(180));
+    private static Pose2d rightBoardScore = new Pose2d(48, 26, Math.toRadians(180));
 
 
 
@@ -46,7 +46,14 @@ public class BlueFarTrajectories {
 
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
 
-            .lineTo(new Vector2d(-48, 34))
+            .lineTo(new Vector2d(-47, 34))
+            .build();
+
+    public static TrajectorySequence rightSequence = TrajectorySequenceBuilder.buildTrajectory(
+
+                    new Pose2d(-39.5, 62, Math.toRadians(90)))
+
+            .lineTo(new Vector2d(-47, 34))
             .build();
 
     //trajectory to pick up first hex from stack
@@ -61,11 +68,16 @@ public class BlueFarTrajectories {
     public static TrajectorySequence firstStackIntake(Position start) {
         Pose2d startPose;
         if(start == Position.RIGHT) startPose = rightPixelDrop.end();
-        else if(start == Position.LEFT) startPose = leftPixelDrop.end();
+        else if(start == Position.LEFT){
+            startPose = leftPixelDrop.end();
+            return TrajectorySequenceBuilder.buildTrajectory(startPose)
+                    .lineToSplineHeading(stackLocation)
+                    .build();
+        }
         else startPose = centerPixelDrop.end();
 
         TrajectorySequence trajectorySequence = TrajectorySequenceBuilder.buildTrajectory(startPose)
-                .forward(5)
+                .forward(9)
 //                .splineTo(new Vector2d(-50, 42), Math.toRadians(100))
 
                 .lineToSplineHeading(stackLocation)
@@ -82,6 +94,17 @@ public class BlueFarTrajectories {
             .forward(2)
             .build();
 
+
+    public static Trajectory leftPixelDrop = TrajectoryBuilder.buildTrajectory(
+                    new Pose2d(-39.5, 58, Math.toRadians(90)))
+            .lineToSplineHeading(new Pose2d(-23, 37, Math.toRadians(110)))
+            .build();
+
+    public static TrajectorySequence leftSequence = TrajectorySequenceBuilder.buildTrajectory(
+                    new Pose2d(-39.5, 58, Math.toRadians(90)))
+            .lineToSplineHeading(new Pose2d(-26, 37, Math.toRadians(110)))
+            .lineToSplineHeading(new Pose2d(-23, 38, Math.toRadians(125)))
+            .build();
 
 
     //drives to board to drop yellow and white corresponding to marker location
@@ -117,6 +140,11 @@ public class BlueFarTrajectories {
     }
 
 
+    public static TrajectorySequence intakeBlueLeft = TrajectorySequenceBuilder.buildTrajectory(leftPixelDrop.end())
+            .lineToSplineHeading(stackLocation)
+            .build();
+
+
     public static Trajectory dropTwoWhites(Position side, double yOffset){
         Pose2d endPose = new Pose2d();
         if(side == Position.LEFT){
@@ -127,7 +155,7 @@ public class BlueFarTrajectories {
         }
         return TrajectoryBuilder.buildTrajectory(stackLocation)
                 .back(1e-2)
-                .splineToSplineHeading(new Pose2d(-22.8, 58, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-22.8, 56, Math.toRadians(180)), Math.toRadians(0))
                 .back(10)
                 .splineToSplineHeading(new Pose2d(endPose.getX(), endPose.getY() + yOffset, endPose.getHeading()),
                         Math.toRadians(0))
@@ -161,7 +189,7 @@ public class BlueFarTrajectories {
         }
         return TrajectoryBuilder.buildTrajectory(startPose)
                 .forward(1e-2)
-                .splineToSplineHeading(new Pose2d(-3, 58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-3, 56, Math.toRadians(180)), Math.toRadians(180))
                 .forward(1)
                 .splineToSplineHeading(stackLocation, Math.toRadians(145))
                 .build();
@@ -180,7 +208,7 @@ public class BlueFarTrajectories {
         }
         return TrajectoryBuilder.buildTrajectory(startPose)
                 .forward(1e-2)
-                .splineToSplineHeading(new Pose2d(-3, 58, Math.toRadians(180)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-3, 56, Math.toRadians(180)), Math.toRadians(180))
                 .forward(1)
                 .splineToSplineHeading(new Pose2d(stackLocation.getX(), stackLocation.getY() - yOffset,
                         stackLocation.getHeading()), Math.toRadians(215))
@@ -209,6 +237,18 @@ public class BlueFarTrajectories {
                     new Pose2d(-39.5, 62, Math.toRadians(90)))
 //            .back(1e-2)
 
+            .lineTo(new Vector2d(-44, 30))
+//            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
+//                    SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(120),
+//                            DriveConstants.TRACK_WIDTH),
+//                    SampleMecanumDrive.getAccelerationConstraint(20)
+//            )
+            .build();
+
+    public static TrajectorySequence centerSequence = TrajectorySequenceBuilder.buildTrajectory(
+                    new Pose2d(-39.5, 62, Math.toRadians(90)))
+//            .back(1e-2)
+
             .lineTo(new Vector2d(-42, 33))
 //            .splineToSplineHeading(new Pose2d(-36.2, -35, Math.toRadians(270)), Math.toRadians(270),
 //                    SampleMecanumDrive.getVelocityConstraint(30, Math.toRadians(120),
@@ -216,24 +256,20 @@ public class BlueFarTrajectories {
 //                    SampleMecanumDrive.getAccelerationConstraint(20)
 //            )
             .build();
-    public static Trajectory leftPixelDrop = TrajectoryBuilder.buildTrajectory(
-                    new Pose2d(-39.5, 62, Math.toRadians(90)))
-            .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-39.5, -50, Math.toRadians(180)), Math.toRadians(90))
-            .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(160)), Math.toRadians(90))
-            .build();
+
+
 
 
     public static Trajectory driveToBoardLeft = TrajectoryBuilder.buildTrajectory(firstStackIntake(Position.LEFT).end())
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-29.8, 58, Math.toRadians(180)), Math.toRadians(0))
-            .splineToSplineHeading(new Pose2d(-2.3, 58, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-29.8, 54, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-2.3, 54, Math.toRadians(180)), Math.toRadians(0))
             .splineToSplineHeading(leftBoardScore, Math.toRadians(0))
             .build();
 
     public static Trajectory driveToBoardCenter = TrajectoryBuilder.buildTrajectory(firstStackIntake(Position.CENTER).end())
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-30, 58, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-30, 56, Math.toRadians(180)), Math.toRadians(0))
             .back(18)
             .splineToSplineHeading(centerBoardScore, Math.toRadians(0))
             .build();
@@ -242,7 +278,7 @@ public class BlueFarTrajectories {
     public static Trajectory driveToBoardRight = TrajectoryBuilder.buildTrajectory(firstStackIntake(Position.RIGHT).end(),
                     Math.toRadians(180))
             .back(1e-2)
-            .splineToSplineHeading(new Pose2d(-30, 60, Math.toRadians(180)), Math.toRadians(0))
+            .splineToSplineHeading(new Pose2d(-30, 56, Math.toRadians(180)), Math.toRadians(0))
             .back(18)
             .splineToSplineHeading(rightBoardScore, Math.toRadians(0))
             .build();

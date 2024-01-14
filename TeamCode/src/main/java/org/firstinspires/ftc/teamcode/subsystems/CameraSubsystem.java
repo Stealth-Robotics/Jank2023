@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.pipelines.PropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.opencv.core.Rect;
 import org.stealthrobotics.library.Alliance;
 
 public class CameraSubsystem extends SubsystemBase {
@@ -42,6 +43,10 @@ public class CameraSubsystem extends SubsystemBase {
 
     public void stopCamera(){
         portal.stopStreaming();
+    }
+
+    public void setRects(Rect left, Rect middle, Rect right){
+        processor.setRects(left, middle, right);
     }
     @Override
     public void periodic() {

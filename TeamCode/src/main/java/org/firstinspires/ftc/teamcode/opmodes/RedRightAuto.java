@@ -125,7 +125,8 @@ public class RedRightAuto extends StealthOpMode {
 
 
 
-                        new WaitBeforeCommand(100, new AlignTranslationWithDistanceSensors(drive, distance, 1.87).withTimeout(4000)),
+                        new WaitBeforeCommand(100,
+                                new AlignTranslationWithDistanceSensors(drive, distance, 1.88).withTimeout(4000)),
 
                         new WaitCommand(500),
                         new InstantCommand(() -> clawper.clawperRelease()),

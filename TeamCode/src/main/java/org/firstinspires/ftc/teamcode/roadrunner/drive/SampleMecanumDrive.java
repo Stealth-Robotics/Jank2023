@@ -56,7 +56,7 @@ import java.util.List;
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(3, 0, .075);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0.01, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(20, 0.01, 0);
 
     public static double LATERAL_MULTIPLIER = 1.34;
 

@@ -32,16 +32,16 @@ public class PropProcessor implements VisionProcessor {
     String outStr = "left";
     //TODO: tune these values
 
-    static final Rect LEFT_RECTANGLE = new Rect(
+    static Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
             new Point(180, 480)
     );
 
-    static final Rect RIGHT_RECTANGLE = new Rect(
+    static Rect RIGHT_RECTANGLE = new Rect(
             new Point(500, 0),
             new Point(640, 480)
     );
-    static final Rect CENTER_RECT = new Rect(
+    static Rect CENTER_RECT = new Rect(
             new Point(180, 0),
             new Point(500, 480)
     );
@@ -77,6 +77,12 @@ public class PropProcessor implements VisionProcessor {
     public void init(int width, int height, CameraCalibration calibration) {
     }
 
+
+    public void setRects(Rect left, Rect middle, Rect right){
+        LEFT_RECTANGLE = left;
+        RIGHT_RECTANGLE = right;
+        CENTER_RECT = middle;
+    }
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
